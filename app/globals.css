@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-muted: var(--muted);
+  
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
+}
+
+:root {
+  --background: #F9F9F7; /* Off-white / Ivory */
+  --foreground: #2C2C2C; /* Charcoal */
+  --primary: #1A1A1A;    /* Darker Charcoal for headings */
+  --secondary: #E5E5E5;  /* Soft Silver */
+  --accent: #D4C5B0;     /* Muted Beige */
+  --muted: #9CA3AF;      /* Muted Grey */
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  color: var(--primary);
+  font-weight: 400; /* Editorial feel often uses lighter weights for serif headings */
+}
+
+/* Custom Utilities for Editorial Feel */
+.text-editorial {
+    letter-spacing: -0.02em;
+}
+
+.spacing-editorial {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+}
