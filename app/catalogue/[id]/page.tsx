@@ -5,7 +5,20 @@ import { Vehicle3DViewer } from '@/components/Vehicle3DViewer';
 import { ArrowLeft, Check } from 'lucide-react';
 
 // Mock Data Function
-const vehiclesData: Record<string, any> = {
+interface VehicleSpec {
+  label: string;
+  value: string;
+}
+
+interface Vehicle {
+  name: string;
+  tagline: string;
+  price: string;
+  description: string;
+  specs: VehicleSpec[];
+}
+
+const vehiclesData: Record<string, Vehicle> = {
   '1': {
     name: 'Kawasaki Ninja 400',
     tagline: 'Track Born, Street Bred',
