@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Lato } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { BotpressWebChat } from "@/components/BotpressWebChat";
 
 const playfair = Playfair_Display({
   variable: "--font-serif",
@@ -38,8 +38,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
-        <Script src="https://cdn.botpress.cloud/webchat/v3.5/inject.js" strategy="afterInteractive" />
-        <Script src="https://files.bpcontent.cloud/2026/01/08/17/20260108173538-6DULEWDI.js" strategy="afterInteractive" />
+        <BotpressWebChat />
       </body>
     </html>
   );
