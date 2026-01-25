@@ -17,6 +17,7 @@ export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
+  const isHomePage = pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,16 +37,23 @@ export const Navbar = () => {
   }, [isOpen]);
 
   return (
-    <nav
-      className={clsx(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b border-transparent',
-        isScrolled ? 'bg-background/80 backdrop-blur-md border-secondary/50 py-4' : 'bg-transparent py-6'
-      )}
-    >
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+    <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4">
+      <nav
+        className={clsx(
+          'transition-all duration-500 ease-in-out rounded-full flex items-center justify-between',
+          isScrolled 
+            ? 'bg-white/95 shadow-xl border border-gray-200 py-3 px-8 w-full max-w-6xl' 
+            : (isHomePage 
+                ? 'bg-white/10 border border-white/20 backdrop-blur-md py-4 px-8 w-full max-w-7xl shadow-lg'
+                : 'bg-transparent py-4 px-8 w-full max-w-7xl')
+        )}
+      >
         {/* Logo */}
         <Link href="/" className="relative z-50">
-          <h1 className="font-serif text-2xl tracking-widest text-primary uppercase">
+          <h1 className={clsx(
+            "font-serif font-bold text-xl md:text-2xl tracking-widest uppercase transition-colors duration-300 drop-shadow-sm",
+            (isScrolled || !isHomePage) ? "text-primary" : "text-white"
+          )}>
             OW Motors
           </h1>
         </Link>
@@ -58,13 +66,16 @@ export const Navbar = () => {
               href={link.href}
               className={clsx(
                 'text-sm uppercase tracking-widest transition-colors duration-300 relative group',
-                pathname === link.href ? 'text-primary' : 'text-muted hover:text-primary'
+                (isScrolled || !isHomePage)
+                  ? (pathname === link.href ? 'text-primary' : 'text-muted hover:text-primary')
+                  : (pathname === link.href ? 'text-white' : 'text-white/80 hover:text-white')
               )}
             >
               {link.name}
               <span 
                 className={clsx(
-                  "absolute -bottom-1 left-0 h-[1px] bg-primary transition-all duration-300",
+                  "absolute -bottom-1 left-0 h-[1px] transition-all duration-300",
+                  (isScrolled || !isHomePage) ? "bg-primary" : "bg-white",
                   pathname === link.href ? "w-full" : "w-0 group-hover:w-full"
                 )}
               />
@@ -74,7 +85,10 @@ export const Navbar = () => {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden relative z-50 text-primary p-2 -mr-2"
+          className={clsx(
+            "md:hidden relative z-50 p-2 -mr-2 transition-colors duration-300",
+            isOpen ? "text-primary" : ((isScrolled || !isHomePage) ? "text-primary" : "text-white")
+          )}
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle menu"
         >
@@ -85,18 +99,18 @@ export const Navbar = () => {
         <AnimatePresence>
           {isOpen && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="fixed inset-0 z-40 bg-background flex flex-col items-center justify-center space-y-8 md:hidden"
+              initial={{ opacity: 0, scale: 0.95, y: -20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -20 }}
+              transition={{ duration: 0.2 }}
+              className="absolute top-full left-0 right-0 mt-2 p-6 bg-white rounded-3xl shadow-2xl border border-gray-100 flex flex-col items-center space-y-6 md:hidden overflow-hidden"
             >
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className="font-serif text-3xl text-primary hover:text-accent transition-colors"
+                  className="font-serif text-xl text-primary hover:text-accent transition-colors w-full text-center py-2"
                 >
                   {link.name}
                 </Link>
@@ -104,7 +118,7 @@ export const Navbar = () => {
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 };

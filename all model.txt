@@ -1,0 +1,294 @@
+TARO MODELS
+TARO GP1 401 (GP ONE 401)
+
+Category: Racing / Street
+
+Engine: Single-cylinder, liquid-cooled, 4-stroke
+
+Displacement: ~401 cc
+
+Power: ~27 kW @ ~7500 rpm
+
+Torque: ~35 Nm @ ~5500 rpm
+
+Transmission: 6-speed
+
+Brakes: Disc front & rear, Dual-channel ABS
+
+Suspension: Inverted front fork, rear monoshock
+
+Top Speed: ~135–140 km/h
+
+Features:
+
+LED lens headlamp
+
+TFT digital cluster
+
+Keyless start
+
+Sport riding ergonomics
+
+TARO GP1 250
+
+Category: Racing / Street
+
+Engine: Single-cylinder, liquid-cooled, 4-valve
+
+Displacement: ~250 cc
+
+Power: ~18–19 kW
+
+Torque: ~22–23 Nm
+
+Brakes: Disc front & rear, ABS
+
+Suspension: Inverted front, rear monoshock
+
+Use Case: Entry-level sportbike with aggressive stance
+
+TARO GP2 200
+
+Category: Racing / Street
+
+Engine: Single-cylinder, liquid-cooled
+
+Displacement: ~200 cc
+
+Power: ~15–16 kW
+
+Brakes: Disc front & rear, ABS
+
+Target Rider: Beginner–intermediate sport riders
+
+TARO GP2 250
+
+Category: Racing / Street
+
+Engine: Single-cylinder, liquid-cooled, 4-valve
+
+Displacement: ~250 cc
+
+Power: ~18–19 kW
+
+Torque: ~22 Nm
+
+Features:
+
+Sport chassis
+
+ABS
+
+TFT display
+
+TARO C6 (listed as “C6 25cc” – actual models are larger)
+C6 FE 250
+
+Engine: Single-cylinder, oil-cooled
+
+Displacement: 249 cc
+
+Power: 17 kW @ 7500 rpm
+
+Torque: 23 Nm @ 6000 rpm
+
+Brakes: Disc front & rear
+
+Suspension: Dual shock rear
+
+Category: Street / Naked
+
+C6 FE 300
+
+Engine: Single-cylinder, oil-cooled
+
+Displacement: 299 cc
+
+Power: 19.5 kW @ 7500 rpm
+
+Torque: 27.5 Nm @ 5500 rpm
+
+Brakes: Dual-channel ABS
+
+Use Case: Mid-weight street bike
+
+TARO C5 401
+
+Category: Street / Naked
+
+Engine: Single-cylinder, liquid-cooled
+
+Displacement: ~401 cc
+
+Power: ~27 kW
+
+Torque: ~35 Nm
+
+Brakes: Disc front & rear, ABS
+
+Features:
+
+Aggressive naked styling
+
+TFT display
+
+LED lighting
+
+LIFAN MODELS
+LIFAN KPT 250
+
+Category: Adventure / Touring
+
+Engine: Single-cylinder, liquid-cooled, 4-valve
+
+Displacement: 250 cc
+
+Power: ~19 kW
+
+Torque: ~22 Nm
+
+Brakes: Disc front & rear, ABS
+
+Suspension: Long-travel, ADV-tuned
+
+Use Case: Touring, light off-road
+
+LIFAN KPT 400
+
+Category: Adventure / Touring
+
+Engine: Twin-cylinder, liquid-cooled
+
+Displacement: ~400 cc
+
+Power: ~29 kW
+
+Torque: ~37 Nm
+
+Brakes: Dual-channel ABS
+
+Features:
+
+Large windscreen
+
+Touring seat
+
+ADV wheels
+
+LIFAN KPM 200
+
+Category: Street / Naked
+
+Engine: Single-cylinder, air/liquid-cooled
+
+Displacement: 200 cc
+
+Power: ~15 kW
+
+Brakes: Disc front & rear
+
+Use Case: Daily commuting, city riding
+
+LIFAN K19 200
+
+Category: Street
+
+Engine: Single-cylinder
+
+Displacement: 200 cc
+
+Focus: Fuel efficiency + reliability
+
+Brakes: Disc front / rear
+
+LIFAN K29 250
+
+Category: Street / Sport
+
+Engine: Single-cylinder, liquid-cooled
+
+Displacement: 250 cc
+
+Power: ~18–19 kW
+
+Brakes: Disc with ABS
+
+Design: Sport-naked styling
+
+LIFAN SS2 250
+
+Category: Sport
+
+Engine: Single-cylinder, liquid-cooled
+
+Displacement: 250 cc
+
+Power: ~19 kW
+
+Brakes: Disc front & rear, ABS
+
+Positioning: Entry sportbike
+
+LIFAN KPS 250
+
+Category: Street / Sport
+
+Engine: Single-cylinder, liquid-cooled
+
+Displacement: 250 cc
+
+Power: ~19 kW
+
+Features: Sport ergonomics, modern styling
+
+LIFAN V16S
+
+Category: Cruiser
+
+Engine: V-twin, air-cooled
+
+Displacement: ~250 cc
+
+Style: Classic cruiser
+
+Brakes: Disc front & rear
+
+LIFAN V400
+
+Category: Cruiser
+
+Engine: V-twin, liquid-cooled
+
+Displacement: ~400 cc
+
+Power: ~29 kW
+
+Torque: ~37 Nm
+
+Use Case: Highway cruising
+
+LIFAN SS3 200
+
+Category: Sport
+
+Engine: Single-cylinder
+
+Displacement: 200 cc
+
+Brakes: Disc front & rear
+
+Target: Beginner sport riders
+
+LIFAN X-PECT 250
+
+Category: Dual-Sport / Adventure
+
+Engine: Single-cylinder, liquid-cooled
+
+Displacement: 250 cc
+
+Brakes: Disc front & rear
+
+Suspension: Long-travel
+
+Use Case: On-road + off-road

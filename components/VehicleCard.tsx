@@ -21,11 +21,21 @@ export const VehicleCard: React.FC<VehicleProps> = ({ id, name, tagline, price, 
         className="group cursor-pointer"
       >
         <div className="aspect-[16/10] bg-secondary/20 mb-6 overflow-hidden relative">
-          {/* Image Placeholder */}
-          <div className="absolute inset-0 bg-gray-200" />
-          <div className="absolute inset-0 flex items-center justify-center text-muted/50 font-serif text-xl">
-             {name} Image
-          </div>
+          {image ? (
+             // eslint-disable-next-line @next/next/no-img-element
+             <img 
+               src={image} 
+               alt={name} 
+               className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-700 ease-out bg-white"
+             />
+          ) : (
+            <>
+              <div className="absolute inset-0 bg-gray-200" />
+              <div className="absolute inset-0 flex items-center justify-center text-muted/50 font-serif text-xl">
+                 {name}
+              </div>
+            </>
+          )}
           
           {/* Hover Overlay */}
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-500" />

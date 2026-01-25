@@ -3,9 +3,11 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion, Variants } from 'framer-motion';
-import { Hero3D } from '@/components/Hero3D';
+import { HeroVideo } from '@/components/HeroVideo';
 import { Button } from '@/components/Button';
+import { VehicleCard } from '@/components/VehicleCard';
 import { ArrowRight } from 'lucide-react';
+import { vehiclesData } from '@/data/vehicles';
 
 // Animation variants
 const fadeInUp: Variants = {
@@ -28,34 +30,36 @@ const staggerContainer: Variants = {
 };
 
 export default function Home() {
+  const featuredVehicles = Object.values(vehiclesData).slice(0, 3);
+
   return (
     <div className="flex flex-col min-h-screen">
       
       {/* Hero Section */}
-      <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden">
-        {/* Background 3D */}
-        <Hero3D />
+      <section className="relative min-h-[100dvh] flex items-end justify-start overflow-hidden">
+        {/* Background Video */}
+        <HeroVideo />
         
+        {/* Gradient Overlay for Text Readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-[1] pointer-events-none" />
+
         {/* Content */}
         <motion.div 
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
-          className="relative z-10 text-center px-6 max-w-4xl mx-auto"
+          className="relative z-10 text-left px-6 pb-32 md:pb-40 md:pl-20 max-w-5xl w-full"
         >
-          <motion.p variants={fadeInUp} className="text-xs md:text-sm lg:text-base tracking-[0.2em] text-accent uppercase mb-4 md:mb-6 font-medium">
-            OW Motors
-          </motion.p>
-          <motion.h1 variants={fadeInUp} className="text-4xl md:text-6xl lg:text-8xl font-serif text-primary mb-6 md:mb-8 leading-tight">
+          <motion.h1 variants={fadeInUp} className="text-4xl md:text-6xl lg:text-8xl font-serif text-[#D4C5B0] mb-6 md:mb-8 leading-tight drop-shadow-2xl">
             Crafted Performance.<br />
             Timeless Design.
           </motion.h1>
-          <motion.p variants={fadeInUp} className="text-muted text-base md:text-xl max-w-2xl mx-auto mb-8 md:mb-12 font-light leading-relaxed">
+          <motion.p variants={fadeInUp} className="text-[#F9F9F7] text-base md:text-xl max-w-xl mb-8 md:mb-12 font-light leading-relaxed drop-shadow-xl">
             Experience the epitome of two-wheeled luxury. Where engineering meets art, and every ride becomes a statement.
           </motion.p>
           <motion.div variants={fadeInUp}>
             <Link href="/catalogue">
-              <Button variant="outline" size="lg" className="group text-sm md:text-base px-6 py-3 md:px-8 md:py-4">
+              <Button variant="outline" size="lg" className="group text-sm md:text-base px-6 py-3 md:px-8 md:py-4 border-white text-white hover:bg-white hover:text-black hover:border-white backdrop-blur-sm bg-white/5">
                 Explore Collection
                 <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Button>
@@ -83,40 +87,35 @@ export default function Home() {
             </Link>
           </motion.div>
 
-          {/* Placeholder Grid */}
+          {/* Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3].map((item) => (
+            {featuredVehicles.map((vehicle, index) => (
               <motion.div 
-                key={item}
+                key={vehicle.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: item * 0.1 }}
-                className="group cursor-pointer"
+                transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <div className="aspect-[4/3] bg-secondary/20 mb-6 overflow-hidden relative">
-                  {/* Placeholder Image */}
-                  <div className="absolute inset-0 bg-gray-200 animate-pulse" /> 
-                  <div className="absolute inset-0 flex items-center justify-center text-muted/50 font-serif text-2xl">
-                    {item === 1 ? 'Heavy Bikes' : item === 2 ? 'Sports' : 'Scooters'}
-                  </div>
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500" />
-                </div>
-                <h3 className="text-xl font-serif text-primary mb-2 group-hover:text-accent transition-colors">
-                  {item === 1 ? 'Kawasaki Series' : item === 2 ? 'Ducati Series' : 'OW Electric'}
-                </h3>
-                <p className="text-sm text-muted uppercase tracking-wider">Starting at PKR {item === 3 ? '3.5 Lac' : '18.5 Lac'}</p>
+                <VehicleCard 
+                  id={vehicle.id}
+                  name={vehicle.name}
+                  tagline={vehicle.tagline}
+                  price={vehicle.price}
+                  image={vehicle.imagePath}
+                />
               </motion.div>
             ))}
           </div>
 
-          <div className="mt-12 md:hidden text-center">
-             <Link href="/catalogue">
+          <div className="mt-12 text-center md:hidden">
+            <Link href="/catalogue">
               <Button variant="ghost">View All Vehicles <ArrowRight className="ml-2 w-4 h-4" /></Button>
             </Link>
           </div>
         </div>
       </section>
+
 
       {/* Editorial Section */}
       <section className="py-24 bg-white">
