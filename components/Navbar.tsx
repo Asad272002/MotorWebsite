@@ -95,38 +95,41 @@ export const Navbar = () => {
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
-        {/* Mobile Menu Overlay */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="fixed inset-0 top-0 z-40 bg-white flex flex-col items-center justify-center space-y-8 md:hidden"
-            >
-              {/* Close Button Positioned absolutely within the fixed overlay */}
-              <button
-                 className="absolute top-8 right-8 text-primary p-2"
-                 onClick={() => setIsOpen(false)}
-                 aria-label="Close menu"
+        {/* Mobile Menu Overlay - Using Portal to escape parent stacking context */}
+        {mounted && createPortal(
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center space-y-8 md:hidden"
               >
-                <X size={32} />
-              </button>
-
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className="font-serif text-3xl text-primary hover:text-accent transition-colors tracking-widest"
+                {/* Close Button Positioned absolutely within the fixed overlay */}
+                <button
+                   className="absolute top-8 right-8 text-primary p-2"
+                   onClick={() => setIsOpen(false)}
+                   aria-label="Close menu"
                 >
-                  {link.name}
-                </Link>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
+                  <X size={32} />
+                </button>
+
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className="font-serif text-3xl text-primary hover:text-accent transition-colors tracking-widest"
+                  >
+                    {link.name}
+                  </Link>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body
+        )}
       </nav>
     </div>
   );
