@@ -36,7 +36,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen">
       
       {/* Hero Section */}
-      <section className="relative min-h-[100dvh] flex items-end justify-start overflow-hidden">
+      <section className="relative h-[85vh] md:h-[100dvh] min-h-[600px] flex items-end justify-start overflow-hidden">
         {/* Background Video */}
         <HeroVideo />
         
@@ -48,7 +48,7 @@ export default function Home() {
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
-          className="relative z-10 text-left px-6 pb-24 md:pb-40 md:pl-20 max-w-5xl w-full"
+          className="relative z-10 text-left px-6 pb-20 md:pb-40 md:pl-20 max-w-5xl w-full"
         >
           <motion.h1 variants={fadeInUp} className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-serif text-[#D4C5B0] mb-6 md:mb-8 leading-tight drop-shadow-2xl">
             Crafted Performance.<br />
