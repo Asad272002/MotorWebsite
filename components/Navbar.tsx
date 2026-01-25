@@ -99,18 +99,27 @@ export const Navbar = () => {
         <AnimatePresence>
           {isOpen && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: -20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: -20 }}
-              transition={{ duration: 0.2 }}
-              className="absolute top-full left-0 right-0 mt-2 p-6 bg-white rounded-3xl shadow-2xl border border-gray-100 flex flex-col items-center space-y-6 md:hidden overflow-hidden"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="fixed inset-0 top-0 z-40 bg-white flex flex-col items-center justify-center space-y-8 md:hidden"
             >
+              {/* Close Button Positioned absolutely within the fixed overlay */}
+              <button
+                 className="absolute top-8 right-8 text-primary p-2"
+                 onClick={() => setIsOpen(false)}
+                 aria-label="Close menu"
+              >
+                <X size={32} />
+              </button>
+
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className="font-serif text-xl text-primary hover:text-accent transition-colors w-full text-center py-2"
+                  className="font-serif text-3xl text-primary hover:text-accent transition-colors tracking-widest"
                 >
                   {link.name}
                 </Link>

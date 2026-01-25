@@ -31,7 +31,7 @@ export const HeroVideo = () => {
       {/* Sound Toggle Button */}
       <button
         onClick={toggleMute}
-        className="absolute bottom-8 right-8 z-30 p-3 rounded-full bg-black/20 backdrop-blur-md border border-white/20 text-white hover:bg-black/40 transition-all duration-300 group"
+        className="absolute bottom-6 right-6 md:bottom-8 md:right-8 z-30 p-3 rounded-full bg-black/20 backdrop-blur-md border border-white/20 text-white hover:bg-black/40 transition-all duration-300 group active:scale-95"
         aria-label={isMuted ? "Unmute video" : "Mute video"}
       >
         {isMuted ? (

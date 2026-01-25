@@ -48,13 +48,13 @@ export default function Home() {
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
-          className="relative z-10 text-left px-6 pb-32 md:pb-40 md:pl-20 max-w-5xl w-full"
+          className="relative z-10 text-left px-6 pb-24 md:pb-40 md:pl-20 max-w-5xl w-full"
         >
-          <motion.h1 variants={fadeInUp} className="text-4xl md:text-6xl lg:text-8xl font-serif text-[#D4C5B0] mb-6 md:mb-8 leading-tight drop-shadow-2xl">
+          <motion.h1 variants={fadeInUp} className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-serif text-[#D4C5B0] mb-6 md:mb-8 leading-tight drop-shadow-2xl">
             Crafted Performance.<br />
             Timeless Design.
           </motion.h1>
-          <motion.p variants={fadeInUp} className="text-[#F9F9F7] text-base md:text-xl max-w-xl mb-8 md:mb-12 font-light leading-relaxed drop-shadow-xl">
+          <motion.p variants={fadeInUp} className="text-[#F9F9F7] text-sm sm:text-base md:text-xl max-w-xl mb-8 md:mb-12 font-light leading-relaxed drop-shadow-xl">
             Experience the epitome of two-wheeled luxury. Where engineering meets art, and every ride becomes a statement.
           </motion.p>
           <motion.div variants={fadeInUp}>

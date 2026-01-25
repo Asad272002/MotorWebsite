@@ -43,7 +43,7 @@ function ContactForm() {
   };
 
   return (
-    <div className="bg-white border border-secondary/30 p-8 md:p-12 shadow-sm relative overflow-hidden flex flex-col md:flex-row gap-12">
+    <div className="bg-white border border-secondary/30 p-6 md:p-12 shadow-sm relative overflow-hidden flex flex-col md:flex-row gap-12">
       <div className="w-full md:w-2/3">
         <AnimatePresence mode="wait">
           {!isSubmitted ? (

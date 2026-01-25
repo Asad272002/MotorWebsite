@@ -40,9 +40,21 @@ export const VehicleCard: React.FC<VehicleProps> = ({ id, name, tagline, price, 
           {/* Hover Overlay */}
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-500" />
           
-          {/* View Details Button (appears on hover) */}
+          {/* View Details Button (appears on hover on desktop, always visible on mobile if needed, or we rely on tap) */}
+          {/* Strategy: Keep clean on mobile (no button), relying on the card being clickable. 
+              But for clarity, we could show a small icon or just ensure the user knows to tap. 
+              Given the 'Vogue' style, less is more. I will keep it as is for mobile (clean), 
+              but maybe add a subtle indicator if needed. 
+              Actually, let's make the "View Details" button appear on focus-within for accessibility 
+              and maybe just keep it simple. 
+              
+              Let's try to make it visible on small screens? 
+              No, that covers the image. 
+              
+              Let's just ensure the whole card is tappable (it is wrapped in Link).
+          */}
           <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-             <span className="bg-white/90 backdrop-blur text-primary text-xs uppercase tracking-widest px-4 py-2 flex items-center gap-2">
+             <span className="bg-white/90 backdrop-blur text-primary text-xs uppercase tracking-widest px-4 py-2 flex items-center gap-2 shadow-sm">
                 View Details <ArrowUpRight size={14} />
              </span>
           </div>
@@ -54,6 +66,7 @@ export const VehicleCard: React.FC<VehicleProps> = ({ id, name, tagline, price, 
                     {name}
                 </h3>
                 <p className="text-sm text-muted mt-1">{tagline}</p>
+                {/* Mobile-only "View" text if we really want it? Nah, standard pattern. */}
             </div>
             <span className="text-sm font-medium text-primary/80">{price}</span>
         </div>
