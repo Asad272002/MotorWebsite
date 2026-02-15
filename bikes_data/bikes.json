@@ -1,0 +1,178 @@
+[
+  {
+    "name": "TARO GP 2",
+    "cc": 200,
+    "brand": "Taro",
+    "specification": "EFI\nWATER COOL",
+    "type": "Original",
+    "image": { "localPath": "/bikes/TARO GP 2.png" }
+  },
+  {
+    "name": "TARO GP 1",
+    "cc": 401,
+    "brand": "TARO",
+    "specification": "EFI\nABS\nWATER COOL\n8 VALVE ENGINE\nTFT DISPLAY",
+    "type": "Original",
+    "image": { "localPath": "/bikes/TARO GP 1.png" }
+  },
+  {
+    "name": "Taro Gp1",
+    "cc": 300,
+    "brand": "Taro",
+    "specification": "300cc 4 valves engine, EFI, CBS, OIL COOL BUT NOT LIKE REPLICA, TFT DISPLAY,6 GEARS",
+    "type": "Original",
+    "image": { "localPath": "/bikes/Taro Gp1.png" }
+  },
+  {
+    "name": "Taro c6",
+    "cc": 250,
+    "brand": "Taro",
+    "specification": "250cc with 4 valves engine, EFI oil cooled,TFT DISPLAY,\n6 gears ⚙️   25HP, 24 NM TORQE",
+    "type": "Original",
+    "image": { "localPath": "/bikes/Taro c6.png" }
+  },
+  {
+    "name": "Taro C5",
+    "cc": 400,
+    "brand": "Taro",
+    "specification": "400cc Dual cylinder ABS efi watercool 8 valve engine\nFastest bike 🏍",
+    "type": "Original",
+    "image": { "localPath": "/bikes/Taro c5.png" }
+  },
+  {
+    "name": "Lifan kpm",
+    "cc": 200,
+    "brand": "Lifan",
+    "specification": "EFI ABS WATER COOLED  LED LIGHTS,  6 GEARS,SMOOTHLY  ROIDE",
+    "type": "Original",
+    "image": { "localPath": "/bikes/Lifan kpm.png" }
+  },
+  {
+    "name": "Lifan K19",
+    "cc": 200,
+    "brand": "Lifan",
+    "specification": "EFI  WATER COOLED  LED LIGHTS,  6 GEARS,SMOOTHLY  ROIDE\nComfort  posture  timsun tyres with alloy  rimes",
+    "type": "Original",
+    "image": { "localPath": "/bikes/Lifan K19.png" }
+  },
+  {
+    "name": "Lifan v16s",
+    "cc": 250,
+    "brand": "Lifan",
+    "specification": "EFI, ABS , WATER COOLED,LED LIGHTS,  6 GEARS,SMOOTHLY  ROIDE\nComfort  posture  cst tyres with alloy  rimes\n , v twin engine  , dual cylinder",
+    "type": "Original",
+    "image": { "localPath": "/bikes/Lifan v16s.png" }
+  },
+  {
+    "name": "Yamaha R6",
+    "cc": 500,
+    "brand": "Zongshan",
+    "specification": "Dual cylinder  EFI,ABS,WATER COOLED,FAT TYRE 180\nFRONT TYRE  120 HEAVY DUTY  SHOCK",
+    "type": "Replica",
+    "image": { "localPath": "/bikes/Yamaha R6.png" }
+  },
+  {
+    "name": "BMW  S1000RR",
+    "cc": 400,
+    "brand": "Zongshan",
+    "specification": "Dual cylinder  EFI,ABS,WATER COOLED,FAT TYRE 180\nFRONT TYRE  120 HEAVY DUTY  SHOCKS\n LOOKING  LIKE ORIGINAL",
+    "type": "Replica",
+    "image": { "localPath": "/bikes/BMW S1000RR.png" }
+  },
+  {
+    "name": "Ducati v4s",
+    "cc": 400,
+    "brand": "Zongshan",
+    "specification": "EFI ABS WATER COOLED DUAL CYLINDER FRONT TYRE 120\nBACK TYRE 16O",
+    "type": "Replica",
+    "image": { "localPath": "/bikes/Ducati v4s.png" }
+  },
+  {
+    "name": "Ducati gr",
+    "cc": 400,
+    "brand": "Zongshan",
+    "specification": "EFI ABS WATER COOLED DUAL CYLINDER FRONT TYRE 120\nBACK TYRE 16O singl swingao.",
+    "type": "Replica",
+    "image": { "localPath": "/bikes/Ducati gr.png" }
+  },
+  {
+    "name": "Ducati gt",
+    "cc": 250,
+    "brand": "Zongshan",
+    "specification": "Single-cylinder  carburetor base  remote system \nCrash guards disc brakes",
+    "type": "Replica",
+    "image": { "localPath": "/bikes/Ducati gt.png" }
+  },
+  {
+    "name": "Kawasaki ninja",
+    "cc": 250,
+    "brand": "Zongshan",
+    "specification": "Single-cylinder  carburetor base  remote system \nCrash guards disc brakes  Bluetooth system",
+    "type": "Replica",
+    "image": { "localPath": "/bikes/Kawasaki ninja.png" }
+  },
+  {
+    "name": "Lifan kpt",
+    "cc": 250,
+    "brand": "Lifan",
+    "specification": "Single-cylinder   EFI ABS WATER COOLED three  boxes traction controlled",
+    "type": "Original",
+    "image": { "localPath": "/bikes/Lifan kpt.png" }
+  },
+  {
+    "name": "Super star 200cc",
+    "cc": 200,
+    "brand": "Super star",
+    "specification": "lED LIGHTS  DIGITAL METER DISC BRAKES TUBELESS TURES UP & DOWN SHOCK 5 gears",
+    "type": "Original",
+    "image": { "localPath": "/bikes/Super star 200cc.png" }
+  },
+  {
+    "name": "Super star",
+    "cc": 150,
+    "brand": "Super star",
+    "specification": "DIGITAL METER DISC BRAKES  5 gears  spock rims",
+    "type": "Original",
+    "image": { "localPath": "/bikes/Super star.png" }
+  },
+  {
+    "name": "Taro c5",
+    "cc": 400,
+    "brand": "Taro",
+    "specification": "EFI ABS WATER COOLED DUAL CYLINDER  6 gears  fastest machine",
+    "type": "Original",
+    "image": { "localPath": "/bikes/Taro c5.png" }
+  },
+  {
+    "name": "Hi speed infinity",
+    "cc": 150,
+    "brand": "Hi speed",
+    "specification": "Single-cylinder carburetor base  Discs  brakes \nDigital meter",
+    "type": "Original",
+    "image": { "localPath": "/bikes/Hi speed infinity.png" }
+  },
+  {
+    "name": "Hi speed freedom",
+    "cc": 200,
+    "brand": "Hi speed",
+    "specification": "Single-cylinder carburetor base  Discs  brakes \nDigital meter",
+    "type": "Original",
+    "image": { "localPath": "/bikes/Hi speed freedom.png" }
+  },
+  {
+    "name": "Hi speed cyclone",
+    "cc": 250,
+    "brand": "Hi speed",
+    "specification": "Single-cylinder EFI Discs  brakes \nDigital meter TUBELESS TYRES",
+    "type": "Original",
+    "image": { "localPath": "/bikes/Hi speed cyclone.png" }
+  },
+  {
+    "name": "Hi speed batllo",
+    "cc": 200,
+    "brand": "Hi speed",
+    "specification": "Single-cylinder  carburetor base Discs  brakes \nDigital meter TUBELESS TYRES",
+    "type": "Original",
+    "image": { "localPath": "/bikes/Hi speed batllo.png" }
+  }
+]
