@@ -95,6 +95,8 @@ const modelImagesByNameKey: Record<string, string[]> = {
   'lifan v16s': ['/bikes/Lifan_-lifan_v16s_-250cc-4.png'],
   'lifan kpt': ['/bikes/Lifan_-lifan_kpt-250cc-1.png'],
   'hi speed infinity': ['/bikes-data/hi-speed/infinity/infinity_3.jpg'],
+  'super star 200cc': ['/bikes-data/superstar/superstart200/superstar_200.png'],
+  'falcon': ['/bikes-data/superstar/falcon/Super_star-falcon.png'],
 };
 
 const bikes: GroupedBike[] = Object.values(groupedBikesMap).map((bike) => {

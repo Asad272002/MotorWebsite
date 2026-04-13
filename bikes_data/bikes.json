@@ -125,7 +125,7 @@
     "brand": "Super star",
     "specification": "lED LIGHTS  DIGITAL METER DISC BRAKES TUBELESS TURES UP & DOWN SHOCK 5 gears",
     "type": "Original",
-    "image": { "localPath": "/bikes/Super star 200cc.png" }
+    "image": { "localPath": "/bikes-data/superstar/superstart200/superstar_200.png" }
   },
   {
     "name": "Falcon",
@@ -133,7 +133,7 @@
     "brand": "Super star",
     "specification": "DIGITAL METER DISC BRAKES  5 gears  spock rims",
     "type": "Original",
-    "image": { "localPath": "/bikes/Super star.png" }
+    "image": { "localPath": "/bikes-data/superstar/falcon/Super_star-falcon.png" }
   },
   {
     "name": "Hi speed infinity",
