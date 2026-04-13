@@ -1,0 +1,165 @@
+[
+  {
+    "name_of_bike": "TARO GP 2",
+    "cc": 200,
+    "brand": "Taro",
+    "original_replica": "Original",
+    "price_pkr": 825000
+  },
+  {
+    "name_of_bike": "TARO GP 1",
+    "cc": 401,
+    "brand": "TARO",
+    "original_replica": "Original",
+    "price_pkr": 1450000
+  },
+  {
+    "name_of_bike": "Taro Gp1",
+    "cc": 300,
+    "brand": "Taro",
+    "original_replica": "Original",
+    "price_pkr": 880000
+  },
+  {
+    "name_of_bike": "Taro c6",
+    "cc": 250,
+    "brand": "Taro",
+    "original_replica": "Original",
+    "price_pkr": 775000
+  },
+  {
+    "name_of_bike": "Taro C5",
+    "cc": 400,
+    "brand": "Taro",
+    "original_replica": "Original",
+    "price_pkr": 1450000
+  },
+  {
+    "name_of_bike": "Lifan kpm",
+    "cc": 200,
+    "brand": "Lifan",
+    "original_replica": "Original",
+    "price_pkr": 820000
+  },
+  {
+    "name_of_bike": "Lifan K19",
+    "cc": 200,
+    "brand": "Lifan",
+    "original_replica": "Original",
+    "price_pkr": 790000
+  },
+  {
+    "name_of_bike": "Lifan v16s",
+    "cc": 250,
+    "brand": "Lifan",
+    "original_replica": "Original",
+    "price_pkr": 1375000
+  },
+  {
+    "name_of_bike": "Yamaha R6",
+    "cc": 500,
+    "brand": "Replica/Others",
+    "original_replica": "Replica",
+    "price_pkr": 1450000
+  },
+  {
+    "name_of_bike": "BMW  S1000RR",
+    "cc": 400,
+    "brand": "Replica/Others",
+    "original_replica": "Replica",
+    "price_pkr": 1250000
+  },
+  {
+    "name_of_bike": "Ducati v4s",
+    "cc": 400,
+    "brand": "Replica/Others",
+    "original_replica": "Replica",
+    "price_pkr": 1175000
+  },
+  {
+    "name_of_bike": "Ducati gr",
+    "cc": 400,
+    "brand": "Replica/Others",
+    "original_replica": "Replica",
+    "price_pkr": 1075000
+  },
+  {
+    "name_of_bike": "Ducati gt",
+    "cc": 250,
+    "brand": "Replica/Others",
+    "original_replica": "Replica",
+    "price_pkr": 775000
+  },
+  {
+    "name_of_bike": "Kawasaki ninja",
+    "cc": 250,
+    "brand": "Replica/Others",
+    "original_replica": "Replica",
+    "price_pkr": 625000
+  },
+  {
+    "name_of_bike": "Lifan kpt",
+    "cc": 250,
+    "brand": "Lifan",
+    "original_replica": "Original",
+    "price_pkr": 1125000
+  },
+  {
+    "name_of_bike": "Super star 200cc",
+    "cc": 200,
+    "brand": "Super star",
+    "original_replica": "Original",
+    "price_pkr": 615000
+  },
+  {
+    "name_of_bike": "Super star Falcon",
+    "cc": 150,
+    "brand": "Super star",
+    "original_replica": "Original",
+    "price_pkr": 420000
+  },
+  {
+    "name_of_bike": "Taro c5",
+    "cc": 400,
+    "brand": "Taro",
+    "original_replica": "Original",
+    "price_pkr": 1450000
+  },
+  {
+    "name_of_bike": "Hi speed infinity",
+    "cc": 150,
+    "brand": "Hi speed",
+    "original_replica": "Original",
+    "price_pkr": 430000
+  },
+  {
+    "name_of_bike": "Hi speed freedom",
+    "cc": 200,
+    "brand": "Hi speed",
+    "original_replica": "Original",
+    "price_pkr": 535000
+  },
+  {
+    "name_of_bike": "Hi speed cyclone",
+    "cc": 250,
+    "brand": "Hi speed",
+    "original_replica": "Original",
+    "price_pkr": 760000,
+    "variant": "Standard"
+  },
+  {
+    "name_of_bike": "Hi speed cyclone",
+    "cc": 250,
+    "brand": "Hi speed",
+    "original_replica": "Original",
+    "price_pkr": 860000,
+    "variant": "ABS"
+  },
+  {
+    "name_of_bike": "Hi speed batllo",
+    "cc": 200,
+    "brand": "Hi speed",
+    "original_replica": "Original",
+    "price_pkr": 615000
+  }
+]
