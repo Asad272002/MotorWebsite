@@ -90,10 +90,11 @@ const modelImagesByNameKey: Record<string, string[]> = {
   'taro gp 1': ['/bikes/gp1_400_1.png', '/bikes/gp1_300_2.png'],
   'taro c6': ['/bikes/Taro -TARO c6-250cc-1.png'],
   'taro c5': ['/bikes/c5_400_1.png'],
-  'lifan kpm': ['/bikes/Lifan kpm.png'],
+  'lifan kpm': ['/bikes-data/lifan/kpm/kpm_2.png'],
   'lifan k19': ['/bikes/Lifan K19.png'],
   'lifan v16s': ['/bikes/Lifan_-lifan_v16s_-250cc-4.png'],
   'lifan kpt': ['/bikes/Lifan_-lifan_kpt-250cc-1.png'],
+  'hi speed infinity': ['/bikes-data/hi-speed/infinity/infinity_3.jpg'],
 };
 
 const bikes: GroupedBike[] = Object.values(groupedBikesMap).map((bike) => {
