@@ -32,7 +32,13 @@ const staggerContainer: Variants = {
 };
 
 export default function Home() {
-  const featuredVehicles = Object.values(vehiclesData).slice(0, 3);
+  const featuredVehicles = [
+    vehiclesData['taro-gp-2'],
+    vehiclesData['taro-gp-1'],
+    vehiclesData['taro-c6'],
+    vehiclesData['lifan-kpm-200'],
+    vehiclesData['lifan-v16s'],
+  ].filter(Boolean);
 
   return (
     <div className="flex flex-col min-h-screen">

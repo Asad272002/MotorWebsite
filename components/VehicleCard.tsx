@@ -22,6 +22,8 @@ export const VehicleCard: React.FC<VehicleProps> = ({
   cc,
   image,
 }) => {
+  const useMultiplyBlend = (image ?? '').includes('/models/');
+
   return (
     <Link href={`/catalogue/${id}`}>
       <motion.div 
@@ -39,7 +41,7 @@ export const VehicleCard: React.FC<VehicleProps> = ({
              <img 
                src={image} 
                alt={name} 
-               className="relative w-full h-full object-contain p-4 group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+               className={`relative w-full h-full object-contain p-4 group-hover:scale-[1.03] transition-transform duration-700 ease-out ${useMultiplyBlend ? 'mix-blend-multiply' : ''}`}
              />
           ) : (
             <>

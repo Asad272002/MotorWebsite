@@ -436,7 +436,7 @@ export default function Catalogue() {
                                               <span className="text-[10px] uppercase tracking-widest text-muted">
                                                 PKR
                                               </span>
-                                              <span className="mt-1 text-[13px] sm:text-sm font-semibold text-champagne tabular-nums whitespace-nowrap">
+                                              <span className="mt-1 max-w-full overflow-hidden text-ellipsis text-[12px] md:text-[13px] font-semibold text-champagne tabular-nums whitespace-nowrap tracking-tight">
                                                 {priceLabel.replace(/^PKR\s+/i, '')}
                                               </span>
                                             </div>
@@ -599,7 +599,7 @@ export default function Catalogue() {
                                       <span className="text-[10px] uppercase tracking-widest text-muted">
                                         PKR
                                       </span>
-                                      <span className="mt-1 text-[13px] sm:text-sm font-semibold text-champagne tabular-nums whitespace-nowrap">
+                                      <span className="mt-1 max-w-full overflow-hidden text-ellipsis text-[12px] md:text-[13px] font-semibold text-champagne tabular-nums whitespace-nowrap tracking-tight">
                                         {priceLabel.replace(/^PKR\s+/i, '')}
                                       </span>
                                     </div>

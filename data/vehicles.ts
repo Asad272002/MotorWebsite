@@ -252,7 +252,7 @@ export const vehiclesData: Record<string, Vehicle> = {
       { label: 'Power', value: '~15 kW' },
       { label: 'Use Case', value: 'Daily commuting' },
     ],
-    imagePath: '/models/lifankpm_200.png'
+    imagePath: '/bikes-data/lifan/kpm/kpm_2.png'
   },
   'lifan-k19-200': {
     id: 'lifan-k19-200',
@@ -330,7 +330,7 @@ export const vehiclesData: Record<string, Vehicle> = {
       { label: 'Displacement', value: '~250 cc' },
       { label: 'Style', value: 'Classic cruiser' },
     ],
-    imagePath: '/models/LifanV16s.png'
+    imagePath: '/bikes-data/lifan/v16s/Lifan_-lifan_v16s_-250cc-1.png'
   },
   'lifan-v400': {
     id: 'lifan-v400',
