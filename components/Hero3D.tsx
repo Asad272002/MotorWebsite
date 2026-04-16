@@ -20,7 +20,7 @@ const AbstractShape = () => {
       <mesh ref={meshRef} scale={1.2}>
         <torusKnotGeometry args={[1, 0.3, 128, 32]} />
         <meshPhysicalMaterial
-          color="#D4C5B0" // Accent color
+          color="#D89043"
           metalness={0.9}
           roughness={0.1}
           clearcoat={1}

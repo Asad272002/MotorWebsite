@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion, Variants } from 'framer-motion';
 import { HeroVideo } from '@/components/HeroVideo';
+import { Atmosphere3D } from '@/components/Atmosphere3D';
 import { Button } from '@/components/Button';
 import { VehicleCard } from '@/components/VehicleCard';
 import { ArrowRight } from 'lucide-react';
@@ -40,9 +41,11 @@ export default function Home() {
       <section className="relative h-[85vh] md:h-[100dvh] min-h-[600px] flex items-end justify-start overflow-hidden">
         {/* Background Video */}
         <HeroVideo />
+
+        <Atmosphere3D className="absolute inset-0 z-[1] pointer-events-none opacity-20 mix-blend-screen" />
         
         {/* Gradient Overlay for Text Readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-[1] pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/55 to-transparent z-[2] pointer-events-none" />
 
         {/* Content */}
         <motion.div 
@@ -51,26 +54,35 @@ export default function Home() {
           variants={staggerContainer}
           className="relative z-10 text-left px-6 pb-20 md:pb-40 md:pl-20 max-w-5xl w-full"
         >
-          <motion.h1 variants={fadeInUp} className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-serif text-[#D4C5B0] mb-6 md:mb-8 leading-tight drop-shadow-2xl">
+          <motion.h1 variants={fadeInUp} className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-serif text-champagne mb-6 md:mb-8 leading-tight drop-shadow-2xl">
             Crafted Performance.<br />
             Timeless Design.
           </motion.h1>
-          <motion.p variants={fadeInUp} className="text-[#F9F9F7] text-sm sm:text-base md:text-xl max-w-xl mb-8 md:mb-12 font-light leading-relaxed drop-shadow-xl">
+          <motion.p variants={fadeInUp} className="text-foreground/85 text-sm sm:text-base md:text-xl max-w-xl mb-8 md:mb-12 font-light leading-relaxed drop-shadow-xl">
             Experience the epitome of two-wheeled luxury. Where engineering meets art, and every ride becomes a statement.
           </motion.p>
-          <motion.div variants={fadeInUp}>
+          <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4">
             <Link href="/catalogue">
-              <Button variant="outline" size="lg" className="group text-sm md:text-base px-6 py-3 md:px-8 md:py-4 border-white text-white hover:bg-white hover:text-black hover:border-white backdrop-blur-sm bg-white/5">
-                Explore Collection
+              <Button variant="primary" size="lg" className="rounded-full">
+                Browse Catalogue
                 <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>
+            <a
+              href="https://maps.app.goo.gl/GtwvrJteHG5GjoNt5"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button variant="outline" size="lg" className="rounded-full">
+                Visit Showroom
+              </Button>
+            </a>
           </motion.div>
         </motion.div>
       </section>
 
       {/* Featured Collection Teaser */}
-      <section className="py-24 bg-background">
+      <section className="py-24">
         <div className="max-w-7xl mx-auto px-6">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -126,16 +138,16 @@ export default function Home() {
 
 
       {/* Editorial Section */}
-      <section className="py-24 bg-white">
+      <section className="py-24">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center bg-secondary/30 border border-white/10 rounded-[28px] p-8 md:p-14 shadow-[0_50px_120px_rgba(0,0,0,0.55)]">
             <motion.div
                initial={{ opacity: 0, x: -30 }}
                whileInView={{ opacity: 1, x: 0 }}
                viewport={{ once: true }}
                transition={{ duration: 0.8 }}
             >
-               <h2 className="text-4xl md:text-5xl font-serif text-primary mb-8 leading-tight">
+               <h2 className="text-4xl md:text-5xl font-serif text-champagne mb-8 leading-tight">
                  Redefining the<br />
                  Riding Experience
                </h2>
@@ -143,7 +155,7 @@ export default function Home() {
                  At OW Motors, we believe a motorcycle is more than just a machine; it is an extension of one&apos;s personality. Our showroom is designed to be a sanctuary for enthusiasts, free from the noise of traditional dealerships.
                </p>
                <Link href="/about">
-                 <Button variant="primary">Read Our Story</Button>
+                 <Button variant="primary" className="rounded-full">Read Our Story</Button>
                </Link>
             </motion.div>
             <motion.div
@@ -151,7 +163,7 @@ export default function Home() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="aspect-square bg-secondary/30 relative overflow-hidden"
+              className="aspect-square bg-black/20 border border-white/10 rounded-3xl relative overflow-hidden"
             >
               <Image
                 src="/showroom.png"
@@ -161,7 +173,7 @@ export default function Home() {
                 className="object-cover"
                 priority={false}
               />
-              <div className="absolute inset-0 bg-gradient-to-tr from-black/15 via-transparent to-white/10" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-black/35 via-transparent to-black/10" />
             </motion.div>
           </div>
         </div>

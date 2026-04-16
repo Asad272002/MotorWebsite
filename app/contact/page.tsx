@@ -37,7 +37,7 @@ function ContactForm() {
   };
 
   return (
-    <div className="bg-white border border-secondary/30 p-6 md:p-12 shadow-sm relative overflow-hidden flex flex-col md:flex-row gap-12">
+    <div className="bg-secondary/35 border border-white/10 p-6 md:p-12 shadow-[0_40px_90px_rgba(0,0,0,0.55)] relative overflow-hidden flex flex-col md:flex-row gap-12 rounded-3xl">
       <div className="w-full md:w-2/3">
         <AnimatePresence mode="wait">
           {!isSubmitted ? (
@@ -59,7 +59,7 @@ function ContactForm() {
                     required
                     value={formState.name}
                     onChange={handleChange}
-                    className="w-full border-b border-secondary/50 py-2 focus:outline-none focus:border-primary transition-colors bg-transparent placeholder-muted/30"
+                    className="w-full border-b border-white/10 py-2 focus:outline-none focus:border-accent transition-colors bg-transparent placeholder-muted/40 text-foreground"
                     placeholder="John Doe"
                   />
                 </div>
@@ -72,7 +72,7 @@ function ContactForm() {
                     required
                     value={formState.email}
                     onChange={handleChange}
-                    className="w-full border-b border-secondary/50 py-2 focus:outline-none focus:border-primary transition-colors bg-transparent placeholder-muted/30"
+                    className="w-full border-b border-white/10 py-2 focus:outline-none focus:border-accent transition-colors bg-transparent placeholder-muted/40 text-foreground"
                     placeholder="john@example.com"
                   />
                 </div>
@@ -87,7 +87,7 @@ function ContactForm() {
                     name="phone" 
                     value={formState.phone}
                     onChange={handleChange}
-                    className="w-full border-b border-secondary/50 py-2 focus:outline-none focus:border-primary transition-colors bg-transparent placeholder-muted/30"
+                    className="w-full border-b border-white/10 py-2 focus:outline-none focus:border-accent transition-colors bg-transparent placeholder-muted/40 text-foreground"
                     placeholder="+92 300 ..."
                   />
                 </div>
@@ -98,7 +98,7 @@ function ContactForm() {
                     name="vehicle" 
                     value={formState.vehicle}
                     onChange={handleChange}
-                    className="w-full border-b border-secondary/50 py-2 focus:outline-none focus:border-primary transition-colors bg-transparent text-primary"
+                    className="w-full border-b border-white/10 py-2 focus:outline-none focus:border-accent transition-colors bg-transparent text-foreground"
                   >
                     <option value="">Select a vehicle</option>
                     {Object.values(vehiclesData).map((vehicle) => (
@@ -118,7 +118,7 @@ function ContactForm() {
                   required
                   value={formState.message}
                   onChange={handleChange}
-                  className="w-full border-b border-secondary/50 py-2 focus:outline-none focus:border-primary transition-colors bg-transparent placeholder-muted/30 resize-none"
+                  className="w-full border-b border-white/10 py-2 focus:outline-none focus:border-accent transition-colors bg-transparent placeholder-muted/40 resize-none text-foreground"
                   placeholder="I am interested in..."
                 />
               </div>
@@ -135,12 +135,12 @@ function ContactForm() {
               animate={{ opacity: 1, scale: 1 }}
               className="flex flex-col items-center justify-center py-12 text-center"
             >
-              <CheckCircle className="w-16 h-16 text-primary mb-6" />
-              <h3 className="text-2xl font-serif text-primary mb-2">Inquiry Received</h3>
+              <CheckCircle className="w-16 h-16 text-champagne mb-6" />
+              <h3 className="text-2xl font-serif text-champagne mb-2">Inquiry Received</h3>
               <p className="text-muted">Thank you. Our team will contact you shortly.</p>
               <button 
                 onClick={() => setIsSubmitted(false)}
-                className="mt-8 text-xs uppercase tracking-widest border-b border-primary pb-1 hover:text-primary/70 transition-colors"
+                className="mt-8 text-xs uppercase tracking-widest border-b border-accent pb-1 hover:text-champagne transition-colors"
               >
                 Send Another
               </button>
@@ -149,26 +149,26 @@ function ContactForm() {
         </AnimatePresence>
       </div>
 
-      <div className="w-full md:w-1/3 md:border-l border-secondary/30 md:pl-12 flex flex-col justify-center space-y-8">
+      <div className="w-full md:w-1/3 md:border-l border-white/10 md:pl-12 flex flex-col justify-center space-y-8">
         <div>
-          <h3 className="font-serif text-xl text-primary mb-4">Visit Us</h3>
+          <h3 className="font-serif text-xl text-champagne mb-4">Visit Us</h3>
           <p className="text-muted text-sm leading-relaxed">
             Shop#61-A, Main Peco Road Township,<br/>
             Lahore, Pakistan.
           </p>
         </div>
         <div>
-          <h3 className="font-serif text-xl text-primary mb-4">Contact</h3>
+          <h3 className="font-serif text-xl text-champagne mb-4">Contact</h3>
           <p className="text-muted text-sm leading-relaxed">
             +92 322 2033399<br/>
             omerwaseem.97@gmail.com
           </p>
         </div>
         <div>
-          <h3 className="font-serif text-xl text-primary mb-4">Follow</h3>
+          <h3 className="font-serif text-xl text-champagne mb-4">Follow</h3>
           <div className="flex space-x-4 text-sm text-muted">
-            <a href="https://www.instagram.com/owmotors.official/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Instagram</a>
-            <a href="https://www.youtube.com/@owmotorsports" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">YouTube</a>
+            <a href="https://www.instagram.com/owmotors.official/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">Instagram</a>
+            <a href="https://www.youtube.com/@owmotorsports" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">YouTube</a>
           </div>
         </div>
       </div>
@@ -186,7 +186,20 @@ export default function Contact() {
           <p className="text-muted">We invite you to start a conversation.</p>
         </div>
 
-        <Suspense fallback={<div>Loading form...</div>}>
+        <Suspense
+          fallback={
+            <div className="bg-secondary/35 border border-white/10 p-6 md:p-12 rounded-3xl animate-pulse">
+              <div className="h-6 w-40 bg-black/20 rounded" />
+              <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="h-10 bg-black/20 rounded" />
+                <div className="h-10 bg-black/20 rounded" />
+                <div className="h-10 bg-black/20 rounded md:col-span-2" />
+                <div className="h-24 bg-black/20 rounded md:col-span-2" />
+              </div>
+              <div className="mt-8 h-12 w-44 bg-black/20 rounded-full" />
+            </div>
+          }
+        >
           <ContactForm />
         </Suspense>
         

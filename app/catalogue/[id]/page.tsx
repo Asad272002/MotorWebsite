@@ -214,12 +214,12 @@ export default async function BikeDetail({
   const galleryImages = await getGalleryImagesForGroup(bikeGroup);
 
   return (
-    <div className="pt-24 pb-24 min-h-screen bg-background">
+    <div className="pt-32 pb-24 min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-6">
         <div className="mb-8">
           <Link
             href={backHref}
-            className="text-sm uppercase tracking-widest text-muted hover:text-primary transition-colors flex items-center gap-2 w-fit"
+            className="text-sm uppercase tracking-widest text-muted hover:text-champagne transition-colors flex items-center gap-2 w-fit"
           >
             <ArrowLeft size={14} /> Back to Collection
           </Link>

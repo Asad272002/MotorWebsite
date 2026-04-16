@@ -25,44 +25,43 @@ export const VehicleCard: React.FC<VehicleProps> = ({
   return (
     <Link href={`/catalogue/${id}`}>
       <motion.div 
-        whileHover={{ y: -5 }}
-        className="group cursor-pointer"
+        whileHover={{ y: -3 }}
+        className="group cursor-pointer rounded-2xl overflow-hidden border border-white/10 bg-secondary/35 shadow-[0_30px_60px_rgba(0,0,0,0.35)] hover:bg-secondary/45 transition-colors"
       >
-        <div className="aspect-[16/10] mb-6 overflow-hidden relative rounded-sm">
+        <div className="aspect-[16/10] overflow-hidden relative">
           <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-white via-slate-50 to-slate-100" />
-            <div className="absolute -right-28 -top-28 h-[200%] w-[80%] rotate-[-18deg] bg-gradient-to-b from-amber-500/20 via-orange-400/10 to-transparent" />
-            <div className="absolute right-0 top-0 h-full w-[70%] bg-[radial-gradient(circle_at_1px_1px,rgba(245,158,11,0.14)_1px,transparent_0)] bg-[length:18px_18px] opacity-30" />
-            <div className="absolute -left-12 -bottom-12 h-48 w-48 rounded-full bg-red-500/10 blur-3xl" />
+            <div className="absolute inset-0 bg-gradient-to-br from-surface/35 via-background/40 to-background" />
+            <div className="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-[radial-gradient(circle_at_center,rgba(216,144,67,0.22),transparent_62%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(215,215,215,0.10)_1px,transparent_0)] bg-[length:18px_18px] opacity-20" />
           </div>
           {image ? (
              // eslint-disable-next-line @next/next/no-img-element
              <img 
                src={image} 
                alt={name} 
-               className="relative w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-700 ease-out"
+               className="relative w-full h-full object-contain p-4 group-hover:scale-[1.03] transition-transform duration-700 ease-out"
              />
           ) : (
             <>
-              <div className="absolute inset-0 bg-gray-200" />
-              <div className="absolute inset-0 flex items-center justify-center text-muted/50 font-serif text-xl">
+              <div className="absolute inset-0 bg-black/20" />
+              <div className="absolute inset-0 flex items-center justify-center text-muted font-serif text-xl">
                  {name}
               </div>
             </>
           )}
           
           {/* Hover Overlay */}
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-500" />
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500" />
           
           <div className="absolute bottom-4 left-4 right-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 pointer-events-none">
             {cc ? (
-              <span className="bg-white/85 backdrop-blur border border-amber-200/70 text-slate-950 text-xs uppercase tracking-widest px-3 py-2 w-fit">
+              <span className="bg-black/35 backdrop-blur border border-white/10 text-foreground text-xs uppercase tracking-widest px-3 py-2 w-fit">
                 {cc} CC
               </span>
             ) : (
               <span />
             )}
-            <span className="bg-white/85 backdrop-blur border border-amber-200/70 text-slate-950 text-xs uppercase tracking-widest px-3 py-2 w-fit sm:ml-auto">
+            <span className="bg-black/35 backdrop-blur border border-white/10 text-champagne text-xs uppercase tracking-widest px-3 py-2 w-fit sm:ml-auto">
               {price}
             </span>
           </div>
@@ -81,14 +80,14 @@ export const VehicleCard: React.FC<VehicleProps> = ({
               Let's just ensure the whole card is tappable (it is wrapped in Link).
           */}
           <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-             <span className="bg-white/90 backdrop-blur text-primary text-xs uppercase tracking-widest px-4 py-2 flex items-center gap-2 shadow-sm">
+             <span className="bg-black/35 backdrop-blur text-champagne text-xs uppercase tracking-widest px-4 py-2 flex items-center gap-2 border border-white/10">
                 View Details <ArrowUpRight size={14} />
              </span>
           </div>
         </div>
 
-        <div>
-          <h3 className="text-xl font-serif text-primary group-hover:text-accent transition-colors duration-300">
+        <div className="px-6 py-6">
+          <h3 className="text-xl font-serif text-foreground group-hover:text-champagne transition-colors duration-300">
             {name}
           </h3>
           <p className="text-sm text-muted mt-1">{tagline}</p>

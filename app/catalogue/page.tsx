@@ -162,17 +162,17 @@ const CatalogueGridSkeleton = ({ count }: { count: number }) => {
       {Array.from({ length: count }).map((_, idx) => (
         <div
           key={idx}
-          className="border border-slate-200/70 bg-white rounded-2xl overflow-hidden animate-pulse"
+          className="border border-white/10 bg-secondary/35 rounded-2xl overflow-hidden animate-pulse"
         >
           <div className="flex items-center">
             <div className="w-32 sm:w-40 md:w-44">
-              <div className="aspect-[16/10] bg-slate-100" />
+              <div className="aspect-[16/10] bg-black/20" />
             </div>
             <div className="flex-1 min-w-0 px-6 py-6">
-              <div className="h-5 w-2/3 bg-slate-200 rounded" />
+              <div className="h-5 w-2/3 bg-black/20 rounded" />
               <div className="mt-5 grid grid-cols-2 gap-3">
-                <div className="h-10 bg-slate-200 rounded-xl" />
-                <div className="h-10 bg-slate-200 rounded-xl" />
+                <div className="h-10 bg-black/20 rounded-2xl" />
+                <div className="h-10 bg-black/20 rounded-2xl" />
               </div>
             </div>
           </div>
@@ -244,7 +244,7 @@ export default function Catalogue() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(15,23,42,0.06),transparent_60%)]" />
         <div className="absolute -left-40 -top-24 h-[200%] w-[65%] rotate-[-18deg] bg-gradient-to-b from-amber-500/18 via-orange-400/8 to-transparent" />
         <div className="absolute right-0 top-0 h-full w-[55%] bg-[radial-gradient(circle_at_1px_1px,rgba(245,158,11,0.14)_1px,transparent_0)] bg-[length:18px_18px] opacity-25" />
-        <div className="absolute left-1/2 top-1/3 h-72 w-72 -translate-x-1/2 rounded-full bg-red-500/10 blur-3xl" />
+        <div className="absolute left-1/2 top-1/3 h-72 w-72 -translate-x-1/2 rounded-full bg-performance/5 blur-3xl" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-6">
@@ -279,8 +279,8 @@ export default function Catalogue() {
             </p>
           </div>
 
-          <div className="flex justify-center mb-10">
-            <div className="inline-flex rounded-full border border-secondary/40 bg-white/80 backdrop-blur-sm p-1 text-xs uppercase tracking-widest">
+          <div className="sticky top-24 z-30 flex justify-center mb-10">
+            <div className="inline-flex rounded-full border border-white/10 bg-secondary/55 backdrop-blur-sm p-1 text-xs uppercase tracking-widest">
               <button
                 onClick={() => {
                   if (activeCategory === 'ORIGINAL') return;
@@ -290,8 +290,8 @@ export default function Catalogue() {
                 }}
                 className={`px-4 py-2 rounded-full transition-colors ${
                   activeCategory === 'ORIGINAL'
-                    ? 'bg-primary text-white'
-                    : 'text-muted hover:text-primary'
+                    ? 'bg-accent text-white'
+                    : 'text-muted hover:text-foreground'
                 }`}
               >
                 Original
@@ -305,8 +305,8 @@ export default function Catalogue() {
                 }}
                 className={`px-4 py-2 rounded-full transition-colors ${
                   activeCategory === 'OTHERS'
-                    ? 'bg-primary text-white'
-                    : 'text-muted hover:text-primary'
+                    ? 'bg-accent text-white'
+                    : 'text-muted hover:text-foreground'
                 }`}
               >
                 Others
@@ -324,13 +324,13 @@ export default function Catalogue() {
                 transition={{ duration: 0.25, ease: 'easeOut' }}
                 className="mb-10"
               >
-                <div className="flex flex-wrap justify-center gap-3 mb-10 text-xs uppercase tracking-widest text-muted">
+                <div className="sticky top-40 z-20 flex flex-wrap justify-center gap-3 mb-10 text-xs uppercase tracking-widest text-muted">
                   <button
                     onClick={() => setOriginalBrandFilter('ALL')}
                     className={`px-3 py-1 border rounded-full transition-colors ${
                       originalBrandFilter === 'ALL'
-                        ? 'border-primary text-primary bg-primary/5'
-                        : 'border-secondary/40 hover:border-primary hover:text-primary'
+                        ? 'border-accent text-primary bg-white/5'
+                        : 'border-white/10 hover:border-accent hover:text-primary'
                     }`}
                   >
                     All Brands
@@ -342,8 +342,8 @@ export default function Catalogue() {
                         onClick={() => setOriginalBrandFilter(brand)}
                         className={`px-3 py-1 border rounded-full transition-colors ${
                           originalBrandFilter === brand
-                            ? 'border-primary text-primary bg-primary/5'
-                            : 'border-secondary/40 hover:border-primary hover:text-primary'
+                            ? 'border-accent text-primary bg-white/5'
+                            : 'border-white/10 hover:border-accent hover:text-primary'
                         }`}
                       >
                         {brand}
@@ -387,24 +387,24 @@ export default function Catalogue() {
                               <Link
                                 key={bike.name}
                                 href={`/catalogue/${slugify(bike.name)}${originalsDetailSuffix}`}
-                                  className="group block border border-slate-200/70 bg-white rounded-2xl overflow-hidden transition-all hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-amber-300/40"
+                                  className="group block border border-white/10 bg-secondary/35 rounded-2xl overflow-hidden transition-all hover:bg-secondary/45 hover:shadow-[0_40px_90px_rgba(0,0,0,0.55)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-accent/35"
                               >
                                 <div className="relative">
                                   <div className="absolute inset-0">
-                                    <div className="absolute inset-0 bg-gradient-to-br from-white via-slate-50 to-slate-100" />
-                                      <div className="absolute -right-20 -top-24 h-[200%] w-[75%] rotate-[-18deg] bg-gradient-to-b from-amber-500/22 via-orange-400/10 to-transparent" />
-                                      <div className="absolute right-0 top-0 h-full w-[65%] bg-[radial-gradient(circle_at_1px_1px,rgba(245,158,11,0.14)_1px,transparent_0)] bg-[length:18px_18px] opacity-30" />
-                                      <div className="absolute -left-16 -bottom-16 h-48 w-48 rounded-full bg-red-500/10 blur-3xl" />
+                                    <div className="absolute inset-0 bg-gradient-to-br from-background via-secondary/40 to-background" />
+                                    <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[radial-gradient(circle_at_center,rgba(216,144,67,0.18),transparent_62%)]" />
+                                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(215,215,215,0.08)_1px,transparent_0)] bg-[length:18px_18px] opacity-25" />
+                                    <div className="absolute inset-0 bg-gradient-to-r from-black/35 via-transparent to-black/10" />
                                   </div>
 
                                   <div className="relative flex items-center">
-                                  <div className="w-32 sm:w-40 md:w-44">
-                                    <div className="aspect-[16/10] bg-white/60 flex items-center justify-center">
+                                  <div className="w-36 sm:w-44 md:w-52">
+                                    <div className="aspect-[16/10] bg-black/10 border border-white/10 rounded-xl flex items-center justify-center overflow-hidden ml-4 my-4">
                                       {bike.previewImage ? (
                                         <img
                                           src={bike.previewImage}
                                           alt={bike.name}
-                                          className="w-full h-full object-contain p-3 transition-transform duration-500 group-hover:scale-[1.02]"
+                                          className="w-full h-full object-contain p-2 drop-shadow-[0_18px_36px_rgba(0,0,0,0.55)] transition-transform duration-500 group-hover:scale-[1.05]"
                                         />
                                       ) : (
                                         <div className="w-full h-full flex items-center justify-center text-xs uppercase tracking-widest text-muted">
@@ -418,22 +418,33 @@ export default function Catalogue() {
                                       {bike.name}
                                     </h5>
 
-                                    <div className="mt-5 grid grid-cols-2 gap-3">
-                                        <div className="rounded-xl border border-amber-200/70 bg-amber-50/70 px-3 py-2">
-                                          <div className="text-[10px] uppercase tracking-widest text-amber-800/70">
+                                    <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div className="rounded-2xl border border-white/10 bg-black/20 px-3 py-2">
+                                          <div className="text-[10px] uppercase tracking-widest text-muted">
                                           Top Variant
                                         </div>
-                                          <div className="text-sm font-semibold text-slate-950">
+                                          <div className="text-sm font-semibold text-foreground">
                                           {topCc} CC
                                         </div>
                                       </div>
-                                        <div className="rounded-xl border border-amber-200/70 bg-amber-50/70 px-3 py-2">
-                                          <div className="text-[10px] uppercase tracking-widest text-amber-800/70">
+                                        <div className="rounded-2xl border border-white/10 bg-black/20 px-3 py-2">
+                                          <div className="text-[10px] uppercase tracking-widest text-muted">
                                           Price
                                         </div>
-                                          <div className="text-xs sm:text-sm font-semibold text-slate-950 leading-tight break-words">
-                                          {priceLabel}
-                                        </div>
+                                          {priceLabel.startsWith('PKR ') ? (
+                                            <div className="mt-1 flex flex-col leading-none">
+                                              <span className="text-[10px] uppercase tracking-widest text-muted">
+                                                PKR
+                                              </span>
+                                              <span className="mt-1 text-[13px] sm:text-sm font-semibold text-champagne tabular-nums whitespace-nowrap">
+                                                {priceLabel.replace(/^PKR\s+/i, '')}
+                                              </span>
+                                            </div>
+                                          ) : (
+                                            <div className="mt-1 text-xs sm:text-sm font-semibold text-champagne leading-tight">
+                                              {priceLabel}
+                                            </div>
+                                          )}
                                       </div>
                                     </div>
 
@@ -442,18 +453,23 @@ export default function Catalogue() {
                                           {otherVariants.map((v) => (
                                             <span
                                               key={`${v.cc}-${(v.variant ?? '').toLowerCase().replace(/[^a-z0-9]/g, '')}-${v.pricePkr}`}
-                                              className="inline-flex items-center gap-2 rounded-full border border-amber-200/70 bg-white/70 px-3 py-1 text-xs text-slate-950"
+                                              className="inline-flex max-w-full min-w-0 flex-wrap items-center gap-x-2 gap-y-1 rounded-2xl border border-white/10 bg-black/20 px-3 py-2 text-xs text-foreground sm:rounded-full sm:py-1"
                                             >
                                               <span className="font-semibold uppercase tracking-widest">
                                                 {v.cc} CC
                                               </span>
                                               {v.variant && (
-                                                <span className="uppercase tracking-widest text-[10px] text-slate-700/70">
+                                                <span className="uppercase tracking-widest text-[10px] text-muted">
                                                   {v.variant}
                                                 </span>
                                               )}
-                                              <span className="text-amber-800/80">
-                                                {formatPricePkr(v.pricePkr)}
+                                              <span className="text-champagne/90 tabular-nums">
+                                                <span className="text-muted uppercase tracking-widest text-[10px]">
+                                                  PKR
+                                                </span>{' '}
+                                                <span className="whitespace-nowrap">
+                                                  {formatPricePkr(v.pricePkr).replace(/^PKR\s+/i, '')}
+                                                </span>
                                               </span>
                                             </span>
                                           ))}
@@ -534,24 +550,24 @@ export default function Catalogue() {
                       <Link
                         key={bike.name}
                         href={`/catalogue/${slugify(bike.name)}${othersDetailSuffix}`}
-                          className="group block border border-slate-200/70 bg-white rounded-2xl overflow-hidden transition-all hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-amber-300/40"
+                          className="group block border border-white/10 bg-secondary/35 rounded-2xl overflow-hidden transition-all hover:bg-secondary/45 hover:shadow-[0_40px_90px_rgba(0,0,0,0.55)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-accent/35"
                       >
                         <div className="relative">
                           <div className="absolute inset-0">
-                            <div className="absolute inset-0 bg-gradient-to-br from-white via-slate-50 to-slate-100" />
-                              <div className="absolute -right-20 -top-24 h-[200%] w-[75%] rotate-[-18deg] bg-gradient-to-b from-amber-500/22 via-orange-400/10 to-transparent" />
-                              <div className="absolute right-0 top-0 h-full w-[65%] bg-[radial-gradient(circle_at_1px_1px,rgba(245,158,11,0.14)_1px,transparent_0)] bg-[length:18px_18px] opacity-30" />
-                              <div className="absolute -left-16 -bottom-16 h-48 w-48 rounded-full bg-red-500/10 blur-3xl" />
+                            <div className="absolute inset-0 bg-gradient-to-br from-background via-secondary/40 to-background" />
+                            <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[radial-gradient(circle_at_center,rgba(216,144,67,0.18),transparent_62%)]" />
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(215,215,215,0.08)_1px,transparent_0)] bg-[length:18px_18px] opacity-25" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-black/35 via-transparent to-black/10" />
                           </div>
 
                           <div className="relative flex items-center">
-                          <div className="w-32 sm:w-40 md:w-44">
-                            <div className="aspect-[16/10] bg-white/60 flex items-center justify-center">
+                          <div className="w-36 sm:w-44 md:w-52">
+                            <div className="aspect-[16/10] bg-black/10 border border-white/10 rounded-xl flex items-center justify-center overflow-hidden ml-4 my-4">
                               {bike.previewImage ? (
                                 <img
                                   src={bike.previewImage}
                                   alt={bike.name}
-                                  className="w-full h-full object-contain p-3 transition-transform duration-500 group-hover:scale-[1.02]"
+                                  className="w-full h-full object-contain p-2 drop-shadow-[0_18px_36px_rgba(0,0,0,0.55)] transition-transform duration-500 group-hover:scale-[1.05]"
                                 />
                               ) : (
                                 <div className="w-full h-full flex items-center justify-center text-xs uppercase tracking-widest text-muted">
@@ -565,22 +581,33 @@ export default function Catalogue() {
                               {bike.name}
                             </h5>
 
-                            <div className="mt-5 grid grid-cols-2 gap-3">
-                                <div className="rounded-xl border border-amber-200/70 bg-amber-50/70 px-3 py-2">
-                                  <div className="text-[10px] uppercase tracking-widest text-amber-800/70">
+                            <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div className="rounded-2xl border border-white/10 bg-black/20 px-3 py-2">
+                                  <div className="text-[10px] uppercase tracking-widest text-muted">
                                   Top Variant
                                 </div>
-                                  <div className="text-sm font-semibold text-slate-950">
+                                  <div className="text-sm font-semibold text-foreground">
                                   {topCc} CC
                                 </div>
                               </div>
-                                <div className="rounded-xl border border-amber-200/70 bg-amber-50/70 px-3 py-2">
-                                  <div className="text-[10px] uppercase tracking-widest text-amber-800/70">
+                                <div className="rounded-2xl border border-white/10 bg-black/20 px-3 py-2">
+                                  <div className="text-[10px] uppercase tracking-widest text-muted">
                                   Price
                                 </div>
-                                  <div className="text-xs sm:text-sm font-semibold text-slate-950 leading-tight break-words">
-                                  {priceLabel}
-                                </div>
+                                  {priceLabel.startsWith('PKR ') ? (
+                                    <div className="mt-1 flex flex-col leading-none">
+                                      <span className="text-[10px] uppercase tracking-widest text-muted">
+                                        PKR
+                                      </span>
+                                      <span className="mt-1 text-[13px] sm:text-sm font-semibold text-champagne tabular-nums whitespace-nowrap">
+                                        {priceLabel.replace(/^PKR\s+/i, '')}
+                                      </span>
+                                    </div>
+                                  ) : (
+                                    <div className="mt-1 text-xs sm:text-sm font-semibold text-champagne leading-tight">
+                                      {priceLabel}
+                                    </div>
+                                  )}
                               </div>
                             </div>
 
@@ -589,18 +616,23 @@ export default function Catalogue() {
                                   {otherVariants.map((v) => (
                                     <span
                                       key={`${v.cc}-${(v.variant ?? '').toLowerCase().replace(/[^a-z0-9]/g, '')}-${v.pricePkr}`}
-                                      className="inline-flex items-center gap-2 rounded-full border border-amber-200/70 bg-white/70 px-3 py-1 text-xs text-slate-950"
+                                      className="inline-flex max-w-full min-w-0 flex-wrap items-center gap-x-2 gap-y-1 rounded-2xl border border-white/10 bg-black/20 px-3 py-2 text-xs text-foreground sm:rounded-full sm:py-1"
                                     >
                                       <span className="font-semibold uppercase tracking-widest">
                                         {v.cc} CC
                                       </span>
                                       {v.variant && (
-                                        <span className="uppercase tracking-widest text-[10px] text-slate-700/70">
+                                        <span className="uppercase tracking-widest text-[10px] text-muted">
                                           {v.variant}
                                         </span>
                                       )}
-                                      <span className="text-amber-800/80">
-                                        {formatPricePkr(v.pricePkr)}
+                                      <span className="text-champagne/90 tabular-nums">
+                                        <span className="text-muted uppercase tracking-widest text-[10px]">
+                                          PKR
+                                        </span>{' '}
+                                        <span className="whitespace-nowrap">
+                                          {formatPricePkr(v.pricePkr).replace(/^PKR\s+/i, '')}
+                                        </span>
                                       </span>
                                     </span>
                                   ))}

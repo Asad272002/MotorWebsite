@@ -6,6 +6,9 @@
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
   --color-accent: var(--accent);
+  --color-champagne: var(--champagne);
+  --color-surface: var(--surface);
+  --color-performance: var(--performance);
   --color-muted: var(--muted);
   
   --font-sans: var(--font-sans);
@@ -13,16 +16,26 @@
 }
 
 :root {
-  --background: #F9F9F7; /* Off-white / Ivory */
-  --foreground: #2C2C2C; /* Charcoal */
-  --primary: #1A1A1A;    /* Darker Charcoal for headings */
-  --secondary: #E5E5E5;  /* Soft Silver */
-  --accent: #D4C5B0;     /* Muted Beige */
-  --muted: #9CA3AF;      /* Muted Grey */
+  --background: #1B202A;
+  --foreground: #D7D7D7;
+  --primary: #D7D7D7;
+  --secondary: #333844;
+  --surface: #48515F;
+  --accent: #D89043;
+  --champagne: #F3D777;
+  --performance: #D32E2F;
+  --muted: #9AA4B2;
 }
 
 body {
   background-color: var(--background);
+  background-image:
+    radial-gradient(900px 520px at 12% 10%, rgba(72, 81, 95, 0.55), transparent 62%),
+    radial-gradient(760px 460px at 78% 68%, rgba(216, 144, 67, 0.14), transparent 64%),
+    radial-gradient(520px 340px at 58% 22%, rgba(243, 215, 119, 0.10), transparent 62%),
+    linear-gradient(135deg, rgba(27, 32, 42, 0.96), rgba(9, 11, 16, 0.98)),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/></filter><rect width='180' height='180' filter='url(%23n)' opacity='.10'/></svg>");
+  background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-sans);
   line-height: 1.6;

@@ -142,14 +142,14 @@ export const VariantSelector = ({
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
             transition={{ duration: 0.4 }}
-            className="aspect-[16/10] bg-secondary/10 rounded-3xl overflow-hidden flex items-center justify-center p-8 shadow-inner"
+            className="aspect-[16/10] bg-secondary/30 border border-white/10 rounded-3xl overflow-hidden flex items-center justify-center p-8 shadow-[0_30px_60px_rgba(0,0,0,0.35)]"
           >
             {activeImage ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={activeImage}
                 alt={selectedVariant.name}
-                className="w-full h-full object-contain mix-blend-multiply"
+                className="w-full h-full object-contain"
               />
             ) : (
               <div className="text-muted tracking-widest uppercase text-sm">
@@ -167,13 +167,13 @@ export const VariantSelector = ({
                 onClick={() => setSelectedImageIndex(idx)}
                 className={`h-20 w-28 shrink-0 rounded-2xl overflow-hidden border transition-all ${
                   idx === selectedImageIndex
-                    ? 'border-primary shadow-md'
-                    : 'border-secondary/30 hover:border-primary/50'
+                    ? 'border-accent shadow-md'
+                    : 'border-white/10 hover:border-accent/50'
                 }`}
                 aria-label={`View image ${idx + 1}`}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={img} alt="" className="w-full h-full object-contain bg-white/80" />
+                <img src={img} alt="" className="w-full h-full object-contain bg-black/10" />
               </button>
             ))}
           </div>
@@ -182,10 +182,10 @@ export const VariantSelector = ({
 
       <div className="flex flex-col justify-center">
         <div className="mb-4 flex items-center gap-3">
-          <span className="inline-block px-4 py-1.5 bg-primary/5 border border-primary/10 text-primary text-xs tracking-widest uppercase rounded-full font-medium">
+          <span className="inline-block px-4 py-1.5 bg-black/20 border border-white/10 text-primary text-xs tracking-widest uppercase rounded-full font-medium">
             {bikeGroup.brand}
           </span>
-          <span className="inline-block px-4 py-1.5 bg-secondary/20 text-primary text-xs tracking-widest uppercase rounded-full font-medium">
+          <span className="inline-block px-4 py-1.5 bg-black/20 border border-white/10 text-foreground text-xs tracking-widest uppercase rounded-full font-medium">
             {typeLabel}
           </span>
         </div>
@@ -211,8 +211,8 @@ export const VariantSelector = ({
                   }}
                   className={`px-6 py-3 rounded-2xl text-sm font-medium transition-all duration-300 border ${
                     selectedVariant.cc === cc
-                      ? 'border-primary bg-primary text-white shadow-md transform scale-105'
-                      : 'border-secondary/40 text-muted hover:border-primary/50 hover:text-primary bg-white'
+                      ? 'border-accent bg-accent text-white shadow-md transform scale-105'
+                      : 'border-white/10 text-muted hover:border-accent/50 hover:text-foreground bg-black/20'
                   }`}
                 >
                   <span className="flex flex-col items-center leading-tight">
@@ -233,14 +233,14 @@ export const VariantSelector = ({
           </div>
         )}
 
-        <div className="bg-white rounded-2xl border border-secondary/20 p-8 shadow-sm mb-10">
+        <div className="bg-secondary/30 rounded-2xl border border-white/10 p-8 shadow-[0_30px_60px_rgba(0,0,0,0.35)] mb-10">
           <h3 className="text-xs uppercase tracking-widest text-muted mb-6 font-semibold flex items-center">
             Specifications <ChevronRight size={14} className="ml-1 opacity-50" />
           </h3>
-          <ul className="space-y-2 text-base text-primary/80 font-light">
+          <ul className="space-y-2 text-base text-foreground/80 font-light">
             {specItems.map((item) => (
               <li key={item} className="flex gap-3 leading-relaxed">
-                <span className="mt-2 h-1.5 w-1.5 rounded-full bg-primary/60 shrink-0" />
+                <span className="mt-2 h-1.5 w-1.5 rounded-full bg-accent/70 shrink-0" />
                 <span>{item}</span>
               </li>
             ))}
@@ -256,7 +256,7 @@ export const VariantSelector = ({
               {selectedPriceLabel ? (
                 <>
                   Price for the <strong className="text-primary">{selectedVariant.cc}cc</strong> model:{' '}
-                  <strong className="text-primary">{selectedPriceLabel}</strong>
+                  <strong className="text-champagne">{selectedPriceLabel}</strong>
                 </>
               ) : (
                 <>

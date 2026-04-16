@@ -29,7 +29,7 @@ export default function About() {
            whileInView={{ opacity: 1 }}
            viewport={{ once: true }}
            transition={{ duration: 0.8, delay: 0.2 }}
-           className="aspect-[16/9] md:aspect-[21/9] bg-secondary/20 mb-24 relative overflow-hidden"
+           className="aspect-[16/9] md:aspect-[21/9] bg-secondary/30 border border-white/10 mb-24 relative overflow-hidden rounded-3xl"
         >
           <Image
             src="/showroom.png"
@@ -39,7 +39,7 @@ export default function About() {
             className="object-cover"
             priority={false}
           />
-          <div className="absolute inset-0 bg-gradient-to-tr from-black/20 via-transparent to-white/10" />
+          <div className="absolute inset-0 bg-gradient-to-tr from-black/35 via-transparent to-black/10" />
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-24">
@@ -60,7 +60,7 @@ export default function About() {
            </div>
         </div>
 
-        <div className="border-t border-secondary/30 pt-16 text-center">
+        <div className="border-t border-white/10 pt-16 text-center">
            <h3 className="text-3xl font-serif text-primary mb-8">Visit Our Showroom</h3>
            <p className="text-muted max-w-lg mx-auto mb-8">
              Shop#61-A, Main Peco Road Township, Lahore.<br/>
