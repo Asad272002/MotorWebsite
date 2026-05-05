@@ -26,9 +26,11 @@ type GroupedBike = Omit<Bike, 'cc'> & {
 export const VariantSelector = ({
   bikeGroup,
   galleryImages,
+  galleryImagesByCc,
 }: {
   bikeGroup: GroupedBike;
   galleryImages: string[];
+  galleryImagesByCc: Record<number, string[]>;
 }) => {
   const sortedVariants = useMemo(
     () => [...bikeGroup.variants].sort((a, b) => a.cc - b.cc),
@@ -91,7 +93,15 @@ export const VariantSelector = ({
     return items;
   }, [selectedVariant.cc, selectedVariant.specification]);
 
-  const activeImages = galleryImages.length > 0 ? galleryImages : (selectedVariant.image?.localPath ? [selectedVariant.image.localPath] : []);
+  const imagesForCc = galleryImagesByCc[selectedVariant.cc] ?? [];
+  const activeImages =
+    imagesForCc.length > 0
+      ? imagesForCc
+      : galleryImages.length > 0
+        ? galleryImages
+        : selectedVariant.image?.localPath
+          ? [selectedVariant.image.localPath]
+          : [];
   const activeImage = activeImages[selectedImageIndex] ?? activeImages[0] ?? null;
   const ccOptions = useMemo(
     () => Array.from(new Set(sortedVariants.map((v) => v.cc))),

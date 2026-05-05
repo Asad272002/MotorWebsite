@@ -188,6 +188,64 @@ const getGalleryImagesForGroup = async (bikeGroup: GroupedBike) => {
   });
 };
 
+const getGalleryImagesByCc = async (bikeGroup: GroupedBike) => {
+  const bikesDataRoot = path.join(process.cwd(), 'bikes_data');
+  const allFiles = await listFilesRecursive(bikesDataRoot, 5);
+  const filesByBaseName = new Map<string, string[]>();
+
+  allFiles.forEach((fullPath) => {
+    const base = path.basename(fullPath);
+    const existing = filesByBaseName.get(base);
+    if (existing) {
+      existing.push(fullPath);
+      return;
+    }
+    filesByBaseName.set(base, [fullPath]);
+  });
+
+  const entries = await Promise.all(
+    bikeGroup.variants.map(async (variant) => {
+      const fileName = (variant.image?.localPath ?? '').split('/').pop();
+      if (!fileName) return [variant.cc, [] as string[]] as const;
+
+      const matches = filesByBaseName.get(fileName) ?? [];
+      if (matches.length === 0) return [variant.cc, [] as string[]] as const;
+
+      let dir = path.dirname(matches[0]);
+      const base = path.basename(dir);
+      if (isVariantFolderName(base)) {
+        dir = path.dirname(dir);
+      }
+
+      const filePaths = await listFilesRecursive(dir, 2);
+      const baseMatch = normalizeForMatch(bikeGroup.baseName);
+      const images = filePaths
+        .filter((p) => isImageFileName(p))
+        .filter((p) => {
+          if (bikeGroup.type.toLowerCase() !== 'replica') return true;
+          const stem = path.parse(p).name;
+          const fileMatch = normalizeForMatch(stem);
+          return fileMatch.includes(baseMatch) || baseMatch.includes(fileMatch);
+        })
+        .sort((a, b) => a.localeCompare(b))
+        .map((absPath) => {
+          const rel = path.relative(bikesDataRoot, absPath);
+          const urlSegments = rel.split(path.sep).map((s) => encodeURIComponent(s));
+          return `/bikes-data/${urlSegments.join('/')}`;
+        });
+
+      return [variant.cc, images] as const;
+    })
+  );
+
+  const byCc: Record<number, string[]> = {};
+  entries.forEach(([cc, images]) => {
+    if (!byCc[cc]) byCc[cc] = images;
+  });
+
+  return byCc;
+};
+
 export default async function BikeDetail({
   params,
   searchParams,
@@ -212,6 +270,7 @@ export default async function BikeDetail({
   }
 
   const galleryImages = await getGalleryImagesForGroup(bikeGroup);
+  const galleryImagesByCc = await getGalleryImagesByCc(bikeGroup);
 
   return (
     <div className="pt-32 pb-24 min-h-screen bg-background">
@@ -226,7 +285,7 @@ export default async function BikeDetail({
         </div>
 
         {/* Client component to handle state between variants */}
-        <VariantSelector bikeGroup={bikeGroup} galleryImages={galleryImages} />
+        <VariantSelector bikeGroup={bikeGroup} galleryImages={galleryImages} galleryImagesByCc={galleryImagesByCc} />
       </div>
     </div>
   );
