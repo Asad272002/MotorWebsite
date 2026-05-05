@@ -330,7 +330,7 @@ export const vehiclesData: Record<string, Vehicle> = {
       { label: 'Displacement', value: '~250 cc' },
       { label: 'Style', value: 'Classic cruiser' },
     ],
-    imagePath: '/bikes-data/lifan/v16s/Lifan_-lifan_v16s_-250cc-1.png'
+    imagePath: '/bikes-data/lifan/v16s/LifanV16s.png'
   },
   'lifan-v400': {
     id: 'lifan-v400',

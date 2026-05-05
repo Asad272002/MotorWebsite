@@ -64,6 +64,62 @@
     "image": { "localPath": "/bikes/Lifan_-lifan_v16s_-250cc-1.png" }
   },
   {
+    "name": "LIFAN SS2",
+    "cc": 250,
+    "brand": "Lifan",
+    "specification": "Contact for specifications",
+    "type": "Original",
+    "image": { "localPath": "/bikes-data/lifan/SS2/LIFANSS2.png" }
+  },
+  {
+    "name": "LIFAN SS3",
+    "cc": 200,
+    "brand": "Lifan",
+    "specification": "Contact for specifications",
+    "type": "Original",
+    "image": { "localPath": "/bikes-data/lifan/SS3/SS3.png" }
+  },
+  {
+    "name": "LIFAN X-PECT",
+    "cc": 250,
+    "brand": "Lifan",
+    "specification": "Contact for specifications",
+    "type": "Original",
+    "image": { "localPath": "/bikes-data/lifan/Xpect/X-PECT250.png" }
+  },
+  {
+    "name": "LIFAN K29",
+    "cc": 250,
+    "brand": "Lifan",
+    "specification": "Contact for specifications",
+    "type": "Original",
+    "image": { "localPath": "/bikes-data/lifan/k29/Lifan_-lifan_k29_-250cc-10.png" }
+  },
+  {
+    "name": "LIFAN KPS 250",
+    "cc": 250,
+    "brand": "Lifan",
+    "specification": "Contact for specifications",
+    "type": "Original",
+    "image": { "localPath": "/bikes-data/lifan/kps250/kps250.png" }
+  },
+  {
+    "name": "LIFAN KPT 400",
+    "cc": 400,
+    "brand": "Lifan",
+    "specification": "Contact for specifications",
+    "type": "Original",
+    "image": { "localPath": "/bikes-data/lifan/kpt400/Lifan-KPT400.png" }
+  },
+  {
+    "name": "LIFAN V400",
+    "cc": 400,
+    "brand": "Lifan",
+    "specification": "Contact for specifications",
+    "type": "Original",
+    "image": { "localPath": "/bikes-data/lifan/v400/v400.png" }
+  },
+  {
     "name": "Yamaha R6",
     "cc": 500,
     "brand": "Zongshan",

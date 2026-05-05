@@ -32,6 +32,10 @@ const staggerContainer: Variants = {
 };
 
 export default function Home() {
+  const detailSlugOverrides: Record<string, string> = {
+    'lifan-kpm-200': 'lifan-kpm',
+  };
+
   const featuredVehicles = [
     vehiclesData['taro-gp-2'],
     vehiclesData['taro-gp-1'],
@@ -119,9 +123,10 @@ export default function Home() {
                 {(() => {
                   const top = getBikeTopVariant(vehicle.name);
                   const displayPrice = top ? formatPricePkr(top.pricePkr) : vehicle.price;
+                  const detailSlug = detailSlugOverrides[vehicle.id] ?? vehicle.id;
                   return (
                     <VehicleCard
-                      id={vehicle.id}
+                      id={detailSlug}
                       name={vehicle.name}
                       tagline={vehicle.tagline}
                       price={displayPrice}

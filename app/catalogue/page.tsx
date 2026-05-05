@@ -93,7 +93,7 @@ const modelImagesByNameKey: Record<string, string[]> = {
   'taro c5': ['/bikes/c5_400_1.png'],
   'lifan kpm': ['/bikes-data/lifan/kpm/kpm_2.png'],
   'lifan k19': ['/bikes/Lifan K19.png'],
-  'lifan v16s': ['/bikes/Lifan_-lifan_v16s_-250cc-4.png'],
+  'lifan v16s': ['/bikes-data/lifan/v16s/LifanV16s.png'],
   'lifan kpt': ['/bikes/Lifan_-lifan_kpt-250cc-1.png'],
   'hi speed infinity': ['/bikes-data/hi-speed/infinity/infinity_3.jpg'],
   'super star 200cc': ['/bikes-data/superstar/superstart200/superstar_200.png'],
