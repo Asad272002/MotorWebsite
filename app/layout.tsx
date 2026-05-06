@@ -22,6 +22,7 @@ export const metadata: Metadata = {
   description: "A premium automotive catalogue experience.",
   icons: {
     icon: "/owmotor.png",
+    shortcut: "/owmotor.png",
     apple: "/owmotor.png",
   },
 };

@@ -11,7 +11,7 @@ export const Footer = () => {
           <div className="flex items-center gap-3">
             <span className="relative h-10 w-10 overflow-hidden rounded-full border border-white/10 bg-white/5 backdrop-blur shadow-sm">
               <Image
-                src="/owmotor.jpeg"
+                src="/owmotor.png"
                 alt="OW Motor Sports"
                 fill
                 sizes="40px"

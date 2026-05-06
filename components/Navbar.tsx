@@ -60,7 +60,7 @@ export const Navbar = () => {
             )}
           >
             <Image
-              src="/owmotor.jpeg"
+              src="/owmotor.png"
               alt="OW Motor Sports"
               fill
               sizes="44px"
