@@ -21,9 +21,9 @@ export const metadata: Metadata = {
   title: "OW Motors | Crafted Performance",
   description: "A premium automotive catalogue experience.",
   icons: {
-    icon: "/owmotor.png",
-    shortcut: "/owmotor.png",
-    apple: "/owmotor.png",
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
   },
 };
 
