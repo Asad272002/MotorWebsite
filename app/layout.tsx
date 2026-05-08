@@ -19,11 +19,14 @@ const lato = Lato({
 
 export const metadata: Metadata = {
   title: "OW Motors | Crafted Performance",
-  description: "A premium automotive catalogue experience.",
+  description:
+    "OW Motors showroom in Lahore, Pakistan. Explore premium motorcycles, sports bikes, and performance vehicles.",
   icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
-    apple: "/favicon.png",
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon-48x48.png", sizes: "48x48", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
   },
 };
 
