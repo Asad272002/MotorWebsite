@@ -6,6 +6,9 @@ export type ProductSpecification = Readonly<{ label: string; value: string }>;
 export type ProductVariant = Readonly<{
   id: string;
   cc: number;
+  abs: boolean;
+  configurationId: string;
+  configurationLabel: string;
   colorId: string;
   colorName: string;
   colorHex: string;

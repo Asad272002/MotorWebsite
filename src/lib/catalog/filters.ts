@@ -76,7 +76,7 @@ export function filterCatalog(
     if (lockedCategory && !item.categories.includes(lockedCategory)) return false;
     return (!filters.brand.length || filters.brand.includes(item.brand))
       && (!filters.category.length || filters.category.some((category) => item.categories.includes(category)))
-      && (!filters.engine.length || filters.engine.includes(item.engine.toLowerCase()))
+      && (!filters.engine.length || item.engineOptions.some((engine) => filters.engine.includes(engine.toLowerCase())))
       && (!filters.transmission.length || filters.transmission.includes(item.transmission))
       && (!filters.fuel.length || filters.fuel.includes(item.fuel))
       && (!filters.availability.length || filters.availability.includes(item.availability))

@@ -5,7 +5,6 @@ import type {
   CatalogAvailability,
   CatalogFilterOptions,
   CatalogMotorcycle,
-  NavigationMotorcycle,
 } from "@/data/catalog";
 import { getBrandPresentation, type HomepageBrand } from "@/data/homepage";
 import type {
@@ -23,8 +22,17 @@ import { getSupabaseConfig } from "@/lib/supabase/config";
 import { createPublicServerSupabaseClient } from "@/lib/supabase/server";
 import type { StockStatus, Tables } from "@/lib/supabase/database.types";
 import { DEFAULT_STOREFRONT_CONTENT, parseStorefrontContent, storefrontSettingKeys, type StorefrontContent } from "@/lib/storefront/content";
+import {
+  getStorefrontBrandSummaries,
+  getStorefrontBikeRows,
+  getStorefrontCatalogMotorcycles,
+  getStorefrontNavigationMotorcycles,
+  getStorefrontProduct,
+} from "@/lib/storefront/bike-catalog";
 
 const PAGE_SIZE = 6;
+const FALLBACK_PUBLIC_DATE = "2026-09-25T00:00:00.000Z";
+const HOMEPAGE_BRAND_SLUGS = new Set(["taro", "lifan", "hi-speed"]);
 
 export const getStorefrontContent = cache(async (): Promise<StorefrontContent> => {
   const supabase = createPublicServerSupabaseClient();
@@ -58,13 +66,6 @@ type CatalogSourceRow = Pick<
   images: Array<Pick<ImageRow, "id" | "variant_id" | "storage_path" | "alt_text" | "is_primary" | "sort_order">>;
   categoryLinks: Array<{ category: Pick<CategoryRow, "id" | "name" | "slug" | "is_active"> }>;
   specifications: Array<Pick<SpecificationRow, "variant_id" | "label" | "value" | "unit" | "sort_order">>;
-};
-
-type NavigationSourceRow = Pick<MotorcycleRow, "id" | "name" | "slug" | "base_price"> & {
-  brand: Pick<BrandRow, "id" | "name" | "slug" | "is_active">;
-  variants: Array<Pick<VariantRow, "cc" | "price" | "is_default" | "is_active">>;
-  images: Array<Pick<ImageRow, "storage_path" | "alt_text" | "is_primary" | "sort_order">>;
-  categoryLinks: Array<{ category: Pick<CategoryRow, "name" | "slug" | "is_active"> }>;
 };
 
 type ProductSourceRow = Pick<
@@ -161,6 +162,7 @@ function availabilityLabel(value: CatalogAvailability) {
     "in-stock": "In Stock",
     "out-of-stock": "Out of Stock",
     "coming-soon": "Coming Soon",
+    "contact-us": "Contact for availability",
     discontinued: "Discontinued",
   }[value];
 }
@@ -240,26 +242,44 @@ function toPublicCategory(row: CategoryRow): PublicCategory {
 
 export const getPublicBrands = cache(async (): Promise<readonly PublicBrand[]> => {
   const supabase = createPublicServerSupabaseClient();
-  const { data, error } = await supabase
-    .from("brands")
-    .select("id, name, slug, logo_path, mega_menu_logo_path, show_mega_menu_logo, short_description, full_description, hero_image_path, seo_title, seo_description, is_active, display_order, created_at, updated_at")
-    .eq("is_active", true)
-    .order("display_order", { ascending: true });
+  const [{ data, error }, storefrontBrands] = await Promise.all([
+    supabase
+      .from("brands")
+      .select("id, name, slug, logo_path, mega_menu_logo_path, show_mega_menu_logo, short_description, full_description, hero_image_path, seo_title, seo_description, is_active, display_order, created_at, updated_at")
+      .eq("is_active", true)
+      .order("display_order", { ascending: true }),
+    getStorefrontBrandSummaries(),
+  ]);
 
   if (error) failQuery("getPublicBrands", error.code);
-  return (data ?? []).map(toPublicBrand);
+  const storefrontBrandSlugs = new Set(storefrontBrands.map((brand) => brand.slug));
+  const databaseBrands = (data ?? []).map(toPublicBrand).filter((brand) => storefrontBrandSlugs.has(brand.slug));
+  const known = new Set(databaseBrands.map((brand) => brand.slug));
+  const appended = storefrontBrands.filter((brand) => !known.has(brand.slug)).map((brand, index): PublicBrand => ({
+    id: brand.id,
+    name: brand.name,
+    slug: brand.slug,
+    shortDescription: `${brand.name} motorcycles available through OW Motors.`,
+    fullDescription: `Explore ${brand.name} models, configurations, colors, prices, and specifications.`,
+    logo: localBrandLogo(brand.slug),
+    megaMenuLogo: null,
+    heroImage: null,
+    seoTitle: null,
+    seoDescription: null,
+    displayOrder: databaseBrands.length + index,
+    updatedAt: brand.updatedAt,
+  }));
+  return [...databaseBrands, ...appended];
 });
 
 export const getPublicCategories = cache(async (): Promise<readonly PublicCategory[]> => {
-  const supabase = createPublicServerSupabaseClient();
-  const { data, error } = await supabase
-    .from("categories")
-    .select("id, name, slug, description, seo_title, seo_description, is_active, display_order, created_at, updated_at")
-    .eq("is_active", true)
-    .order("display_order", { ascending: true });
-
-  if (error) failQuery("getPublicCategories", error.code);
-  return (data ?? []).map(toPublicCategory);
+  const rows = await getStorefrontBikeRows();
+  const updatedAt = rows.reduce((latest, row) => row.updated_at > latest ? row.updated_at : latest, FALLBACK_PUBLIC_DATE);
+  const categories = [...new Set(rows.filter((row) => row.section !== "replicas").map((row) => row.category))];
+  return [
+    ...categories.map((slug, index): PublicCategory => ({ id: `storefront-${slug}`, name: slug.split("-").map((word) => `${word[0]?.toUpperCase() ?? ""}${word.slice(1)}`).join(" "), slug, description: `Explore ${slug.replaceAll("-", " ")} available through OW Motors.`, seoTitle: null, seoDescription: null, displayOrder: index, updatedAt })),
+    { id: "storefront-replicas", name: "Replicas", slug: "replicas", description: "Replica motorcycle collection with dedicated configurations and specifications.", seoTitle: null, seoDescription: null, displayOrder: categories.length, updatedAt },
+  ];
 });
 
 export const getPublicBrandBySlug = cache(async (slug: string) => {
@@ -339,6 +359,8 @@ function toCatalogMotorcycle(row: CatalogSourceRow): CatalogMotorcycle | null {
     categories: categories.map((category) => category.slug),
     categoryLabels: categories.map((category) => category.name),
     engine,
+    engineOptions: variants.map((variant) => `${variant.cc}cc`),
+    configurationLabels: variants.map((variant) => `${variant.cc}cc`),
     cooling,
     transmission: toFilterValue(transmission),
     transmissionLabel: transmission,
@@ -356,64 +378,13 @@ function toCatalogMotorcycle(row: CatalogSourceRow): CatalogMotorcycle | null {
   };
 }
 
-export const getPublicCatalogMotorcycles = cache(async (): Promise<readonly CatalogMotorcycle[]> => {
-  const rows = await getCatalogSource();
-  return rows.flatMap((row) => {
-    const item = toCatalogMotorcycle(row);
-    return item ? [item] : [];
-  });
-});
+export const getPublicCatalogMotorcycles = cache(getStorefrontCatalogMotorcycles);
 
 /**
  * Lean, bounded data for the shared mega menus. It intentionally excludes
  * variants, specifications, prices, and the rest of the full catalog payload.
  */
-export const getNavigationMotorcycles = cache(async (): Promise<readonly NavigationMotorcycle[]> => {
-  const supabase = createPublicServerSupabaseClient();
-  const { data, error } = await supabase
-    .from("motorcycles")
-    .select(`
-      id,
-      name,
-      slug,
-      base_price,
-      brand:brands!motorcycles_brand_id_fkey!inner(id, name, slug, is_active),
-      variants:motorcycle_variants(cc, price, is_default, is_active),
-      images:motorcycle_images(storage_path, alt_text, is_primary, sort_order),
-      categoryLinks:motorcycle_categories(category:categories!inner(name, slug, is_active))
-    `)
-    .eq("publication_status", "published")
-    .eq("brand.is_active", true)
-    .eq("images.is_primary", true)
-    .eq("categoryLinks.category.is_active", true)
-    .order("is_featured", { ascending: false })
-    .order("updated_at", { ascending: false })
-    .limit(200);
-
-  if (error) failQuery("getNavigationMotorcycles", error.code);
-
-  return ((data ?? []) as unknown as NavigationSourceRow[]).map((row) => {
-    const image = sortImages(row.images)[0];
-    const variant = sortVariants(row.variants.filter((item) => item.is_active))[0];
-    const price = variant?.price ?? row.base_price;
-    const activeCategories = row.categoryLinks
-      .map((link) => link.category)
-      .filter((category) => category.is_active);
-    return {
-      id: row.id,
-      brand: row.brand.slug,
-      brandName: row.brand.name,
-      name: row.name,
-      slug: row.slug,
-      categories: activeCategories.map((category) => category.slug),
-      categoryLabels: activeCategories.map((category) => category.name),
-      image: image ? resolveStorageImage(image.storage_path) : localBrandLogo(row.brand.slug),
-      imageAlt: image?.alt_text ?? `${row.brand.name} logo shown while ${row.name} photography is unavailable`,
-      price,
-      priceLabel: formatPrice(price),
-    };
-  });
-});
+export const getNavigationMotorcycles = cache(getStorefrontNavigationMotorcycles);
 
 function uniqueOptions(values: readonly Readonly<{ value: string; label: string }>[]) {
   return [...new Map(values.filter((item) => item.value).map((item) => [item.value, item])).values()]
@@ -426,10 +397,9 @@ export async function getCatalogPageData(
   lockedCategory?: string,
   pageSize = PAGE_SIZE,
 ): Promise<CatalogPageData> {
-  const [allMotorcycles, brands, categories] = await Promise.all([
+  const [allMotorcycles, brands] = await Promise.all([
     getPublicCatalogMotorcycles(),
     getPublicBrands(),
-    getPublicCategories(),
   ]);
   const filtered = filterCatalog(allMotorcycles, filters, lockedBrand, lockedCategory);
   const safePageSize = Math.max(3, Math.min(48, Math.trunc(pageSize)));
@@ -439,8 +409,8 @@ export async function getCatalogPageData(
 
   const options: CatalogFilterOptions = {
     brand: brands.map((brand) => ({ value: brand.slug, label: brand.name })),
-    category: categories.map((category) => ({ value: category.slug, label: category.name })),
-    engine: uniqueOptions(allMotorcycles.map((item) => ({ value: toFilterValue(item.engine), label: item.engine }))),
+    category: uniqueOptions(allMotorcycles.flatMap((item) => item.categories.flatMap((value, index) => value === "motorcycles" ? [] : [{ value, label: item.categoryLabels[index] ?? value }]))),
+    engine: uniqueOptions(allMotorcycles.flatMap((item) => item.engineOptions.map((engine) => ({ value: toFilterValue(engine), label: engine })))),
     transmission: uniqueOptions(allMotorcycles.map((item) => ({ value: item.transmission, label: item.transmission === "not-specified" ? "Not specified" : item.transmission.replaceAll("-", " ") }))),
     fuel: uniqueOptions(allMotorcycles.map((item) => ({ value: item.fuel, label: item.fuel === "not-specified" ? "Not specified" : item.fuel.replaceAll("-", " ") }))),
     availability: uniqueOptions(allMotorcycles.map((item) => ({ value: item.availability, label: availabilityLabel(item.availability) }))),
@@ -513,7 +483,8 @@ export const getHomepageDisplay = cache(async (): Promise<Readonly<{
     getHomepageBrands(),
     getPublicHomepageBrandSections(),
   ]);
-  const brandsById = new Map(brands.map((brand) => [brand.databaseId, brand]));
+  const homepageBrands = brands.filter((brand) => HOMEPAGE_BRAND_SLUGS.has(brand.id));
+  const brandsById = new Map(homepageBrands.map((brand) => [brand.databaseId, brand]));
   const toBrand = (section: HomepageBrandSectionRow) => {
     const brand = brandsById.get(section.brand_id);
     if (!brand) return null;
@@ -585,7 +556,7 @@ function buildProductFaqs(name: string, variants: readonly ProductVariant[]): re
   ];
 }
 
-export const getPublicProduct = cache(async (brandSlug: string, productSlug: string): Promise<ProductDetail | null> => {
+const getLegacyPublicProduct = async (brandSlug: string, productSlug: string): Promise<ProductDetail | null> => {
   const brand = await getPublicBrandBySlug(brandSlug);
   if (!brand) return null;
 
@@ -641,6 +612,9 @@ export const getPublicProduct = cache(async (brandSlug: string, productSlug: str
     return {
       id: variant.id,
       cc: variant.cc,
+      abs: applicableSpecifications.some((item) => item.value.toLowerCase() === "abs"),
+      configurationId: `${variant.cc}-${variant.id}`,
+      configurationLabel: `${variant.cc}cc`,
       colorId: colorId(variant.color_name),
       colorName: variant.color_name,
       colorHex: variant.color_hex,
@@ -692,7 +666,9 @@ export const getPublicProduct = cache(async (brandSlug: string, productSlug: str
     technicalGroups: groupSpecifications(detailedSpecifications),
     faqs: buildProductFaqs(row.name, variants),
   };
-});
+};
+
+export const getPublicProduct = cache(getStorefrontProduct);
 
 export async function getRelatedMotorcycles(product: ProductDetail): Promise<readonly RelatedMotorcycle[]> {
   const motorcycles = await getPublicCatalogMotorcycles();

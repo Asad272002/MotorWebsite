@@ -1,0 +1,527 @@
+[
+  {
+    "brand": "Taro",
+    "model_name": "Taro GP1",
+    "category": "sport-bikes",
+    "variants": [
+      {
+        "cc": 401,
+        "abs": true,
+        "price_pkr": 1450000,
+        "available_colors": ["Black", "Orange", "Blue", "Carbonfiber", "Gray"],
+        "specifications": [
+          "EFI",
+          "ABS",
+          "Water Cooled",
+          "8 Valve Engine",
+          "TFT Display"
+        ]
+      },
+      {
+        "cc": 300,
+        "abs": false,
+        "price_pkr": 880000,
+        "available_colors": ["Black", "Orange", "Blue", "Carbonfiber", "Gray"],
+        "specifications": [
+          "300cc 4 valves engine",
+          "EFI",
+          "CBS",
+          "Oil Cooled",
+          "TFT Display",
+          "6 Gears"
+        ]
+      }
+    ]
+  },
+  {
+    "brand": "Taro",
+    "model_name": "Taro GP2",
+    "category": "sport-bikes",
+    "variants": [
+      {
+        "cc": 200,
+        "abs": false,
+        "price_pkr": 825000,
+        "available_colors": ["Black", "Red", "Blue", "Yellow"],
+        "specifications": ["EFI", "Water Cooled"]
+      }
+    ]
+  },
+  {
+    "brand": "Taro",
+    "model_name": "Taro C6",
+    "category": "street-bikes",
+    "variants": [
+      {
+        "cc": 250,
+        "abs": false,
+        "price_pkr": 775000,
+        "available_colors": ["Black", "Red", "Orange", "Green"],
+        "specifications": [
+          "250cc 4 valves engine",
+          "EFI Oil Cooled",
+          "TFT Display",
+          "6 Gears",
+          "25 HP / 24 Nm Torque"
+        ]
+      }
+    ]
+  },
+  {
+    "brand": "Taro",
+    "model_name": "Taro C5",
+    "category": "street-bikes",
+    "variants": [
+      {
+        "cc": 400,
+        "abs": true,
+        "price_pkr": 1450000,
+        "available_colors": ["Black Matt", "Silver Matt"],
+        "specifications": [
+          "400cc Dual cylinder",
+          "ABS",
+          "EFI",
+          "Water Cooled",
+          "8 Valve Engine"
+        ]
+      }
+    ]
+  },
+  {
+    "brand": "Lifan",
+    "model_name": "Lifan KPM",
+    "category": "street-bikes",
+    "variants": [
+      {
+        "cc": 200,
+        "abs": true,
+        "price_pkr": 820000,
+        "available_colors": ["Black", "Blue"],
+        "specifications": ["EFI", "ABS", "Water Cooled", "LED Lights", "6 Gears"]
+      }
+    ]
+  },
+  {
+    "brand": "Lifan",
+    "model_name": "Lifan K19",
+    "category": "cruisers",
+    "variants": [
+      {
+        "cc": 200,
+        "abs": false,
+        "price_pkr": 800000,
+        "available_colors": ["Black", "Gray"],
+        "specifications": [
+          "EFI",
+          "Water Cooled",
+          "LED Lights",
+          "6 Gears",
+          "Timsun Tyres with Alloy Rims"
+        ]
+      }
+    ]
+  },
+  {
+    "brand": "Lifan",
+    "model_name": "Lifan V16S",
+    "category": "cruisers",
+    "variants": [
+      {
+        "cc": 250,
+        "abs": true,
+        "price_pkr": 1375000,
+        "available_colors": ["White", "Black", "Red Matt"],
+        "specifications": [
+          "V-Twin Engine",
+          "Dual Cylinder",
+          "EFI",
+          "ABS",
+          "Water Cooled",
+          "LED Lights",
+          "6 Gears",
+          "CST Tyres with Alloy Rims"
+        ]
+      }
+    ]
+  },
+  {
+    "brand": "Lifan",
+    "model_name": "Lifan KPT",
+    "category": "adventure",
+    "variants": [
+      {
+        "cc": 250,
+        "abs": true,
+        "price_pkr": 1125000,
+        "available_colors": ["Gray", "Silver Gray"],
+        "specifications": [
+          "Single-cylinder",
+          "EFI",
+          "ABS",
+          "Water Cooled",
+          "Three Boxes",
+          "Traction Control"
+        ]
+      }
+    ]
+  },
+  {
+    "brand": "Lifan",
+    "model_name": "Lifan SS 2",
+    "category": "sport-bikes",
+    "variants": [
+      {
+        "cc": 250,
+        "abs": false,
+        "price_pkr": 575000,
+        "available_colors": ["Orange", "Black"],
+        "specifications": ["Single-cylinder", "Carburetor Base", "Disc Brakes"]
+      }
+    ]
+  },
+  {
+    "brand": "Replica",
+    "model_name": "Yamaha R6",
+    "category": "sport-bikes",
+    "variants": [
+      {
+        "cc": 500,
+        "abs": true,
+        "price_pkr": 1450000,
+        "available_colors": ["Black", "Blue", "Carbonfiber", "White Neon"],
+        "specifications": [
+          "Dual Cylinder",
+          "EFI",
+          "ABS",
+          "Water Cooled",
+          "Fat Tyre 180 (Rear)",
+          "Front Tyre 120",
+          "Heavy Duty Shocks"
+        ]
+      },
+      {
+        "cc": 400,
+        "abs": true,
+        "price_pkr": 1075000,
+        "available_colors": ["Black", "Blue", "Carbonfiber"],
+        "specifications": [
+          "Dual Cylinder",
+          "EFI",
+          "ABS",
+          "Water Cooled",
+          "Heavy Duty Shocks"
+        ]
+      },
+      {
+        "cc": 250,
+        "abs": false,
+        "price_pkr": 775000,
+        "available_colors": ["Black", "Blue", "Red"],
+        "specifications": [
+          "Single-cylinder",
+          "Carburetor Base",
+          "Disc Brakes",
+          "Oil Cooled"
+        ]
+      }
+    ]
+  },
+  {
+    "brand": "Replica",
+    "model_name": "BMW S1000RR",
+    "category": "sport-bikes",
+    "variants": [
+      {
+        "cc": 400,
+        "abs": true,
+        "price_pkr": 1250000,
+        "available_colors": ["Black", "White", "Black Red", "M-Package"],
+        "specifications": [
+          "Dual Cylinder",
+          "EFI",
+          "ABS",
+          "Water Cooled",
+          "Fat Tyre 180 (Rear)",
+          "Front Tyre 120",
+          "Heavy Duty Shocks"
+        ]
+      },
+      {
+        "cc": 250,
+        "abs": false,
+        "price_pkr": 775000,
+        "available_colors": ["Black", "White", "Black Red", "M-Package"],
+        "specifications": [
+          "Single-cylinder",
+          "Carburetor Base",
+          "Disc Brakes",
+          "Oil Cooled"
+        ]
+      }
+    ]
+  },
+  {
+    "brand": "Replica",
+    "model_name": "Ducati V4S",
+    "category": "sport-bikes",
+    "variants": [
+      {
+        "cc": 400,
+        "abs": true,
+        "price_pkr": 1175000,
+        "available_colors": ["Black", "Red"],
+        "specifications": [
+          "Dual Cylinder",
+          "EFI",
+          "ABS",
+          "Water Cooled",
+          "Front Tyre 120",
+          "Back Tyre 160"
+        ]
+      },
+      {
+        "cc": 250,
+        "abs": false,
+        "price_pkr": 725000,
+        "available_colors": ["Black", "Red"],
+        "specifications": [
+          "Single-cylinder",
+          "Carburetor Base",
+          "Disc Brakes",
+          "Oil Cooled"
+        ]
+      }
+    ]
+  },
+  {
+    "brand": "Replica",
+    "model_name": "Ducati GR",
+    "category": "sport-bikes",
+    "variants": [
+      {
+        "cc": 400,
+        "abs": true,
+        "price_pkr": 1075000,
+        "available_colors": ["Black", "Red"],
+        "specifications": [
+          "Dual Cylinder",
+          "EFI",
+          "ABS",
+          "Water Cooled",
+          "Front Tyre 120",
+          "Back Tyre 160",
+          "Single Swingarm"
+        ]
+      }
+    ]
+  },
+  {
+    "brand": "Replica",
+    "model_name": "Ducati GT",
+    "category": "sport-bikes",
+    "variants": [
+      {
+        "cc": 250,
+        "abs": false,
+        "price_pkr": 775000,
+        "available_colors": ["Black", "Gray Orange", "Black Red", "Red Vine"],
+        "specifications": [
+          "Single-cylinder",
+          "Carburetor Base",
+          "Disc Brakes",
+          "Remote System",
+          "Crash Guards"
+        ]
+      }
+    ]
+  },
+  {
+    "brand": "Replica",
+    "model_name": "Kawasaki Ninja",
+    "category": "sport-bikes",
+    "variants": [
+      {
+        "cc": 300,
+        "abs": false,
+        "price_pkr": 850000,
+        "available_colors": ["Black", "Red", "Yellow", "Red Vine"],
+        "specifications": [
+          "Dual-cylinder",
+          "Oil Cooled",
+          "Disc Brakes",
+          "LED Display"
+        ]
+      },
+      {
+        "cc": 250,
+        "abs": false,
+        "price_pkr": 625000,
+        "available_colors": ["Black", "Red", "Yellow", "Red Vine"],
+        "specifications": [
+          "Single-cylinder",
+          "Carburetor Base",
+          "Disc Brakes",
+          "Remote System",
+          "Crash Guards",
+          "Bluetooth System"
+        ]
+      }
+    ]
+  },
+  {
+    "brand": "Super Star",
+    "model_name": "Super Star",
+    "category": "street-bikes",
+    "variants": [
+      {
+        "cc": 200,
+        "abs": false,
+        "price_pkr": 615000,
+        "available_colors": [
+          "Red Black",
+          "Blue Black",
+          "Green Black",
+          "Special Edition"
+        ],
+        "specifications": [
+          "LED Lights",
+          "Digital Meter",
+          "Disc Brakes",
+          "Tubeless Tyres",
+          "USD Shocks",
+          "5 Gears"
+        ]
+      },
+      {
+        "cc": 150,
+        "abs": false,
+        "price_pkr": 420000,
+        "available_colors": ["Black", "White", "Silver"],
+        "specifications": [
+          "Digital Meter",
+          "Disc Brakes",
+          "Spoke Rims",
+          "5 Gears"
+        ]
+      }
+    ]
+  },
+  {
+    "brand": "Hi-Speed",
+    "model_name": "Hi-Speed Cyclone",
+    "category": "cruisers",
+    "variants": [
+      {
+        "cc": 250,
+        "abs": true,
+        "price_pkr": 870000,
+        "available_colors": ["Red", "Black", "Blue", "Beige"],
+        "specifications": [
+          "Single-cylinder",
+          "EFI",
+          "ABS",
+          "Disc Brakes",
+          "Digital Meter",
+          "Tubeless Tyres"
+        ]
+      },
+      {
+        "cc": 250,
+        "abs": false,
+        "price_pkr": 770000,
+        "available_colors": ["Red", "Black", "Blue", "Beige"],
+        "specifications": [
+          "Single-cylinder",
+          "EFI",
+          "Non-ABS",
+          "Disc Brakes",
+          "Digital Meter",
+          "Tubeless Tyres"
+        ]
+      }
+    ]
+  },
+  {
+    "brand": "Hi-Speed",
+    "model_name": "Hi-Speed Infinity",
+    "category": "street-bikes",
+    "variants": [
+      {
+        "cc": 150,
+        "abs": false,
+        "price_pkr": 430000,
+        "available_colors": [
+          "Red",
+          "White",
+          "Green Matt",
+          "Red Matt",
+          "Black Matt"
+        ],
+        "specifications": [
+          "Single-cylinder",
+          "Carburetor Base",
+          "Disc Brakes",
+          "Digital Meter"
+        ]
+      }
+    ]
+  },
+  {
+    "brand": "Hi-Speed",
+    "model_name": "Hi-Speed Freedom",
+    "category": "street-bikes",
+    "variants": [
+      {
+        "cc": 200,
+        "abs": false,
+        "price_pkr": 535000,
+        "available_colors": ["Red", "Blue", "Black Matt", "Green Matt"],
+        "specifications": [
+          "Single-cylinder",
+          "Carburetor Base",
+          "Disc Brakes",
+          "Digital Meter"
+        ]
+      }
+    ]
+  },
+  {
+    "brand": "Hi-Speed",
+    "model_name": "Hi-Speed Batllo",
+    "category": "street-bikes",
+    "variants": [
+      {
+        "cc": 200,
+        "abs": false,
+        "price_pkr": 615000,
+        "available_colors": ["Black", "Red", "Blue", "Matt Green", "Yellow"],
+        "specifications": [
+          "Single-cylinder",
+          "Carburetor Base",
+          "Disc Brakes",
+          "Digital Meter",
+          "Tubeless Tyres"
+        ]
+      }
+    ]
+  },
+  {
+    "brand": "Fuego",
+    "model_name": "Tekken",
+    "category": "adventure",
+    "variants": [
+      {
+        "cc": 250,
+        "abs": false,
+        "price_pkr": 680000,
+        "available_colors": ["Black", "Gray Matt"],
+        "specifications": [
+          "Single-cylinder",
+          "Carburetor Base",
+          "Disc Brakes",
+          "Oil Cooled"
+        ]
+      }
+    ]
+  }
+]

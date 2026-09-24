@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Motorcycle image coming soon</title>
+  <desc id="desc">A clean motorcycle silhouette placeholder for OW Motors.</desc>
+  <rect width="1200" height="760" fill="#f3f1ed"/>
+  <path d="M0 610h1200" stroke="#ddd8d0" stroke-width="2"/>
+  <circle cx="346" cy="515" r="112" fill="none" stroke="#202020" stroke-width="24"/>
+  <circle cx="865" cy="515" r="112" fill="none" stroke="#202020" stroke-width="24"/>
+  <path d="M346 515h184l113-178h126l96 178M530 515l-78-208h128l90 111h127M643 337l-56-80h-92M770 337l74-72h94" fill="none" stroke="#c62828" stroke-linecap="round" stroke-linejoin="round" stroke-width="28"/>
+  <path d="M474 302h135" stroke="#202020" stroke-linecap="round" stroke-width="34"/>
+  <path d="M844 265h95" stroke="#202020" stroke-linecap="round" stroke-width="18"/>
+  <text x="600" y="690" fill="#6b7280" font-family="sans-serif" font-size="30" font-weight="700" letter-spacing="7" text-anchor="middle">IMAGE COMING SOON</text>
+</svg>

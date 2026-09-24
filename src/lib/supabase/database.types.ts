@@ -151,6 +151,77 @@ export type Database = {
         };
         Relationships: [];
       };
+      storefront_bikes: {
+        Row: {
+          brand: string;
+          brand_id: string | null;
+          brand_slug: string;
+          category: string;
+          created_at: string;
+          display_order: number;
+          full_description: string;
+          gallery_image_paths: string[];
+          id: string;
+          is_featured: boolean;
+          is_published: boolean;
+          model_name: string;
+          primary_image_path: string | null;
+          section: string;
+          short_description: string;
+          slug: string;
+          updated_at: string;
+          variants: Json;
+        };
+        Insert: {
+          brand: string;
+          brand_id?: string | null;
+          brand_slug: string;
+          category: string;
+          created_at?: string;
+          display_order?: number;
+          full_description?: string;
+          gallery_image_paths?: string[];
+          id?: string;
+          is_featured?: boolean;
+          is_published?: boolean;
+          model_name: string;
+          primary_image_path?: string | null;
+          section?: string;
+          short_description?: string;
+          slug: string;
+          updated_at?: string;
+          variants: Json;
+        };
+        Update: {
+          brand?: string;
+          brand_id?: string | null;
+          brand_slug?: string;
+          category?: string;
+          created_at?: string;
+          display_order?: number;
+          full_description?: string;
+          gallery_image_paths?: string[];
+          id?: string;
+          is_featured?: boolean;
+          is_published?: boolean;
+          model_name?: string;
+          primary_image_path?: string | null;
+          section?: string;
+          short_description?: string;
+          slug?: string;
+          updated_at?: string;
+          variants?: Json;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "storefront_bikes_brand_id_fkey";
+            columns: ["brand_id"];
+            isOneToOne: false;
+            referencedRelation: "brands";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       brand_campaign_images: {
         Row: {
           alt_text: string;

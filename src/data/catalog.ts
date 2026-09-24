@@ -2,6 +2,7 @@ export type CatalogAvailability =
   | "in-stock"
   | "out-of-stock"
   | "coming-soon"
+  | "contact-us"
   | "discontinued";
 
 export type CatalogMotorcycle = Readonly<{
@@ -13,6 +14,8 @@ export type CatalogMotorcycle = Readonly<{
   categories: readonly string[];
   categoryLabels: readonly string[];
   engine: string;
+  engineOptions: readonly string[];
+  configurationLabels: readonly string[];
   cooling: string;
   transmission: string;
   transmissionLabel: string;

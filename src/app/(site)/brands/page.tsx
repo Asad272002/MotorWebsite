@@ -6,7 +6,7 @@ import { createPageMetadata } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = createPageMetadata({
   title: "Motorcycle Brands",
-  description: "Explore Taro, Lifan, Hi-Speed, and Super Star motorcycles available through OW Motors.",
+  description: "Explore Taro, Lifan, Hi-Speed, Super Star, and Fuego motorcycles available through OW Motors.",
   path: "/brands",
 });
 export default async function BrandsPage() {

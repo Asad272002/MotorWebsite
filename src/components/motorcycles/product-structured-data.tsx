@@ -5,6 +5,7 @@ const availability = {
   "in-stock": "https://schema.org/InStock",
   "out-of-stock": "https://schema.org/OutOfStock",
   "coming-soon": "https://schema.org/PreOrder",
+  "contact-us": "https://schema.org/LimitedAvailability",
   discontinued: "https://schema.org/Discontinued",
 } as const;
 
