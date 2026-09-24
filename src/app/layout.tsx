@@ -13,6 +13,11 @@ export const metadata: Metadata = {
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
+  icons: {
+    icon: [{ url: "/icon.png", type: "image/png", sizes: "512x512" }],
+    shortcut: [{ url: "/icon.png", type: "image/png", sizes: "512x512" }],
+    apple: [{ url: "/apple-icon.png", type: "image/png", sizes: "180x180" }],
+  },
   ...(process.env.VERCEL_ENV && process.env.VERCEL_ENV !== "production"
     ? { robots: { index: false, follow: false, nocache: true } }
     : {}),
