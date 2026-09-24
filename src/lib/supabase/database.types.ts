@@ -222,6 +222,115 @@ export type Database = {
           },
         ];
       };
+      storefront_bike_colors: {
+        Row: { created_at: string; display_order: number; hex: string | null; id: string; is_active: boolean; name: string; slug: string; storefront_bike_id: string; updated_at: string };
+        Insert: { created_at?: string; display_order?: number; hex?: string | null; id?: string; is_active?: boolean; name: string; slug: string; storefront_bike_id: string; updated_at?: string };
+        Update: { created_at?: string; display_order?: number; hex?: string | null; id?: string; is_active?: boolean; name?: string; slug?: string; storefront_bike_id?: string; updated_at?: string };
+        Relationships: [
+          { foreignKeyName: "storefront_bike_colors_storefront_bike_id_fkey"; columns: ["storefront_bike_id"]; isOneToOne: false; referencedRelation: "storefront_bikes"; referencedColumns: ["id"] },
+        ];
+      };
+      storefront_bike_variants: {
+        Row: {
+          cc: number;
+          color_hex: string | null;
+          color_id: string;
+          color_name: string;
+          color_slug: string;
+          created_at: string;
+          display_order: number;
+          has_abs: boolean;
+          id: string;
+          is_active: boolean;
+          is_default: boolean;
+          price_pkr: number;
+          specifications: string[];
+          storefront_bike_id: string;
+          updated_at: string;
+        };
+        Insert: {
+          cc: number;
+          color_hex?: string | null;
+          color_id: string;
+          color_name: string;
+          color_slug: string;
+          created_at?: string;
+          display_order?: number;
+          has_abs?: boolean;
+          id?: string;
+          is_active?: boolean;
+          is_default?: boolean;
+          price_pkr: number;
+          specifications?: string[];
+          storefront_bike_id: string;
+          updated_at?: string;
+        };
+        Update: {
+          cc?: number;
+          color_hex?: string | null;
+          color_id?: string;
+          color_name?: string;
+          color_slug?: string;
+          created_at?: string;
+          display_order?: number;
+          has_abs?: boolean;
+          id?: string;
+          is_active?: boolean;
+          is_default?: boolean;
+          price_pkr?: number;
+          specifications?: string[];
+          storefront_bike_id?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          { foreignKeyName: "storefront_bike_variants_storefront_bike_id_fkey"; columns: ["storefront_bike_id"]; isOneToOne: false; referencedRelation: "storefront_bikes"; referencedColumns: ["id"] },
+        ];
+      };
+      storefront_bike_images: {
+        Row: {
+          alt_text: string;
+          color_id: string | null;
+          created_at: string;
+          id: string;
+          image_type: MotorcycleImageType;
+          is_primary: boolean;
+          sort_order: number;
+          storage_path: string;
+          storefront_bike_id: string;
+          updated_at: string;
+          variant_id: string | null;
+        };
+        Insert: {
+          alt_text: string;
+          color_id?: string | null;
+          created_at?: string;
+          id?: string;
+          image_type?: MotorcycleImageType;
+          is_primary?: boolean;
+          sort_order?: number;
+          storage_path: string;
+          storefront_bike_id: string;
+          updated_at?: string;
+          variant_id?: string | null;
+        };
+        Update: {
+          alt_text?: string;
+          color_id?: string | null;
+          created_at?: string;
+          id?: string;
+          image_type?: MotorcycleImageType;
+          is_primary?: boolean;
+          sort_order?: number;
+          storage_path?: string;
+          storefront_bike_id?: string;
+          updated_at?: string;
+          variant_id?: string | null;
+        };
+        Relationships: [
+          { foreignKeyName: "storefront_bike_images_storefront_bike_id_fkey"; columns: ["storefront_bike_id"]; isOneToOne: false; referencedRelation: "storefront_bikes"; referencedColumns: ["id"] },
+          { foreignKeyName: "storefront_bike_images_variant_id_fkey"; columns: ["variant_id"]; isOneToOne: false; referencedRelation: "storefront_bike_variants"; referencedColumns: ["id"] },
+        ];
+      };
       brand_campaign_images: {
         Row: {
           alt_text: string;
