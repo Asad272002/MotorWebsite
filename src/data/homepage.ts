@@ -63,6 +63,11 @@ const BRAND_PRESENTATION: Readonly<Record<string, BrandPresentation>> = {
     background: "#120d08",
     localLogo: "/images/home/super-star-logo.png",
   },
+  fuego: {
+    tagline: "Built Beyond Boundaries",
+    background: "#120808",
+    localLogo: "/images/home/Fuego.png",
+  },
 };
 
 const DEFAULT_PRESENTATION: BrandPresentation = {

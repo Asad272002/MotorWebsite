@@ -19,6 +19,7 @@ export type ProductVariant = Readonly<{
   isDefault: boolean;
   images: readonly ProductImage[];
   specifications: readonly ProductSpecification[];
+  specificationGroups?: readonly TechnicalGroup[];
 }>;
 
 export type ProductFeature = Readonly<{ title: string; description: string }>;

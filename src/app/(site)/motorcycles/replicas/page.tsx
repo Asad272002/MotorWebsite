@@ -17,7 +17,7 @@ export default async function ReplicaMotorcyclesPage({ searchParams }: Props) {
   const catalog = await getCatalogPageData(filters, undefined, "replicas", 12);
   return <CatalogLayout
     title="Replica Motorcycles"
-    description="A dedicated collection of replica motorcycle designs. Compare engine capacity, ABS and non-ABS packages, colors, prices, and specifications."
+    description="A dedicated collection of replica motorcycle designs. Compare engine capacity, standard and ABS packages, colors, prices, and specifications."
     pathname="/motorcycles/replicas"
     filters={filters}
     catalog={catalog}

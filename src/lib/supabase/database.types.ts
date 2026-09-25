@@ -222,7 +222,56 @@ export type Database = {
           },
         ];
       };
-      storefront_bike_colors: {
+      storefront_bike_specifications: {
+        Row: {
+          cc: number | null;
+          created_at: string;
+          group_key: string;
+          group_name: string;
+          group_order: number;
+          has_abs: boolean | null;
+          id: string;
+          is_active: boolean;
+          label: string;
+          sort_order: number;
+          storefront_bike_id: string;
+          updated_at: string;
+          value: string;
+        };
+        Insert: {
+          cc?: number | null;
+          created_at?: string;
+          group_key: string;
+          group_name: string;
+          group_order?: number;
+          has_abs?: boolean | null;
+          id?: string;
+          is_active?: boolean;
+          label: string;
+          sort_order?: number;
+          storefront_bike_id: string;
+          updated_at?: string;
+          value: string;
+        };
+        Update: {
+          cc?: number | null;
+          created_at?: string;
+          group_key?: string;
+          group_name?: string;
+          group_order?: number;
+          has_abs?: boolean | null;
+          id?: string;
+          is_active?: boolean;
+          label?: string;
+          sort_order?: number;
+          storefront_bike_id?: string;
+          updated_at?: string;
+          value?: string;
+        };
+        Relationships: [
+          { foreignKeyName: "storefront_bike_specifications_storefront_bike_id_fkey"; columns: ["storefront_bike_id"]; isOneToOne: false; referencedRelation: "storefront_bikes"; referencedColumns: ["id"] },
+        ];
+      };      storefront_bike_colors: {
         Row: { created_at: string; display_order: number; hex: string | null; id: string; is_active: boolean; name: string; slug: string; storefront_bike_id: string; updated_at: string };
         Insert: { created_at?: string; display_order?: number; hex?: string | null; id?: string; is_active?: boolean; name: string; slug: string; storefront_bike_id: string; updated_at?: string };
         Update: { created_at?: string; display_order?: number; hex?: string | null; id?: string; is_active?: boolean; name?: string; slug?: string; storefront_bike_id?: string; updated_at?: string };

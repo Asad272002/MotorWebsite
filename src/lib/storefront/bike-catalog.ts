@@ -2,7 +2,7 @@ import "server-only";
 
 import bikesJson from "../../../docs/bikes.json";
 import type { CatalogMotorcycle, NavigationMotorcycle } from "@/data/catalog";
-import type { ProductDetail, ProductImage, ProductVariant } from "@/data/products";
+import type { ProductDetail, ProductImage, ProductVariant, TechnicalGroup } from "@/data/products";
 import { getSupabaseConfig } from "@/lib/supabase/config";
 import { createPublicServerSupabaseClient } from "@/lib/supabase/server";
 import type { Json, Tables } from "@/lib/supabase/database.types";
@@ -36,9 +36,11 @@ type BikeJson = Readonly<{
 type StorefrontBikeRow = Tables<"storefront_bikes">;
 type StorefrontBikeVariantRow = Tables<"storefront_bike_variants">;
 type StorefrontBikeImageRow = Tables<"storefront_bike_images">;
+type StorefrontBikeSpecificationRow = Tables<"storefront_bike_specifications">;
 type StorefrontBike = StorefrontBikeRow & Readonly<{
   normalizedVariants: readonly StorefrontBikeVariantRow[];
   normalizedImages: readonly StorefrontBikeImageRow[];
+  normalizedSpecifications: readonly StorefrontBikeSpecificationRow[];
 }>;
 
 export type StorefrontBrandSummary = Readonly<{
@@ -96,7 +98,7 @@ function legacyNormalizedVariants(row: StorefrontBikeRow): readonly StorefrontBi
   return parseVariants(row.variants).flatMap((configuration) => configuration.available_colors.map((color) => {
     const colorSlug = slugify(color) || "color";
     const item: StorefrontBikeVariantRow = {
-      id: `legacy-${row.id}-${configuration.cc}-${configuration.abs ? "abs" : "non-abs"}-${colorSlug}`,
+      id: `legacy-${row.id}-${configuration.cc}-${configuration.abs ? "abs" : "standard"}-${colorSlug}`,
       storefront_bike_id: row.id,
       cc: configuration.cc,
       has_abs: configuration.abs,
@@ -117,7 +119,7 @@ function legacyNormalizedVariants(row: StorefrontBikeRow): readonly StorefrontBi
 }
 
 function withLegacyData(row: StorefrontBikeRow): StorefrontBike {
-  return { ...row, normalizedVariants: legacyNormalizedVariants(row), normalizedImages: [] };
+  return { ...row, normalizedVariants: legacyNormalizedVariants(row), normalizedImages: [], normalizedSpecifications: [] };
 }
 
 export async function getStorefrontBikeRows(): Promise<readonly StorefrontBike[]> {
@@ -139,15 +141,17 @@ export async function getStorefrontBikeRows(): Promise<readonly StorefrontBike[]
   const rows = data ?? [];
   if (!rows.length) return [];
   const bikeIds = rows.map((row) => row.id);
-  const [variantsResult, imagesResult] = await Promise.all([
+  const [variantsResult, imagesResult, specificationsResult] = await Promise.all([
     supabase.from("storefront_bike_variants").select("*").in("storefront_bike_id", bikeIds).eq("is_active", true).order("display_order", { ascending: true }),
     supabase.from("storefront_bike_images").select("*").in("storefront_bike_id", bikeIds).order("sort_order", { ascending: true }),
+    supabase.from("storefront_bike_specifications").select("*").in("storefront_bike_id", bikeIds).eq("is_active", true).order("group_order", { ascending: true }).order("sort_order", { ascending: true }),
   ]);
 
-  if (variantsResult.error || imagesResult.error) {
+  if (variantsResult.error || imagesResult.error || specificationsResult.error) {
     console.error("[OW Motors normalized storefront media query failed]", {
       variantsCode: variantsResult.error?.code,
       imagesCode: imagesResult.error?.code,
+      specificationsCode: specificationsResult.error?.code,
     });
     return rows.map(withLegacyData);
   }
@@ -158,6 +162,7 @@ export async function getStorefrontBikeRows(): Promise<readonly StorefrontBike[]
       ...row,
       normalizedVariants: normalizedVariants.length ? normalizedVariants : legacyNormalizedVariants(row),
       normalizedImages: (imagesResult.data ?? []).filter((image) => image.storefront_bike_id === row.id),
+      normalizedSpecifications: (specificationsResult.data ?? []).filter((specification) => specification.storefront_bike_id === row.id),
     };
   });
 }
@@ -192,11 +197,19 @@ function inferredColorHex(name: string) {
 }
 
 function configurationId(cc: number, hasAbs: boolean) {
-  return `${cc}-${hasAbs ? "abs" : "non-abs"}`;
+  return `${cc}-${hasAbs ? "abs" : "standard"}`;
 }
 
-function configurationLabel(cc: number, hasAbs: boolean) {
-  return `${cc}cc ${hasAbs ? "ABS" : "Non-ABS"}`;
+function configurationLabel(
+  variant: Pick<StorefrontBikeVariantRow, "id" | "cc" | "has_abs">,
+  variants: readonly Pick<StorefrontBikeVariantRow, "id" | "cc" | "has_abs">[],
+) {
+  const hasSameCapacityAlternative = variants.some((candidate) =>
+    candidate.id !== variant.id
+    && candidate.cc === variant.cc
+    && candidate.has_abs !== variant.has_abs,
+  );
+  return `${variant.cc}cc${hasSameCapacityAlternative && variant.has_abs ? " ABS" : ""}`;
 }
 
 function sortedImages(images: readonly StorefrontBikeImageRow[]) {
@@ -229,30 +242,56 @@ function rowImages(row: StorefrontBike, variantId?: string): readonly ProductIma
   }));
 }
 
+function variantSpecificationGroups(row: StorefrontBike, variant: StorefrontBikeVariantRow): readonly TechnicalGroup[] {
+  const matching = row.normalizedSpecifications.filter((specification) =>
+    (specification.cc === null || specification.cc === variant.cc)
+    && (specification.has_abs === null || specification.has_abs === variant.has_abs),
+  );
+
+  if (matching.length) {
+    const groups = new Map<string, { title: string; items: Array<{ label: string; value: string }> }>();
+    for (const specification of matching) {
+      const group = groups.get(specification.group_key) ?? { title: specification.group_name, items: [] };
+      group.items.push({ label: specification.label, value: specification.value });
+      groups.set(specification.group_key, group);
+    }
+    return [...groups.values()];
+  }
+
+  const items = [
+    { label: "Brand", value: row.brand },
+    { label: "Model", value: row.model_name },
+    { label: "Engine Capacity", value: `${variant.cc}cc` },
+    ...(variant.has_abs ? [{ label: "Braking System", value: "ABS" }] : []),
+    ...variant.specifications
+      .filter((specification) => !/^(?:non-abs|abs)$/i.test(specification.trim()))
+      .map((specification, index) => ({ label: `Feature ${index + 1}`, value: specification })),
+  ];
+  return [{ title: "Specifications", items }];
+}
+
 function productVariants(row: StorefrontBike): readonly ProductVariant[] {
-  return row.normalizedVariants.map((variant) => ({
-    id: variant.id,
-    cc: variant.cc,
-    abs: variant.has_abs,
-    configurationId: configurationId(variant.cc, variant.has_abs),
-    configurationLabel: configurationLabel(variant.cc, variant.has_abs),
-    colorId: variant.color_slug,
-    colorName: variant.color_name,
-    colorHex: variant.color_hex ?? inferredColorHex(variant.color_name),
-    price: Number(variant.price_pkr),
-    availability: "contact-us" as const,
-    stockStatus: "coming_soon" as const,
-    quantity: 0,
-    isDefault: variant.is_default,
-    images: rowImages(row, variant.id),
-    specifications: [
-      { label: "Brand", value: row.brand },
-      { label: "Model", value: row.model_name },
-      { label: "Engine capacity", value: `${variant.cc}cc` },
-      { label: "Braking system", value: variant.has_abs ? "ABS" : "Non-ABS" },
-      ...variant.specifications.map((specification, index) => ({ label: `Feature ${index + 1}`, value: specification })),
-    ],
-  })).sort((a, b) => Number(b.isDefault) - Number(a.isDefault));
+  return row.normalizedVariants.map((variant) => {
+    const specificationGroups = variantSpecificationGroups(row, variant);
+    return {
+      id: variant.id,
+      cc: variant.cc,
+      abs: variant.has_abs,
+      configurationId: configurationId(variant.cc, variant.has_abs),
+      configurationLabel: configurationLabel(variant, row.normalizedVariants),
+      colorId: variant.color_slug,
+      colorName: variant.color_name,
+      colorHex: variant.color_hex ?? inferredColorHex(variant.color_name),
+      price: Number(variant.price_pkr),
+      availability: "contact-us" as const,
+      stockStatus: "coming_soon" as const,
+      quantity: 0,
+      isDefault: variant.is_default,
+      images: rowImages(row, variant.id),
+      specifications: specificationGroups.flatMap((group) => group.items),
+      specificationGroups,
+    };
+  }).sort((a, b) => Number(b.isDefault) - Number(a.isDefault));
 }
 
 export async function getStorefrontCatalogMotorcycles(): Promise<readonly CatalogMotorcycle[]> {
@@ -262,7 +301,7 @@ export async function getStorefrontCatalogMotorcycles(): Promise<readonly Catalo
     if (!variants.length) return [];
     const prices = variants.map((variant) => Number(variant.price_pkr));
     const engineOptions = [...new Set(variants.map((variant) => `${variant.cc}cc`))];
-    const configurations = [...new Set(variants.map((variant) => configurationLabel(variant.cc, variant.has_abs)))];
+    const configurations = [...new Set(variants.map((variant) => configurationLabel(variant, row.normalizedVariants)))];
     const defaultVariant = variants.find((variant) => variant.is_default) ?? variants[0];
     const defaultImage = rowImages(row, defaultVariant?.id)[0];
     const colors = [...new Map(variants.map((variant) => [variant.color_slug, variant])).values()].map((variant) => {
