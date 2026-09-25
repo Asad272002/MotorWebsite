@@ -12,9 +12,9 @@ const allFilters: CatalogFilterVisibility = { brand: true, category: true, price
 export function CatalogFilterForm({ filters, options, action, lockedBrand, lockedCategory, visibility = allFilters }: Readonly<{ filters: CatalogFilters; options: CatalogFilterOptions; action: string; lockedBrand?: string; lockedCategory?: string; visibility?: CatalogFilterVisibility }>) {
   return <form action={action} method="get">
     <p className="text-eyebrow mb-2">Filter Motorcycles</p>
+    {visibility.price ? <PriceRangeFields initialMin={filters.priceMin} initialMax={filters.priceMax} /> : null}
     {visibility.brand ? <FilterGroup title="Brand" name="brand" options={options.brand} selected={filters.brand} lockedValue={lockedBrand} /> : null}
     {visibility.category ? <FilterGroup title="Category" name="category" options={options.category} selected={filters.category} lockedValue={lockedCategory} /> : null}
-    {visibility.price ? <PriceRangeFields initialMin={filters.priceMin} initialMax={filters.priceMax} /> : null}
     {visibility.engineCapacity ? <FilterGroup title="Engine" name="engine" options={options.engine} selected={filters.engine} /> : null}
     {visibility.transmission ? <FilterGroup title="Transmission" name="transmission" options={options.transmission} selected={filters.transmission} /> : null}
     {visibility.fuel ? <FilterGroup title="Fuel Type" name="fuel" options={options.fuel} selected={filters.fuel} /> : null}
