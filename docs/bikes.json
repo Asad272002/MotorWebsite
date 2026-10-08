@@ -42,7 +42,7 @@
         "cc": 200,
         "abs": false,
         "price_pkr": 825000,
-        "available_colors": ["Black", "Red", "Blue", "Yellow"],
+        "available_colors": ["Black", "Red", "Blue", "Yellow", "Orange", "Matte Blue"],
         "specifications": ["EFI", "Water Cooled"]
       }
     ]
