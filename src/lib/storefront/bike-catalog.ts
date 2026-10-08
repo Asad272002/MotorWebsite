@@ -216,7 +216,17 @@ function sortedImages(images: readonly StorefrontBikeImageRow[]) {
   return [...images].sort((a, b) => Number(b.is_primary) - Number(a.is_primary) || a.sort_order - b.sort_order);
 }
 
-function rowImages(row: StorefrontBike, variantId?: string): readonly ProductImage[] {
+function imageAnglePriority(image: StorefrontBikeImageRow) {
+  const value = `${image.storage_path} ${image.alt_text}`.toLowerCase();
+  if (/side[ -]?profile|profile/.test(value)) return 0;
+  if (/\bside\b/.test(value)) return 1;
+  if (/\bleft\b|\bright\b/.test(value)) return 2;
+  if (/\bfront\b/.test(value)) return 3;
+  if (/\brear\b/.test(value)) return 4;
+  return 5;
+}
+
+function actualRowImages(row: StorefrontBike, variantId?: string): readonly ProductImage[] {
   const variant = variantId ? row.normalizedVariants.find((item) => item.id === variantId) : undefined;
   const variantImages = variantId
     ? sortedImages(row.normalizedImages.filter((image) => image.variant_id === variantId))
@@ -234,12 +244,26 @@ function rowImages(row: StorefrontBike, variantId?: string): readonly ProductIma
   if (unique.length) return unique.map((image) => ({ src: resolveImage(image.storage_path), alt: image.alt_text }));
 
   const legacyPaths = [row.primary_image_path, ...row.gallery_image_paths].filter((path): path is string => Boolean(path?.trim()));
-  const legacyUnique = [...new Set(legacyPaths)];
-  if (!legacyUnique.length) return [{ src: PLACEHOLDER_IMAGE, alt: `${row.model_name} image coming soon` }];
-  return legacyUnique.map((path, index) => ({
+  return [...new Set(legacyPaths)].map((path, index) => ({
     src: resolveImage(path),
     alt: index === 0 ? `${row.model_name} motorcycle` : `${row.model_name} view ${index + 1}`,
   }));
+}
+
+function catalogImage(row: StorefrontBike): ProductImage {
+  const preferred = [...row.normalizedImages]
+    .sort((a, b) => imageAnglePriority(a) - imageAnglePriority(b)
+      || Number(b.is_primary) - Number(a.is_primary)
+      || a.sort_order - b.sort_order)[0];
+  if (preferred) return { src: resolveImage(preferred.storage_path), alt: preferred.alt_text };
+
+  const legacy = actualRowImages(row)[0];
+  return legacy ?? { src: PLACEHOLDER_IMAGE, alt: `${row.model_name} image coming soon` };
+}
+
+function rowImages(row: StorefrontBike, variantId?: string): readonly ProductImage[] {
+  const images = actualRowImages(row, variantId);
+  return images.length ? images : [{ src: PLACEHOLDER_IMAGE, alt: `${row.model_name} image coming soon` }];
 }
 
 function variantSpecificationGroups(row: StorefrontBike, variant: StorefrontBikeVariantRow): readonly TechnicalGroup[] {
@@ -302,10 +326,10 @@ export async function getStorefrontCatalogMotorcycles(): Promise<readonly Catalo
     const prices = variants.map((variant) => Number(variant.price_pkr));
     const engineOptions = [...new Set(variants.map((variant) => `${variant.cc}cc`))];
     const configurations = [...new Set(variants.map((variant) => configurationLabel(variant, row.normalizedVariants)))];
-    const defaultVariant = variants.find((variant) => variant.is_default) ?? variants[0];
-    const defaultImage = rowImages(row, defaultVariant?.id)[0];
-    const colors = [...new Map(variants.map((variant) => [variant.color_slug, variant])).values()].map((variant) => {
-      const colorImage = rowImages(row, variant.id)[0] ?? defaultImage;
+    const defaultImage = catalogImage(row);
+    const colors = [...new Map(variants.map((variant) => [variant.color_slug, variant])).values()].flatMap((variant) => {
+      const colorImage = actualRowImages(row, variant.id)[0];
+      if (!colorImage) return [];
       return {
         id: `${row.id}-${variant.color_slug}`,
         name: variant.color_name,
