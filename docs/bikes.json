@@ -153,9 +153,22 @@
         "cc": 250,
         "abs": true,
         "price_pkr": 1125000,
-        "available_colors": ["Gray", "Silver Gray"],
+        "available_colors": ["Gray"],
         "specifications": [
           "Single-cylinder",
+          "EFI",
+          "ABS",
+          "Water Cooled",
+          "Three Boxes",
+          "Traction Control"
+        ]
+      },
+      {
+        "cc": 400,
+        "abs": true,
+        "price_pkr": 1800000,
+        "available_colors": ["Silver Gray"],
+        "specifications": [
           "EFI",
           "ABS",
           "Water Cooled",

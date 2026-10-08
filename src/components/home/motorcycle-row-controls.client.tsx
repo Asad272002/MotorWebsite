@@ -58,14 +58,12 @@ function MotorcycleSlide({
         <p className="mx-auto mt-3 max-w-xl text-[11px] font-medium tracking-[0.12em] text-cool-gray sm:text-xs">{motorcycle.tagline}</p>
       </header>
 
-      <div className="relative mx-auto mt-4 min-h-[310px] max-w-6xl overflow-hidden rounded-2xl bg-[#111820] shadow-[0_24px_70px_rgba(5,10,18,.22)] sm:min-h-[350px] lg:min-h-[350px]">
-        <Image src="/images/home/storefront-road-background.webp" alt="" fill sizes="(max-width: 1280px) 100vw, 1152px" className="object-cover" aria-hidden="true" />
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(5,9,14,.6),rgba(5,9,14,.12)_42%,rgba(5,9,14,.42))]" />
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 flex -translate-y-15 items-center justify-center overflow-hidden font-display text-[clamp(6rem,19vw,14rem)] font-bold uppercase leading-none tracking-[-0.055em] text-white/[.055]">
+      <div className="relative mx-auto mt-4 min-h-[310px] max-w-6xl sm:min-h-[350px] lg:min-h-[350px]">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 flex -translate-y-15 items-center justify-center overflow-hidden font-display text-[clamp(6rem,19vw,14rem)] font-bold uppercase leading-none tracking-[-0.055em] text-[#F3F3F3]">
           {brand.displayName}
         </div>
 
-        <Link href={href} aria-label={`View ${brand.name} ${motorcycle.name}`} className="group absolute inset-x-[12%] inset-y-0 z-10 flex items-center justify-center sm:inset-x-[20%] lg:inset-x-[28%]">
+        <Link href={href} aria-label={`View ${brand.name} ${motorcycle.name}`} className="group absolute inset-x-[12%] inset-y-0 z-10 flex items-center justify-center mix-blend-multiply sm:inset-x-[20%] lg:inset-x-[28%]">
           <Image
             key={image}
             src={image}
@@ -73,15 +71,15 @@ function MotorcycleSlide({
             width={1000}
             height={720}
             sizes="(max-width: 640px) 76vw, (max-width: 1024px) 60vw, 520px"
-            className="h-[240px] w-full object-contain drop-shadow-[0_24px_30px_rgba(0,0,0,.48)] transition-transform duration-300 group-hover:scale-[1.025] group-focus-visible:scale-[1.025] sm:h-[290px] lg:h-[315px] motion-reduce:transition-none"
+            className="h-[240px] w-full object-contain drop-shadow-[0_20px_25px_rgba(0,0,0,0.08)] transition-transform duration-300 group-hover:scale-[1.025] group-focus-visible:scale-[1.025] sm:h-[290px] lg:h-[315px] motion-reduce:transition-none"
           />
         </Link>
 
         {motorcycle.colors.length ? (
-          <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3 rounded-2xl bg-black/45 px-4 py-2.5 shadow-lg backdrop-blur-md lg:bottom-auto lg:left-auto lg:right-[3%] lg:top-1/2 lg:-translate-y-1/2 lg:translate-x-0 lg:flex-col lg:px-3 lg:py-4 xl:right-[4%]">
+          <div className="absolute bottom-0 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3 lg:bottom-auto lg:left-auto lg:right-[12%] lg:top-1/2 lg:-translate-y-1/2 lg:translate-x-0 lg:flex-col xl:right-[12.5%]">
             {configurations.length > 1 ? (
               <div className="flex items-center gap-2 lg:flex-col">
-                <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-white/70 lg:[writing-mode:vertical-rl] lg:rotate-180">Model</span>
+                <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-cool-gray lg:[writing-mode:vertical-rl] lg:rotate-180">Model</span>
                 <div className="flex overflow-hidden rounded-full border border-border bg-white p-1 shadow-sm lg:flex-col lg:rounded-2xl">
                   {configurations.map((configuration) => (
                     <button
@@ -97,7 +95,7 @@ function MotorcycleSlide({
                 </div>
               </div>
             ) : null}
-            <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-white/70 lg:[writing-mode:vertical-rl] lg:rotate-180">Colors</span>
+            <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-cool-gray lg:[writing-mode:vertical-rl] lg:rotate-180">Colors</span>
             <div className="flex items-center gap-3 lg:flex-col">
               {availableColors.map((color) => {
                 const selected = color.id === selectedColor?.id;
@@ -115,7 +113,7 @@ function MotorcycleSlide({
                 );
               })}
             </div>
-            <span className="max-w-24 text-center text-[11px] leading-4 text-white/80">{selectedColor?.name}</span>
+            <span className="max-w-24 text-center text-[11px] leading-4 text-cool-gray">{selectedColor?.name}</span>
           </div>
         ) : null}
       </div>
