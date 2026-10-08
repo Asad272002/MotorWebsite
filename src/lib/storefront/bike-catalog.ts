@@ -218,12 +218,14 @@ function sortedImages(images: readonly StorefrontBikeImageRow[]) {
 
 function imageAnglePriority(image: StorefrontBikeImageRow) {
   const value = `${image.storage_path} ${image.alt_text}`.toLowerCase();
-  if (/side[ -]?profile|profile/.test(value)) return 0;
-  if (/\bside\b/.test(value)) return 1;
-  if (/\bleft\b|\bright\b/.test(value)) return 2;
-  if (/\bfront\b/.test(value)) return 3;
-  if (/\brear\b/.test(value)) return 4;
-  return 5;
+  const filename = image.storage_path.split("/").at(-1) ?? "";
+  if (/^01(?:[-_.]|$)/i.test(filename)) return 0;
+  if (/side[ -]?profile|profile/.test(value)) return 1;
+  if (/\bside\b/.test(value)) return 2;
+  if (/\bleft\b|\bright\b/.test(value)) return 3;
+  if (/\bfront\b/.test(value)) return 4;
+  if (/\brear\b/.test(value)) return 5;
+  return 6;
 }
 
 function actualRowImages(row: StorefrontBike, variantId?: string): readonly ProductImage[] {
