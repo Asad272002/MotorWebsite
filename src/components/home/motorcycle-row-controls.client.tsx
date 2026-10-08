@@ -15,20 +15,32 @@ function MotorcycleSlide({
   motorcycle,
   active,
   selectedColorId,
+  selectedConfigurationId,
   onSelectColor,
+  onSelectConfiguration,
 }: Readonly<{
   brand: HomepageBrand;
   motorcycle: HomepageMotorcycle;
   active: boolean;
   selectedColorId?: string;
+  selectedConfigurationId?: string;
   onSelectColor: (colorId: string) => void;
+  onSelectConfiguration: (configurationId: string) => void;
 }>) {
-  const selectedColor = motorcycle.colors.find((color) => color.id === selectedColorId) ?? motorcycle.colors[0];
+  const configurations = [...new Map(motorcycle.colors.map((color) => [color.configurationId, {
+    id: color.configurationId,
+    label: color.configurationLabel,
+  }])).values()];
+  const activeConfigurationId = configurations.some((configuration) => configuration.id === selectedConfigurationId)
+    ? selectedConfigurationId
+    : configurations[0]?.id;
+  const availableColors = motorcycle.colors.filter((color) => color.configurationId === activeConfigurationId);
+  const selectedColor = availableColors.find((color) => color.id === selectedColorId) ?? availableColors[0] ?? motorcycle.colors[0];
   const image = selectedColor?.image ?? motorcycle.image;
   const imageAlt = selectedColor?.imageAlt ?? motorcycle.imageAlt;
   const href = `/motorcycles/${brand.id}/${motorcycle.slug}`;
   const specs = [
-    { value: specificationValue(motorcycle.engine), label: "Engine" },
+    { value: specificationValue(selectedColor?.engine ?? motorcycle.engine), label: "Engine" },
     { value: specificationValue(motorcycle.cooling), label: "Cooling" },
     { value: specificationValue(motorcycle.gearbox), label: "Gearbox" },
   ];
@@ -65,9 +77,27 @@ function MotorcycleSlide({
 
         {motorcycle.colors.length ? (
           <div className="absolute bottom-0 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3 lg:bottom-auto lg:left-auto lg:right-[12%] lg:top-1/2 lg:-translate-y-1/2 lg:translate-x-0 lg:flex-col xl:right-[12.5%]">
+            {configurations.length > 1 ? (
+              <div className="flex items-center gap-2 lg:flex-col">
+                <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-cool-gray lg:[writing-mode:vertical-rl] lg:rotate-180">Model</span>
+                <div className="flex overflow-hidden rounded-full border border-border bg-white p-1 shadow-sm lg:flex-col lg:rounded-2xl">
+                  {configurations.map((configuration) => (
+                    <button
+                      key={configuration.id}
+                      type="button"
+                      onClick={() => onSelectConfiguration(configuration.id)}
+                      aria-pressed={configuration.id === activeConfigurationId}
+                      className={`min-h-8 rounded-full px-3 text-[10px] font-bold transition-colors ${configuration.id === activeConfigurationId ? "bg-near-black text-white" : "text-cool-gray hover:text-brand"}`}
+                    >
+                      {configuration.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : null}
             <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-cool-gray lg:[writing-mode:vertical-rl] lg:rotate-180">Colors</span>
             <div className="flex items-center gap-3 lg:flex-col">
-              {motorcycle.colors.map((color) => {
+              {availableColors.map((color) => {
                 const selected = color.id === selectedColor?.id;
                 return (
                   <button
@@ -103,6 +133,7 @@ function MotorcycleSlide({
 export function MotorcycleRowControls({ brand }: Readonly<{ brand: HomepageBrand }>) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedColors, setSelectedColors] = useState<Record<string, string>>({});
+  const [selectedConfigurations, setSelectedConfigurations] = useState<Record<string, string>>({});
   const count = brand.motorcycles.length;
   const goTo = (index: number) => setActiveIndex((index + count) % count);
 
@@ -116,7 +147,9 @@ export function MotorcycleRowControls({ brand }: Readonly<{ brand: HomepageBrand
             motorcycle={motorcycle}
             active={index === activeIndex}
             selectedColorId={selectedColors[motorcycle.id]}
+            selectedConfigurationId={selectedConfigurations[motorcycle.id]}
             onSelectColor={(colorId) => setSelectedColors((current) => ({ ...current, [motorcycle.id]: colorId }))}
+            onSelectConfiguration={(configurationId) => setSelectedConfigurations((current) => ({ ...current, [motorcycle.id]: configurationId }))}
           />
         ))}
       </div>

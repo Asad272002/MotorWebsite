@@ -341,12 +341,15 @@ function toCatalogMotorcycle(row: CatalogSourceRow): CatalogMotorcycle | null {
   const productImage = images.find((image) => image.variant_id === null) ?? images[0];
   const colors = [...new Map(variants.map((variant) => {
     const variantImage = images.find((image) => image.variant_id === variant.id) ?? productImage;
-    return [variant.color_name.toLowerCase(), {
+    return [`${variant.cc}-${variant.color_name.toLowerCase()}`, {
       id: variant.id,
       name: variant.color_name,
       hex: variant.color_hex,
       image: variantImage ? resolveStorageImage(variantImage.storage_path) : localBrandLogo(row.brand.slug),
       imageAlt: variantImage?.alt_text ?? `${row.name} in ${variant.color_name}`,
+      configurationId: `${variant.cc}-standard`,
+      configurationLabel: `${variant.cc}cc`,
+      engine: `${variant.cc}cc`,
     }] as const;
   })).values()];
 

@@ -31,6 +31,9 @@ export type CatalogMotorcycle = Readonly<{
     hex: string;
     image: string;
     imageAlt: string;
+    configurationId: string;
+    configurationLabel: string;
+    engine: string;
   }>[];
   price: number;
   priceLabel: string;

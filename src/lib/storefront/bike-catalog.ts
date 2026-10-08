@@ -337,15 +337,18 @@ export async function getStorefrontCatalogMotorcycles(): Promise<readonly Catalo
     const engineOptions = [...new Set(variants.map((variant) => `${variant.cc}cc`))];
     const configurations = [...new Set(variants.map((variant) => configurationLabel(variant, row.normalizedVariants)))];
     const defaultImage = catalogImage(row);
-    const colors = [...new Map(variants.map((variant) => [variant.color_slug, variant])).values()].flatMap((variant) => {
+    const colors = [...new Map(variants.map((variant) => [`${configurationId(variant.cc, variant.has_abs)}-${variant.color_slug}`, variant])).values()].flatMap((variant) => {
       const colorImage = actualRowImages(row, variant.id)[0];
       if (!colorImage) return [];
       return {
-        id: `${row.id}-${variant.color_slug}`,
+        id: variant.id,
         name: variant.color_name,
         hex: variant.color_hex ?? inferredColorHex(variant.color_name),
         image: colorImage?.src ?? PLACEHOLDER_IMAGE,
         imageAlt: colorImage?.alt ?? `${row.model_name} in ${variant.color_name}`,
+        configurationId: configurationId(variant.cc, variant.has_abs),
+        configurationLabel: configurationLabel(variant, row.normalizedVariants),
+        engine: `${variant.cc}cc`,
       };
     });
     const price = Math.min(...prices);

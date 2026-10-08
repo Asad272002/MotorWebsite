@@ -14,6 +14,9 @@ export type HomepageMotorcycle = Readonly<{
     hex: string;
     image: string;
     imageAlt: string;
+    configurationId: string;
+    configurationLabel: string;
+    engine: string;
   }>[];
   specification: string;
   priceLabel: string;
