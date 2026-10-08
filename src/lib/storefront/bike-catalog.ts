@@ -253,6 +253,14 @@ function actualRowImages(row: StorefrontBike, variantId?: string): readonly Prod
 }
 
 function catalogImage(row: StorefrontBike): ProductImage {
+  if (row.primary_image_path) {
+    const selected = row.normalizedImages.find((image) => image.storage_path === row.primary_image_path);
+    return {
+      src: resolveImage(row.primary_image_path),
+      alt: selected?.alt_text ?? `${row.model_name} motorcycle`,
+    };
+  }
+
   const preferred = [...row.normalizedImages]
     .sort((a, b) => imageAnglePriority(a) - imageAnglePriority(b)
       || Number(b.is_primary) - Number(a.is_primary)
