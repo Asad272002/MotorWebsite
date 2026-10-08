@@ -37,7 +37,7 @@ export default function AboutPage() {
           <div className="about-hero-orbit absolute inset-10 rounded-full border border-white/10" />
           <div className="about-hero-orbit about-hero-orbit-delayed absolute inset-24 rounded-full border border-brand/25" />
           <div className="absolute bottom-14 left-1/2 h-10 w-[78%] -translate-x-1/2 rounded-full bg-black/80 blur-xl" />
-          <Image src="/images/home/taro-motorcycle-01.png" alt="" width={1200} height={900} priority className="about-hero-bike absolute inset-0 h-full w-full object-contain object-center drop-shadow-[0_30px_45px_rgba(0,0,0,.65)]" sizes="(min-width: 1024px) 45vw, 0px" />
+          <Image src="/images/home/taro-motorcycle-02.png" alt="" width={1200} height={900} priority className="about-hero-bike absolute inset-0 h-full w-full object-contain object-center drop-shadow-[0_30px_45px_rgba(0,0,0,.65)]" sizes="(min-width: 1024px) 45vw, 0px" />
           <div className="about-hero-badge absolute right-0 top-20 rounded-xl border border-white/15 bg-black/55 px-4 py-3 backdrop-blur-md"><span className="block font-display text-2xl font-bold text-white">5</span><span className="text-[10px] uppercase tracking-[.14em] text-white/50">Motorcycle brands</span></div>
           <div className="about-hero-badge about-hero-badge-delayed absolute bottom-24 left-0 rounded-xl border border-white/15 bg-black/55 px-4 py-3 backdrop-blur-md"><span className="flex items-center gap-1 font-display text-2xl font-bold text-white">4.0 <Star className="h-4 w-4 fill-[#F5A623] text-[#F5A623]" /></span><span className="text-[10px] uppercase tracking-[.14em] text-white/50">Customer rating</span></div>
         </div>
