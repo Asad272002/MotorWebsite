@@ -102,15 +102,17 @@ function MegaProductGrid({
           href={`/motorcycles/${motorcycle.brand}/${motorcycle.slug}`}
           onClick={onProductSelect}
           aria-label={`View ${motorcycle.brandName} ${motorcycle.name}`}
-          className="group flex min-w-0 flex-col items-center justify-center p-2 text-center"
+          className="group flex min-w-0 flex-col items-center justify-center rounded-2xl border border-transparent p-2 text-center transition-colors hover:border-border hover:bg-soft-gray/60"
         >
-          <div className="relative h-[210px] w-full">
+          <div className="relative h-[210px] w-full overflow-hidden rounded-xl bg-[#101820] shadow-[0_14px_34px_rgba(5,10,18,.16)]">
+            <Image src="/images/home/storefront-road-background.webp" alt="" fill sizes="30vw" className="object-cover" aria-hidden="true" />
+            <span aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,8,13,.08),rgba(4,8,13,.42))]" />
             <Image
               src={motorcycle.image}
               alt={motorcycle.imageAlt}
               fill
               sizes="30vw"
-              className="object-contain p-3 transition-[transform,filter] duration-200 ease-out group-hover:-translate-y-1 group-hover:scale-[1.06] group-hover:drop-shadow-[0_14px_14px_rgba(17,17,17,0.18)] group-focus-visible:-translate-y-1 group-focus-visible:scale-[1.06] group-focus-visible:drop-shadow-[0_14px_14px_rgba(17,17,17,0.18)] motion-reduce:transform-none motion-reduce:transition-none"
+              className="z-10 object-contain p-5 drop-shadow-[0_16px_18px_rgba(0,0,0,.5)] transition-[transform,filter] duration-200 ease-out group-hover:-translate-y-1 group-hover:scale-[1.06] group-focus-visible:-translate-y-1 group-focus-visible:scale-[1.06] motion-reduce:transform-none motion-reduce:transition-none"
             />
           </div>
           <p className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-cool-gray">{motorcycle.brandName}</p>

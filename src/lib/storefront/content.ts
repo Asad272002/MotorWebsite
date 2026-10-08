@@ -99,8 +99,8 @@ export const DEFAULT_STOREFRONT_CONTENT: StorefrontContent = {
     eyebrow: "About OW Motors",
     heading: "Your Motorcycle Destination",
     description: "Since 2016, OW Motors has brought Taro, Lifan, Hi-Speed, Super Star, and Fuego together in one rider-focused motorcycle experience.",
-    imagePath: "images/ow-motors-logo.png",
-    imageAlt: "OW Motors",
+    imagePath: "/images/home/taro-campaign-03.webp",
+    imageAlt: "Blue Taro sport motorcycle photographed on a rain-lit city street",
     points: [
       "Motorcycles from five distinct brands",
       "A clear path from discovery to dealership contact",

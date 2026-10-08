@@ -9,8 +9,8 @@ export function AboutPreview({ content }: Readonly<{ content: AboutPreviewConten
     <section aria-labelledby="about-preview-title" className="border-t border-border bg-soft-gray">
       <div className="mx-auto grid max-w-7xl md:grid-cols-2">
         <div className="relative flex min-h-[340px] items-center justify-center overflow-hidden bg-[#1a1a1a] sm:min-h-[440px] md:min-h-[520px]">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(198,40,40,.24),transparent_48%)]" />
-          <Image src={motorcycleStoragePublicUrl(content.imagePath)} alt={content.imageAlt} width={1536} height={1024} className="relative h-auto w-[82%] object-contain brightness-110" sizes="(max-width: 768px) 82vw, 41vw" />
+          <Image src={motorcycleStoragePublicUrl(content.imagePath)} alt={content.imageAlt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_45%,rgba(0,0,0,.68))]" />
           <div className="absolute inset-x-4 bottom-4 grid grid-cols-2 gap-3 sm:inset-x-8 sm:bottom-8">
             <div className="bg-black/65 px-2 py-4 text-center backdrop-blur"><p className="font-display text-3xl font-bold text-white">{content.primaryStatValue}</p><p className="text-xs text-white/60">{content.primaryStatLabel}</p></div>
             <div className="bg-black/65 px-2 py-4 text-center backdrop-blur"><p className="font-display text-3xl font-bold text-white">{content.secondaryStatValue}</p><p className="text-xs text-white/60">{content.secondaryStatLabel}</p></div>
