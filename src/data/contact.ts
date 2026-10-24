@@ -2,6 +2,8 @@ export type SocialPlatform = "instagram" | "facebook" | "tiktok" | "youtube";
 
 export const OW_MOTORS_FOUNDED_YEAR = 2016;
 export const OW_MOTORS_YEARS_OF_SERVICE = new Date().getFullYear() - OW_MOTORS_FOUNDED_YEAR;
+export const OW_MOTORS_INQUIRY_EMAIL = "owmotors3@gmail.com";
+export const OW_MOTORS_WHATSAPP_NUMBER = "923222033399";
 
 export const OW_MOTORS_CONTACT = {
   address: "Shop 61-A, Main Maulana Shaukat Ali Road, Township, Lahore 54000",

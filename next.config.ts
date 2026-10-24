@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: storagePattern ? [{ protocol: storagePattern.protocol.replace(":", "") as "http" | "https", hostname: storagePattern.hostname, port: storagePattern.port, pathname: storagePattern.pathname }] : [],
   },
+  async redirects() {
+    return [
+      { source: "/favicon.ico", destination: "/icon.png", permanent: true },
+    ];
+  },
   async headers() {
     const noStoreHeaders = [
       { key: "Cache-Control", value: "private, no-store, max-age=0, must-revalidate" },

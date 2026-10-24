@@ -63,6 +63,12 @@ Important repository locations:
 - Filtered catalogue URLs canonicalize to the unfiltered landing page and receive `noindex, follow`.
 - Valid paginated catalogue pages after page 1 are indexable and self-canonicalize with `?page=N`.
 - Invalid page numbers, empty result pages, missing products, and error pages are no-indexed.
+- Confirmed legacy product URLs permanently redirect to their exact current canonical products:
+  - `/catalogue/lifan-k19` → `/motorcycles/lifan/lifan-k19`
+  - `/catalogue/taro-c6` → `/motorcycles/taro/taro-c6`
+  - `/catalogue/lifan-ss2` → `/motorcycles/lifan/lifan-ss-2`
+- Legacy X-PECT and KPS 250 URLs intentionally remain `404` because those motorcycles do not currently have published canonical product pages in the production sitemap.
+- `/favicon.ico` permanently redirects to the active application icon at `/icon.png`.
 
 ### Titles and descriptions
 
