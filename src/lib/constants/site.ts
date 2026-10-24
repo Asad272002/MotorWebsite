@@ -1,6 +1,6 @@
 export const SITE_NAME = "OW Motors";
 export const SITE_DESCRIPTION =
-  "Explore motorcycles from Taro, Lifan, Hi-Speed, and Super Star at OW Motors.";
+  "Explore motorcycles from Taro, Lifan, Fuego, Hi-Speed, and Super Star at OW Motors.";
 
 function resolveSiteUrl() {
   const envSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
