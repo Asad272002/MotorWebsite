@@ -25,6 +25,24 @@ type PrimaryNavigationProps = Readonly<{
   brands: readonly NavigationBrand[];
 }>;
 
+const MEGA_SCENE_PRESETS = [
+  {
+    position: "33% center",
+    backdrop: "brightness-[.78] saturate-[.82] contrast-[1.08] scale-[1.04]",
+    atmosphere: "bg-[linear-gradient(115deg,rgba(5,10,16,.34),rgba(21,31,40,.02)_48%,rgba(3,6,10,.48))]",
+  },
+  {
+    position: "58% center",
+    backdrop: "brightness-[.86] saturate-[.68] contrast-[1.12] scale-[1.07]",
+    atmosphere: "bg-[linear-gradient(120deg,rgba(7,12,18,.5),rgba(46,64,76,.08)_52%,rgba(4,7,11,.34))]",
+  },
+  {
+    position: "78% center",
+    backdrop: "brightness-[.8] saturate-[.92] contrast-[1.06] scale-[1.05]",
+    atmosphere: "bg-[linear-gradient(110deg,rgba(4,8,13,.42),rgba(88,54,34,.08)_55%,rgba(3,6,10,.5))]",
+  },
+] as const;
+
 function isActivePath(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -96,34 +114,47 @@ function MegaProductGrid({
 
   return (
     <div className="grid flex-1 grid-cols-3 gap-3">
-      {motorcycles.map((motorcycle) => (
-        <Link
-          key={motorcycle.id}
-          href={`/motorcycles/${motorcycle.brand}/${motorcycle.slug}`}
-          onClick={onProductSelect}
-          aria-label={`View ${motorcycle.brandName} ${motorcycle.name}`}
-          className="group flex min-w-0 flex-col items-center justify-center rounded-2xl border border-transparent p-2 text-center transition-colors hover:border-border hover:bg-soft-gray/60"
-        >
-          <div className="relative h-[210px] w-full overflow-hidden rounded-xl bg-[#101820] shadow-[0_14px_34px_rgba(5,10,18,.16)]">
-            <Image src="/images/home/storefront-road-background.webp" alt="" fill sizes="30vw" className="object-cover" aria-hidden="true" />
-            <span aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,8,13,.08),rgba(4,8,13,.42))]" />
-            <Image
-              src={motorcycle.image}
-              alt={motorcycle.imageAlt}
-              fill
-              sizes="30vw"
-              className="z-10 object-contain p-5 drop-shadow-[0_16px_18px_rgba(0,0,0,.5)] transition-[transform,filter] duration-200 ease-out group-hover:-translate-y-1 group-hover:scale-[1.06] group-focus-visible:-translate-y-1 group-focus-visible:scale-[1.06] motion-reduce:transform-none motion-reduce:transition-none"
-            />
-          </div>
-          <p className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-cool-gray">{motorcycle.brandName}</p>
-          <h3 className="mt-1 font-display text-base font-bold text-near-black">
-            {motorcycle.name}
-          </h3>
-          <span className="mt-1 min-h-4 text-xs font-semibold text-brand opacity-0 transition-[opacity,transform] duration-200 ease-out group-hover:-translate-y-0.5 group-hover:opacity-100 group-focus-visible:-translate-y-0.5 group-focus-visible:opacity-100 motion-reduce:transform-none motion-reduce:transition-none">
-            View Bike <span aria-hidden="true">&rarr;</span>
-          </span>
-        </Link>
-      ))}
+      {motorcycles.map((motorcycle, index) => {
+        const scene = MEGA_SCENE_PRESETS[index % MEGA_SCENE_PRESETS.length];
+        return (
+          <Link
+            key={motorcycle.id}
+            href={`/motorcycles/${motorcycle.brand}/${motorcycle.slug}`}
+            onClick={onProductSelect}
+            aria-label={`View ${motorcycle.brandName} ${motorcycle.name}`}
+            className="group flex min-w-0 flex-col items-center justify-center rounded-2xl border border-transparent p-2 text-center transition-colors hover:border-border hover:bg-soft-gray/60"
+          >
+            <div className="relative h-[210px] w-full overflow-hidden rounded-xl border border-white/10 bg-[#101820] shadow-[0_16px_38px_rgba(5,10,18,.18)]">
+              <Image
+                src="/images/home/storefront-road-background.webp"
+                alt=""
+                fill
+                sizes="30vw"
+                className={`object-cover ${scene.backdrop}`}
+                style={{ objectPosition: scene.position }}
+                aria-hidden="true"
+              />
+              <span aria-hidden="true" className={`absolute inset-0 ${scene.atmosphere}`} />
+              <span aria-hidden="true" className="absolute inset-x-[15%] bottom-[12%] h-[17%] rounded-[50%] bg-black/50 blur-xl" />
+              <span aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,.05),transparent_38%,rgba(2,5,8,.24))] shadow-[inset_0_0_34px_rgba(0,0,0,.28)]" />
+              <Image
+                src={motorcycle.image}
+                alt={motorcycle.imageAlt}
+                fill
+                sizes="30vw"
+                className="z-10 object-contain p-5 drop-shadow-[0_18px_14px_rgba(0,0,0,.6)] transition-[transform,filter] duration-300 ease-out group-hover:-translate-y-1 group-hover:scale-[1.055] group-focus-visible:-translate-y-1 group-focus-visible:scale-[1.055] motion-reduce:transform-none motion-reduce:transition-none"
+              />
+            </div>
+            <p className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-cool-gray">{motorcycle.brandName}</p>
+            <h3 className="mt-1 font-display text-base font-bold text-near-black">
+              {motorcycle.name}
+            </h3>
+            <span className="mt-1 min-h-4 text-xs font-semibold text-brand opacity-0 transition-[opacity,transform] duration-200 ease-out group-hover:-translate-y-0.5 group-hover:opacity-100 group-focus-visible:-translate-y-0.5 group-focus-visible:opacity-100 motion-reduce:transform-none motion-reduce:transition-none">
+              View Bike <span aria-hidden="true">&rarr;</span>
+            </span>
+          </Link>
+        );
+      })}
     </div>
   );
 }
