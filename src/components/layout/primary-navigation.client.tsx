@@ -171,7 +171,7 @@ export function PrimaryNavigation({ categories, motorcycles, brands }: PrimaryNa
 
   const categoryLinks = categories.map((category) => ({
     label: category.name,
-    href: `/motorcycles/category/${category.slug}`,
+    href: category.slug === "replicas" ? "/motorcycles/replicas" : `/motorcycles/category/${category.slug}`,
   }));
   const activeCategoryLink = categoryLinks.find((item) => item.href.endsWith(`/${activeCategory}`))
     ?? categoryLinks[0]

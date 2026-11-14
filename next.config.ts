@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      { source: "/motorcycles/category/replicas", destination: "/motorcycles/replicas", permanent: true },
       { source: "/favicon.ico", destination: "/icon.png", permanent: true },
     ];
   },

@@ -32,10 +32,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
   const latestBrandUpdate = latestTimestamp(brands.map((brand) => brand.updatedAt));
   const latestProductUpdate = latestTimestamp(motorcycles.map((motorcycle) => motorcycle.updatedAt));
+  const replicaCategory = categories.find((category) => category.slug === "replicas");
+  const latestReplicaUpdate = latestTimestamp([
+    ...(replicaCategory ? [replicaCategory.updatedAt] : []),
+    ...(productUpdatesByCategory.get("replicas") ?? []),
+  ]);
   const staticEntries = [
     { path: "", lastModified: latestTimestamp([latestBrandUpdate, latestProductUpdate].filter((value): value is string => Boolean(value))) },
     { path: "/brands", lastModified: latestBrandUpdate },
     ...(motorcycles.length ? [{ path: "/motorcycles", lastModified: latestProductUpdate }] : []),
+    ...(populatedCategorySlugs.has("replicas") ? [{ path: "/motorcycles/replicas", lastModified: latestReplicaUpdate }] : []),
     { path: "/about" },
     { path: "/contact" },
     { path: "/blog", lastModified: latestTimestamp(blogPosts.map((post) => post.updatedAt)) },
@@ -50,7 +56,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ]),
     }));
   const categoryEntries = categories
-    .filter((category) => populatedCategorySlugs.has(category.slug))
+    .filter((category) => category.slug !== "replicas" && populatedCategorySlugs.has(category.slug))
     .map((category) => ({
       path: `/motorcycles/category/${category.slug}`,
       lastModified: latestTimestamp([
