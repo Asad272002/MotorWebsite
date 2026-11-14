@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { ProductVariant } from "@/data/products";
 import { ProductGallery } from "@/components/motorcycles/product-gallery.client";
 import { OW_MOTORS_WHATSAPP_NUMBER } from "@/data/contact";
+import { productDisplayName } from "@/lib/storefront/product-text";
 
 const formatPrice = (price: number) => `PKR ${price.toLocaleString("en-PK")}`;
 const availabilityLabel = (value: ProductVariant["availability"]) => ({
@@ -20,6 +21,7 @@ export function ProductConfigurator({ brandName, productName, description, varia
   const [mobileSpecificationMenuOpen, setMobileSpecificationMenuOpen] = useState(false);
   const mobileSpecificationMenuRef = useRef<HTMLDivElement>(null);
   const selected = variants.find((variant) => variant.id === selectedVariantId) ?? variants[0];
+  const displayName = productDisplayName(brandName, productName);
   const specificationGroups = selected.specificationGroups ?? [{ title: "Specifications", items: selected.specifications }];
   const activeSpecificationGroup = specificationGroups.find((group) => group.title === selectedSpecificationGroup) ?? specificationGroups[0];
   useEffect(() => {
@@ -38,20 +40,20 @@ export function ProductConfigurator({ brandName, productName, description, varia
   }, []);
   const configurations = [...new Map(variants.map((variant) => [variant.configurationId, { id: variant.configurationId, label: variant.configurationLabel }])).values()];
   const colors = [...new Map(variants.map((variant) => [variant.colorId, { id: variant.colorId, name: variant.colorName, hex: variant.colorHex }])).values()];
-  const whatsappMessage = `Hello OW Motors, I am interested in the ${brandName} ${productName} (${selected.configurationLabel}, ${selected.colorName}), listed at ${formatPrice(selected.price)}. Please confirm its current price and availability.`;
+  const whatsappMessage = `Hello OW Motors, I am interested in the ${displayName} (${selected.configurationLabel}, ${selected.colorName}), listed at ${formatPrice(selected.price)}. Please confirm its current price and availability.`;
   const whatsappHref = `https://wa.me/${OW_MOTORS_WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
   const selectConfiguration = (configurationId: string) => { const match = variants.find((variant) => variant.configurationId === configurationId && variant.colorId === selected.colorId) ?? variants.find((variant) => variant.configurationId === configurationId); if (match) setSelectedVariantId(match.id); };
   const selectColor = (colorId: string) => { const match = variants.find((variant) => variant.configurationId === selected.configurationId && variant.colorId === colorId); if (match) setSelectedVariantId(match.id); };
   return <>
     <div className="mx-auto grid max-w-7xl gap-8 px-[var(--page-gutter)] lg:grid-cols-[1.45fr_1fr] lg:gap-12">
-      <ProductGallery key={selected.id} images={selected.images} productName={`${brandName} ${productName}`} />
+      <ProductGallery key={selected.id} images={selected.images} productName={displayName} />
       <div>
         <p className="text-eyebrow mb-2">{brandName}</p><h1 className="font-display text-[clamp(2.4rem,4vw,3.5rem)] font-bold leading-none">{productName}</h1><p className="mt-4 text-sm leading-6 text-cool-gray">{description}</p>
         <div className="mt-6 flex flex-wrap items-center gap-4 border-b border-border pb-5"><p className="font-display text-[clamp(1.8rem,3vw,2.5rem)] font-bold text-brand">{formatPrice(selected.price)}</p><span className={`border px-3 py-1.5 text-xs font-semibold ${selected.availability === "in-stock" ? "border-green-200 bg-green-50 text-green-700" : "border-red-200 bg-red-50 text-brand"}`}>{availabilityLabel(selected.availability)}</span></div>
         {configurations.length > 1 ? <fieldset className="mt-5"><legend className="mb-3 text-sm">Configuration: <strong>{selected.configurationLabel}</strong></legend><div className="flex flex-wrap gap-2">{configurations.map((configuration) => <button key={configuration.id} type="button" onClick={() => selectConfiguration(configuration.id)} aria-pressed={selected.configurationId === configuration.id} className={`min-h-11 touch-manipulation border px-5 text-sm font-semibold transition-all hover:border-brand active:scale-[.97] active:border-brand ${selected.configurationId === configuration.id ? "border-brand bg-brand/5 text-brand" : "border-border bg-white"}`}>{configuration.label}</button>)}</div></fieldset> : null}
         <fieldset className="mt-5"><legend className="mb-3 text-sm">Color: <strong>{selected.colorName}</strong></legend><div className="flex flex-wrap gap-2">{colors.map((color) => { const match = variants.find((variant) => variant.configurationId === selected.configurationId && variant.colorId === color.id); const isSelected = selected.colorId === color.id; return <label key={color.id} className={`relative flex min-h-12 touch-manipulation cursor-pointer select-none items-center gap-2 border px-4 text-sm font-semibold transition-all hover:border-brand active:scale-[.97] active:border-brand focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[var(--ow-focus)] ${isSelected ? "border-brand bg-brand/5 text-brand" : "border-border bg-white"} ${match ? "" : "pointer-events-none cursor-not-allowed opacity-35 line-through"}`}><input type="radio" name="product-color" value={color.id} checked={isSelected} disabled={!match} onChange={() => selectColor(color.id)} className="absolute inset-0 h-full w-full cursor-pointer opacity-0" /><span aria-hidden="true" className="h-4 w-4 rounded-full border border-black/15" style={{ backgroundColor: color.hex }} /><span>{color.name}</span></label>; })}</div></fieldset>
         <div className="mt-6 border border-border bg-soft-gray p-5"><p className="text-eyebrow mb-3">Your Selection</p><dl className="space-y-2 text-sm">{[["Motorcycle", productName], ["Configuration", selected.configurationLabel], ["Color", selected.colorName], ["Price", formatPrice(selected.price)], ["Availability", availabilityLabel(selected.availability)]].map(([label, value]) => <div key={label} className="flex justify-between gap-6"><dt className="text-cool-gray">{label}</dt><dd className={`text-right font-semibold ${label === "Price" ? "text-brand" : ""}`}>{value}</dd></div>)}</dl></div>
-        <div className="mt-5"><a href={whatsappHref} target="_blank" rel="noreferrer" className="flex min-h-11 w-full touch-manipulation items-center justify-center border border-[#0B7A34] bg-[#0B7A34] px-5 text-sm font-semibold !text-white transition-colors hover:bg-white hover:!text-[#0B7A34] active:bg-white active:!text-[#0B7A34]" aria-label={`Ask OW Motors about ${brandName} ${productName} on WhatsApp`}>Ask about this bike on WhatsApp</a></div>
+        <div className="mt-5"><a href={whatsappHref} target="_blank" rel="noreferrer" className="flex min-h-11 w-full touch-manipulation items-center justify-center border border-[#0B7A34] bg-[#0B7A34] px-5 text-sm font-semibold !text-white transition-colors hover:bg-white hover:!text-[#0B7A34] active:bg-white active:!text-[#0B7A34]" aria-label={`Ask OW Motors about ${displayName} on WhatsApp`}>Ask about this bike on WhatsApp</a></div>
       </div>
     </div>
         <section aria-labelledby="selected-specifications" className="mt-14 border-y border-border bg-soft-gray py-12 sm:mt-20 sm:py-16">
@@ -95,6 +97,6 @@ export function ProductConfigurator({ brandName, productName, description, varia
         </div>
       </div>
     </section>
-    <div className="fixed inset-x-0 bottom-0 z-50 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-t border-border bg-white px-3 pb-[max(.5rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_-3px_12px_rgba(0,0,0,.08)] sm:gap-4 sm:px-5 md:grid-cols-[1fr_1fr_1fr]"><div className="min-w-0"><p className="truncate font-display text-sm font-bold">{brandName} {productName}</p><p className="truncate text-[0.65rem] text-cool-gray">{selected.cc}cc · {selected.colorName}</p></div><p className="hidden text-center font-display text-xl font-bold text-brand md:block">{formatPrice(selected.price)}</p><div className="flex justify-end"><a href={whatsappHref} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center whitespace-nowrap border border-[#0B7A34] bg-[#0B7A34] px-3 text-xs font-semibold !text-white transition-colors hover:bg-white hover:!text-[#0B7A34] sm:px-5" aria-label={`Ask OW Motors about ${brandName} ${productName} on WhatsApp`}>Ask on WhatsApp</a></div></div>
+    <div className="fixed inset-x-0 bottom-0 z-50 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-t border-border bg-white px-3 pb-[max(.5rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_-3px_12px_rgba(0,0,0,.08)] sm:gap-4 sm:px-5 md:grid-cols-[1fr_1fr_1fr]"><div className="min-w-0"><p className="truncate font-display text-sm font-bold">{displayName}</p><p className="truncate text-[0.65rem] text-cool-gray">{selected.cc}cc · {selected.colorName}</p></div><p className="hidden text-center font-display text-xl font-bold text-brand md:block">{formatPrice(selected.price)}</p><div className="flex justify-end"><a href={whatsappHref} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center whitespace-nowrap border border-[#0B7A34] bg-[#0B7A34] px-3 text-xs font-semibold !text-white transition-colors hover:bg-white hover:!text-[#0B7A34] sm:px-5" aria-label={`Ask OW Motors about ${displayName} on WhatsApp`}>Ask on WhatsApp</a></div></div>
   </>;
 }

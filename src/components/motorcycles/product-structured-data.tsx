@@ -1,5 +1,6 @@
 import type { ProductDetail } from "@/data/products";
 import { SITE_URL } from "@/lib/constants/site";
+import { productDisplayName } from "@/lib/storefront/product-text";
 
 const availability = {
   "in-stock": "https://schema.org/InStock",
@@ -19,7 +20,7 @@ export function ProductStructuredData({ product }: Readonly<{ product: ProductDe
   const productNode = {
     "@type": "Product",
     "@id": `${url}#product`,
-    name: `${product.brandName} ${product.name}`,
+    name: productDisplayName(product.brandName, product.name),
     description: product.description,
     ...(images.length ? { image: images } : {}),
     brand: { "@type": "Brand", name: product.brandName },

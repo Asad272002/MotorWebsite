@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import type { HomepageBrand, HomepageMotorcycle } from "@/data/homepage";
+import { productDisplayName } from "@/lib/storefront/product-text";
 
 function specificationValue(value: string) {
   return value.trim() || "Not specified";
@@ -39,6 +40,7 @@ function MotorcycleSlide({
   const image = selectedColor?.image ?? motorcycle.image;
   const imageAlt = selectedColor?.imageAlt ?? motorcycle.imageAlt;
   const href = `/motorcycles/${brand.id}/${motorcycle.slug}`;
+  const displayName = productDisplayName(brand.name, motorcycle.name);
   const specs = [
     { value: specificationValue(selectedColor?.engine ?? motorcycle.engine), label: "Engine" },
     { value: specificationValue(motorcycle.cooling), label: "Cooling" },
@@ -53,7 +55,7 @@ function MotorcycleSlide({
     >
       <header className="relative z-10 text-center">
         <h3 id={`home-model-${motorcycle.id}`} className="font-display text-[clamp(2rem,4vw,2.5rem)] font-bold uppercase leading-none tracking-[-0.02em] text-near-black">
-          <Link href={href} className="transition-colors hover:text-brand focus-visible:text-brand">{motorcycle.name}</Link>
+          <Link href={href} className="transition-colors hover:text-brand focus-visible:text-brand">{displayName}</Link>
         </h3>
         <p className="mx-auto mt-3 max-w-xl text-[11px] font-medium tracking-[0.12em] text-cool-gray sm:text-xs">{motorcycle.tagline}</p>
       </header>
@@ -63,7 +65,7 @@ function MotorcycleSlide({
           {brand.displayName}
         </div>
 
-        <Link href={href} aria-label={`View ${brand.name} ${motorcycle.name}`} className="group absolute inset-x-[12%] inset-y-0 z-10 flex items-center justify-center mix-blend-multiply sm:inset-x-[20%] lg:inset-x-[28%]">
+        <Link href={href} aria-label={`View ${displayName}`} className="group absolute inset-x-[12%] inset-y-0 z-10 flex items-center justify-center mix-blend-multiply sm:inset-x-[20%] lg:inset-x-[28%]">
           <Image
             key={image}
             src={image}

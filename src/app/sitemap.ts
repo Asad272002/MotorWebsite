@@ -44,6 +44,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...(populatedCategorySlugs.has("replicas") ? [{ path: "/motorcycles/replicas", lastModified: latestReplicaUpdate }] : []),
     { path: "/about" },
     { path: "/contact" },
+    { path: "/privacy-policy" },
+    { path: "/terms-and-conditions" },
     { path: "/blog", lastModified: latestTimestamp(blogPosts.map((post) => post.updatedAt)) },
   ];
   const brandEntries = brands

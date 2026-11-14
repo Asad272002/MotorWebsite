@@ -31,6 +31,7 @@ import {
   getStorefrontNavigationMotorcycles,
   getStorefrontProduct,
 } from "@/lib/storefront/bike-catalog";
+import { dedupeRepeatedSentences, productDisplayName } from "@/lib/storefront/product-text";
 
 const PAGE_SIZE = 6;
 const FALLBACK_PUBLIC_DATE = "2026-09-25T00:00:00.000Z";
@@ -223,8 +224,8 @@ function toPublicBrand(row: BrandRow): PublicBrand {
     id: row.id,
     name: row.name,
     slug: row.slug,
-    shortDescription: row.short_description,
-    fullDescription: row.full_description,
+    shortDescription: dedupeRepeatedSentences(row.short_description),
+    fullDescription: dedupeRepeatedSentences(row.full_description),
     logo: databaseLogo ?? presentation.localLogo,
     megaMenuLogo,
     heroImage: databaseHero,
@@ -718,7 +719,7 @@ const getLegacyPublicProduct = async (brandSlug: string, productSlug: string): P
     fullDescription: row.full_description,
     seoTitle: row.seo_title,
     seoDescription: row.seo_description,
-    overviewHeading: `${brand.name} ${row.name}`,
+    overviewHeading: productDisplayName(brand.name, row.name),
     overview: paragraphs.length ? paragraphs : [row.full_description],
     overviewImage: overviewImageRow ? mapProductImage(overviewImageRow) : fallbackImage,
     variants,
@@ -732,10 +733,23 @@ export const getPublicProduct = cache(getStorefrontProduct);
 
 export async function getRelatedMotorcycles(product: ProductDetail): Promise<readonly RelatedMotorcycle[]> {
   const motorcycles = await getPublicCatalogMotorcycles();
+  const productCapacity = product.variants.find((variant) => variant.isDefault)?.cc ?? product.variants[0]?.cc ?? 0;
+  const productPrice = product.variants.find((variant) => variant.isDefault)?.price ?? product.variants[0]?.price ?? 0;
   return motorcycles
-    .filter((item) => item.id !== product.id && (
-      item.brand === product.brand
-      || item.categories.some((category) => product.categories.includes(category))
-    ))
-    .slice(0, 4);
+    .filter((item) => item.id !== product.id)
+    .map((item) => {
+      const categoryMatches = item.categories.filter((category) => category !== "motorcycles" && product.categories.includes(category)).length;
+      const capacity = Number.parseInt(item.engine, 10) || 0;
+      const capacityDistance = productCapacity && capacity ? Math.abs(productCapacity - capacity) : Number.MAX_SAFE_INTEGER;
+      const priceDistance = productPrice && item.price ? Math.abs(productPrice - item.price) / productPrice : 1;
+      const score = (item.brand === product.brand ? 8 : 0)
+        + categoryMatches * 6
+        + (capacityDistance === 0 ? 4 : capacityDistance <= 50 ? 3 : capacityDistance <= 100 ? 1 : 0)
+        + (priceDistance <= 0.15 ? 2 : priceDistance <= 0.35 ? 1 : 0);
+      return { item, score, capacityDistance, priceDistance };
+    })
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score || a.capacityDistance - b.capacityDistance || a.priceDistance - b.priceDistance || productDisplayName(a.item.brandName, a.item.name).localeCompare(productDisplayName(b.item.brandName, b.item.name)))
+    .slice(0, 4)
+    .map(({ item }) => item);
 }

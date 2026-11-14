@@ -9,6 +9,7 @@ import { getSupabaseConfig } from "@/lib/supabase/config";
 import { createPublicServerSupabaseClient } from "@/lib/supabase/server";
 import type { Json, Tables } from "@/lib/supabase/database.types";
 import { PUBLIC_CACHE_REVALIDATE_SECONDS, PUBLIC_STOREFRONT_CACHE_TAG } from "@/lib/cache/public-cache";
+import { productDisplayName } from "@/lib/storefront/product-text";
 
 const PLACEHOLDER_IMAGE = "/images/motorcycle-placeholder.svg";
 const FALLBACK_TIMESTAMP = "2026-09-25T00:00:00.000Z";
@@ -19,6 +20,17 @@ function slugify(value: string) {
 
 function categoryLabel(value: string) {
   return value.split("-").filter(Boolean).map((word) => `${word[0]?.toUpperCase() ?? ""}${word.slice(1)}`).join(" ");
+}
+
+function categoryDescription(value: string) {
+  const descriptions: Record<string, string> = {
+    "sport-bikes": "sport motorcycle",
+    "street-bikes": "street motorcycle",
+    cruisers: "cruiser motorcycle",
+    adventure: "adventure motorcycle",
+    replicas: "replica-style motorcycle",
+  };
+  return descriptions[value] ?? `${categoryLabel(value).toLowerCase()} motorcycle`;
 }
 
 type BikeVariant = Readonly<{
@@ -82,8 +94,8 @@ function fallbackRows(): readonly StorefrontBikeRow[] {
       model_name: bike.model_name,
       slug,
       section: brandSlug === "replica" ? "replicas" : "motorcycles",
-      short_description: `${bike.model_name} configurations, colors, pricing, and specifications.`,
-      full_description: `Explore the available ${bike.model_name} configurations at OW Motors. Select an engine and braking package to compare colors, pricing, and specifications.`,
+      short_description: `${productDisplayName(bike.brand, bike.model_name)} is a ${bike.variants.map((variant) => `${variant.cc}cc`).join(" / ")} ${categoryDescription(bike.category)} available through OW Motors.`,
+      full_description: `Compare the available engine, braking, color, price, and technical specification options for ${productDisplayName(bike.brand, bike.model_name)} at OW Motors.`,
       variants: bike.variants as unknown as Json,
       primary_image_path: null,
       gallery_image_paths: [],
@@ -326,6 +338,42 @@ function variantSpecificationGroups(row: StorefrontBike, variant: StorefrontBike
   return [{ title: "Specifications", items }];
 }
 
+function matchingSpecificationValues(row: StorefrontBike, variant: StorefrontBikeVariantRow) {
+  const normalized = row.normalizedSpecifications
+    .filter((item) => (item.cc === null || item.cc === variant.cc) && (item.has_abs === null || item.has_abs === variant.has_abs))
+    .flatMap((item) => [item.label, item.value]);
+  return [...normalized, ...variant.specifications].map((value) => value.trim()).filter(Boolean);
+}
+
+function specificationSummary(row: StorefrontBike, variant: StorefrontBikeVariantRow, patterns: readonly RegExp[]) {
+  const normalized = row.normalizedSpecifications.find((item) =>
+    (item.cc === null || item.cc === variant.cc)
+    && (item.has_abs === null || item.has_abs === variant.has_abs)
+    && patterns.some((pattern) => pattern.test(`${item.label} ${item.value}`)),
+  );
+  if (normalized) return normalized.value;
+  return variant.specifications.find((value) => patterns.some((pattern) => pattern.test(value))) ?? "Not specified";
+}
+
+function productCopy(row: StorefrontBike, variant: StorefrontBikeVariantRow) {
+  const name = productDisplayName(row.brand, row.model_name);
+  const capacities = [...new Set(row.normalizedVariants.map((item) => `${item.cc}cc`))];
+  const colors = new Set(row.normalizedVariants.map((item) => item.color_name)).size;
+  const normalizedFeatures = row.normalizedSpecifications
+    .filter((item) => (item.cc === null || item.cc === variant.cc) && (item.has_abs === null || item.has_abs === variant.has_abs))
+    .filter((item) => /engine type|transmission|gearbox|brakes?|cooling|fuel system|display/i.test(item.label))
+    .map((item) => `${item.label}: ${item.value}`);
+  const legacyFeatures = variant.specifications.filter((value) => !/^(?:non-abs|abs)$/i.test(value));
+  const features = [...new Set(normalizedFeatures.length ? normalizedFeatures : legacyFeatures)].slice(0, 3);
+  const engineText = capacities.length === 1 ? capacities[0] : `${capacities.slice(0, -1).join(", ")} and ${capacities.at(-1)}`;
+  const featureText = features.length ? ` Key equipment includes ${features.join(", ")}.` : "";
+  const short = `${name} is a ${engineText} ${categoryDescription(row.category)} available through OW Motors.${featureText}`;
+  return {
+    short,
+    full: `${short} Compare ${colors} ${colors === 1 ? "available color" : "available colors"}, configuration-specific pricing, and the complete technical specification before contacting the dealership.`,
+  };
+}
+
 function productVariants(row: StorefrontBike): readonly ProductVariant[] {
   return row.normalizedVariants.map((variant) => {
     const specificationGroups = variantSpecificationGroups(row, variant);
@@ -359,6 +407,10 @@ async function loadStorefrontCatalogMotorcycles(): Promise<readonly CatalogMotor
     const engineOptions = [...new Set(variants.map((variant) => `${variant.cc}cc`))];
     const configurations = [...new Set(variants.map((variant) => configurationLabel(variant, row.normalizedVariants)))];
     const defaultImage = catalogImage(row);
+    const defaultVariant = variants.find((variant) => variant.is_default) ?? variants[0];
+    const copy = productCopy(row, defaultVariant);
+    const cooling = specificationSummary(row, defaultVariant, [/\b(?:water|oil|air|liquid)[ -]?cooled\b/i, /\bcooling\b/i]);
+    const gearbox = specificationSummary(row, defaultVariant, [/\b\d+\s*(?:gears?|speed)\b/i, /\bgearbox\b/i, /\btransmission\b/i]);
     const colors = [...new Map(variants.map((variant) => [`${configurationId(variant.cc, variant.has_abs)}-${variant.color_slug}`, variant])).values()].flatMap((variant) => {
       const colorImage = actualRowImages(row, variant.id)[0];
       if (!colorImage) return [];
@@ -385,14 +437,14 @@ async function loadStorefrontCatalogMotorcycles(): Promise<readonly CatalogMotor
       engine: engineOptions[0],
       engineOptions,
       configurationLabels: configurations,
-      cooling: "See specifications",
-      transmission: "not-specified",
-      transmissionLabel: "See specifications",
+      cooling,
+      transmission: gearbox === "Not specified" ? "not-specified" : slugify(gearbox),
+      transmissionLabel: gearbox,
       fuel: "not-specified",
       availability: "contact-us",
       image: defaultImage?.src ?? PLACEHOLDER_IMAGE,
       imageAlt: defaultImage?.alt ?? `${row.model_name} image coming soon`,
-      shortDescription: row.short_description,
+      shortDescription: copy.short,
       colors,
       summary: configurations.join(" / "),
       price,
@@ -483,26 +535,29 @@ async function loadStorefrontProduct(brandSlug: string, productSlug: string): Pr
   const variants = productVariants(row);
   const defaultVariant = variants.find((variant) => variant.isDefault) ?? variants[0];
   const overviewImage = defaultVariant?.images[0] ?? rowImages(row)[0] ?? null;
+  const sourceVariant = row.normalizedVariants.find((variant) => variant.id === defaultVariant?.id) ?? row.normalizedVariants[0];
+  const copy = sourceVariant ? productCopy(row, sourceVariant) : { short: row.short_description, full: row.full_description };
+  const name = productDisplayName(row.brand, row.model_name);
   return {
     id: row.id,
     brand: row.brand_slug,
     brandName: row.brand,
-    name: row.model_name,
+    name,
     slug: row.slug,
     categories: [row.section, row.category],
-    description: row.short_description,
-    fullDescription: row.full_description,
-    seoTitle: `${row.model_name} Price and Specifications in Pakistan`,
-    seoDescription: row.short_description,
-    overviewHeading: row.model_name,
-    overview: [row.full_description],
+    description: copy.short,
+    fullDescription: copy.full,
+    seoTitle: `${name} Price and Specifications in Pakistan`,
+    seoDescription: copy.short,
+    overviewHeading: name,
+    overview: [copy.full],
     overviewImage,
     variants,
     features: [],
     technicalGroups: [],
     faqs: variants.length ? [
-      { question: `Which ${row.model_name} configurations are available?`, answer: [...new Set(variants.map((variant) => variant.configurationLabel))].join(", ") },
-      { question: `Which colors are available for the ${row.model_name}?`, answer: [...new Set(variants.map((variant) => variant.colorName))].join(", ") },
+      { question: `Which ${name} configurations are available?`, answer: [...new Set(variants.map((variant) => variant.configurationLabel))].join(", ") },
+      { question: `Which colors are available for the ${name}?`, answer: [...new Set(variants.map((variant) => variant.colorName))].join(", ") },
     ] : [],
   };
 }
