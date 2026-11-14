@@ -18,6 +18,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]);
   const populatedBrandSlugs = new Set(motorcycles.map((motorcycle) => motorcycle.brand));
   const populatedCategorySlugs = new Set(motorcycles.flatMap((motorcycle) => motorcycle.categories));
+  const productUpdatesByBrand = new Map<string, string[]>();
+  const productUpdatesByCategory = new Map<string, string[]>();
+  for (const motorcycle of motorcycles) {
+    const brandUpdates = productUpdatesByBrand.get(motorcycle.brand);
+    if (brandUpdates) brandUpdates.push(motorcycle.updatedAt);
+    else productUpdatesByBrand.set(motorcycle.brand, [motorcycle.updatedAt]);
+    for (const category of motorcycle.categories) {
+      const categoryUpdates = productUpdatesByCategory.get(category);
+      if (categoryUpdates) categoryUpdates.push(motorcycle.updatedAt);
+      else productUpdatesByCategory.set(category, [motorcycle.updatedAt]);
+    }
+  }
   const latestBrandUpdate = latestTimestamp(brands.map((brand) => brand.updatedAt));
   const latestProductUpdate = latestTimestamp(motorcycles.map((motorcycle) => motorcycle.updatedAt));
   const staticEntries = [
@@ -34,7 +46,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       path: `/motorcycles/brand/${brand.slug}`,
       lastModified: latestTimestamp([
         brand.updatedAt,
-        ...motorcycles.filter((motorcycle) => motorcycle.brand === brand.slug).map((motorcycle) => motorcycle.updatedAt),
+        ...(productUpdatesByBrand.get(brand.slug) ?? []),
       ]),
     }));
   const categoryEntries = categories
@@ -43,9 +55,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       path: `/motorcycles/category/${category.slug}`,
       lastModified: latestTimestamp([
         category.updatedAt,
-        ...motorcycles
-          .filter((motorcycle) => motorcycle.categories.includes(category.slug))
-          .map((motorcycle) => motorcycle.updatedAt),
+        ...(productUpdatesByCategory.get(category.slug) ?? []),
       ]),
     }));
   const productEntries = motorcycles.map((product) => ({

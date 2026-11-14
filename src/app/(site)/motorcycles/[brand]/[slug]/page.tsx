@@ -10,10 +10,15 @@ import { ProductOverview } from "@/components/motorcycles/product-overview";
 import { ProductStructuredData } from "@/components/motorcycles/product-structured-data";
 import { RelatedMotorcycles } from "@/components/motorcycles/related-motorcycles";
 import { Container } from "@/components/ui/container";
-import { getPublicProduct, getRelatedMotorcycles } from "@/lib/supabase/public-queries";
+import { getPublicCatalogMotorcycles, getPublicProduct, getRelatedMotorcycles } from "@/lib/supabase/public-queries";
 import { createNotFoundMetadata, createPageMetadata } from "@/lib/seo/metadata";
 
 type Props = { params: Promise<{ brand: string; slug: string }> };
+
+export async function generateStaticParams() {
+  const motorcycles = await getPublicCatalogMotorcycles();
+  return motorcycles.map(({ brand, slug }) => ({ brand, slug }));
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { brand, slug } = await params;

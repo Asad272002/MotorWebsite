@@ -6,10 +6,15 @@ import { BlogAuthorLine, BlogCard, BlogCategoryBadge } from "@/components/blog/b
 import { ArticleStructuredData } from "@/components/blog/article-structured-data";
 import { BreadcrumbStructuredData } from "@/components/seo/breadcrumb-structured-data";
 import { Container } from "@/components/ui/container";
-import { getPublishedBlogPost, getRelatedBlogPosts } from "@/lib/blog/queries";
+import { getPublishedBlogPost, getPublishedBlogPosts, getRelatedBlogPosts } from "@/lib/blog/queries";
 import { SITE_NAME, SITE_URL } from "@/lib/constants/site";
 
 type Props = Readonly<{ params: Promise<{ slug: string }> }>;
+
+export async function generateStaticParams() {
+  const posts = await getPublishedBlogPosts();
+  return posts.map(({ slug }) => ({ slug }));
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
