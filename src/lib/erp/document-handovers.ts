@@ -17,7 +17,11 @@ function canSeeSale(role: string, actorId: string, sale: HandoverSale) {
   return role === "developer" || role === "admin" || sale.requested_by === actorId;
 }
 
-export async function listDocumentHandoverSales() {
+function normalizeLookup(value: string) {
+  return value.toLocaleLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+export async function listDocumentHandoverSales(searchQuery = "") {
   const actor = await getAuthenticatedProfile();
   if (!actor || !actor.profile.is_active || !["developer", "admin", "manager"].includes(actor.profile.role)) return [];
   const db = serviceRoleClient() as unknown as LooseClient;
@@ -27,7 +31,12 @@ export async function listDocumentHandoverSales() {
     db.from("document_handover_items").select("document_file_id,handover:document_handovers!inner(status)"),
     db.from("document_handovers").select("id,sale_id,status"),
   ]);
-  const sales = ((salesResult.data ?? []) as HandoverSale[]).filter((sale) => canSeeSale(actor.profile.role, actor.userId, sale));
+  const visibleSales = ((salesResult.data ?? []) as HandoverSale[]).filter((sale) => canSeeSale(actor.profile.role, actor.userId, sale));
+  const lookup = normalizeLookup(searchQuery.trim());
+  const sales = lookup
+    ? visibleSales.filter((sale) => [sale.chasis_number, sale.customer?.cnic, sale.customer?.full_name]
+        .some((value) => value && normalizeLookup(value).includes(lookup)))
+    : visibleSales;
   const activeHandedIds = new Set((itemsResult.data ?? []).filter((row: { handover?: { status?: string } | null }) => row.handover?.status === "completed").map((row: { document_file_id: string }) => row.document_file_id));
   return sales.map((sale) => {
     const files = (filesResult.data ?? []).filter((file: { sale_id: string }) => file.sale_id === sale.id);
