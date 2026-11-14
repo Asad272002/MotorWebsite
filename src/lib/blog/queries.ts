@@ -1,11 +1,14 @@
 import "server-only";
 
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { FALLBACK_BLOG_CATEGORIES, FALLBACK_BLOG_POSTS, type BlogCategory, type BlogPost, type BlogSection } from "@/data/blog";
 import { requireStaffPage } from "@/lib/admin/auth";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { createPublicServerSupabaseClient } from "@/lib/supabase/server";
 import { motorcycleStoragePublicUrl } from "@/lib/supabase/storage";
 import type { Tables } from "@/lib/supabase/database.types";
+import { PUBLIC_BLOG_CACHE_TAG, PUBLIC_CACHE_REVALIDATE_SECONDS } from "@/lib/cache/public-cache";
 
 type CategoryRow = Tables<"blog_categories">;
 type PostRow = Tables<"blog_posts">;
@@ -53,15 +56,21 @@ function mapPost(row: PostSource): BlogPost | null {
   };
 }
 
-export const getBlogCategories = cache(async (): Promise<readonly BlogCategory[]> => {
-  const supabase = await createServerSupabaseClient();
+async function loadBlogCategories(): Promise<readonly BlogCategory[]> {
+  const supabase = createPublicServerSupabaseClient();
   const { data, error } = await supabase.from("blog_categories").select("*").eq("is_active", true).order("display_order").order("name");
   if (error) return FALLBACK_BLOG_CATEGORIES;
   return (data ?? []).map(mapCategory);
-});
+}
 
-export const getPublishedBlogPosts = cache(async (): Promise<readonly BlogPost[]> => {
-  const supabase = await createServerSupabaseClient();
+export const getBlogCategories = cache(unstable_cache(
+  loadBlogCategories,
+  ["public-blog-categories-v1"],
+  { tags: [PUBLIC_BLOG_CACHE_TAG], revalidate: PUBLIC_CACHE_REVALIDATE_SECONDS },
+));
+
+async function loadPublishedBlogPosts(): Promise<readonly BlogPost[]> {
+  const supabase = createPublicServerSupabaseClient();
   const { data, error } = await supabase
     .from("blog_posts")
     .select("*, category:blog_categories!blog_posts_category_id_fkey(*)")
@@ -71,7 +80,13 @@ export const getPublishedBlogPosts = cache(async (): Promise<readonly BlogPost[]
     .limit(100);
   if (error) return FALLBACK_BLOG_POSTS;
   return (data ?? []).map((row) => mapPost(row as unknown as PostSource)).filter((post): post is BlogPost => post !== null);
-});
+}
+
+export const getPublishedBlogPosts = cache(unstable_cache(
+  loadPublishedBlogPosts,
+  ["published-blog-posts-v1"],
+  { tags: [PUBLIC_BLOG_CACHE_TAG], revalidate: PUBLIC_CACHE_REVALIDATE_SECONDS },
+));
 
 export const getPublishedBlogPost = cache(async (slug: string): Promise<BlogPost | null> => {
   const posts = await getPublishedBlogPosts();

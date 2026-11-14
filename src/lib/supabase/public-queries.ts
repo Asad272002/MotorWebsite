@@ -1,6 +1,7 @@
 import "server-only";
 
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import type {
   CatalogAvailability,
   CatalogFilterOptions,
@@ -22,6 +23,7 @@ import { getSupabaseConfig } from "@/lib/supabase/config";
 import { createPublicServerSupabaseClient } from "@/lib/supabase/server";
 import type { StockStatus, Tables } from "@/lib/supabase/database.types";
 import { DEFAULT_STOREFRONT_CONTENT, parseStorefrontContent, storefrontSettingKeys, type StorefrontContent } from "@/lib/storefront/content";
+import { PUBLIC_CACHE_REVALIDATE_SECONDS, PUBLIC_STOREFRONT_CACHE_TAG } from "@/lib/cache/public-cache";
 import {
   getStorefrontBrandSummaries,
   getStorefrontBikeRows,
@@ -34,7 +36,7 @@ const PAGE_SIZE = 6;
 const FALLBACK_PUBLIC_DATE = "2026-09-25T00:00:00.000Z";
 const HOMEPAGE_BRAND_SLUGS = new Set(["taro", "lifan", "hi-speed"]);
 
-export const getStorefrontContent = cache(async (): Promise<StorefrontContent> => {
+async function loadStorefrontContent(): Promise<StorefrontContent> {
   const supabase = createPublicServerSupabaseClient();
   const { data, error } = await supabase
     .from("site_settings")
@@ -45,7 +47,13 @@ export const getStorefrontContent = cache(async (): Promise<StorefrontContent> =
     return DEFAULT_STOREFRONT_CONTENT;
   }
   return parseStorefrontContent(data ?? []);
-});
+}
+
+export const getStorefrontContent = cache(unstable_cache(
+  loadStorefrontContent,
+  ["public-storefront-content-v1"],
+  { tags: [PUBLIC_STOREFRONT_CACHE_TAG], revalidate: PUBLIC_CACHE_REVALIDATE_SECONDS },
+));
 
 type BrandRow = Tables<"brands">;
 type BrandCampaignImageRow = Tables<"brand_campaign_images">;
@@ -240,7 +248,7 @@ function toPublicCategory(row: CategoryRow): PublicCategory {
   };
 }
 
-export const getPublicBrands = cache(async (): Promise<readonly PublicBrand[]> => {
+async function loadPublicBrands(): Promise<readonly PublicBrand[]> {
   const supabase = createPublicServerSupabaseClient();
   const [{ data, error }, storefrontBrands] = await Promise.all([
     supabase
@@ -270,9 +278,15 @@ export const getPublicBrands = cache(async (): Promise<readonly PublicBrand[]> =
     updatedAt: brand.updatedAt,
   }));
   return [...databaseBrands, ...appended];
-});
+}
 
-export const getPublicCategories = cache(async (): Promise<readonly PublicCategory[]> => {
+export const getPublicBrands = cache(unstable_cache(
+  loadPublicBrands,
+  ["public-brands-v2"],
+  { tags: [PUBLIC_STOREFRONT_CACHE_TAG], revalidate: PUBLIC_CACHE_REVALIDATE_SECONDS },
+));
+
+async function loadPublicCategories(): Promise<readonly PublicCategory[]> {
   const rows = await getStorefrontBikeRows();
   const updatedAt = rows.reduce((latest, row) => row.updated_at > latest ? row.updated_at : latest, FALLBACK_PUBLIC_DATE);
   const categories = [...new Set(rows.filter((row) => row.section !== "replicas").map((row) => row.category))];
@@ -280,7 +294,13 @@ export const getPublicCategories = cache(async (): Promise<readonly PublicCatego
     ...categories.map((slug, index): PublicCategory => ({ id: `storefront-${slug}`, name: slug.split("-").map((word) => `${word[0]?.toUpperCase() ?? ""}${word.slice(1)}`).join(" "), slug, description: `Explore ${slug.replaceAll("-", " ")} available through OW Motors.`, seoTitle: null, seoDescription: null, displayOrder: index, updatedAt })),
     { id: "storefront-replicas", name: "Replicas", slug: "replicas", description: "Replica motorcycle collection with dedicated configurations and specifications.", seoTitle: null, seoDescription: null, displayOrder: categories.length, updatedAt },
   ];
-});
+}
+
+export const getPublicCategories = cache(unstable_cache(
+  loadPublicCategories,
+  ["public-categories-v2"],
+  { tags: [PUBLIC_STOREFRONT_CACHE_TAG], revalidate: PUBLIC_CACHE_REVALIDATE_SECONDS },
+));
 
 export const getPublicBrandBySlug = cache(async (slug: string) => {
   const brands = await getPublicBrands();
@@ -394,12 +414,13 @@ function uniqueOptions(values: readonly Readonly<{ value: string; label: string 
     .sort((a, b) => a.label.localeCompare(b.label));
 }
 
-export async function getCatalogPageData(
-  filters: CatalogFilters,
+const getCatalogPageDataForKey = cache(async (
+  filtersKey: string,
   lockedBrand?: string,
   lockedCategory?: string,
   pageSize = PAGE_SIZE,
-): Promise<CatalogPageData> {
+): Promise<CatalogPageData> => {
+  const filters = JSON.parse(filtersKey) as CatalogFilters;
   const [allMotorcycles, brands] = await Promise.all([
     getPublicCatalogMotorcycles(),
     getPublicBrands(),
@@ -420,9 +441,21 @@ export async function getCatalogPageData(
   };
 
   return { motorcycles, total: filtered.length, page, totalPages, options };
+});
+
+export async function getCatalogPageData(
+  filters: CatalogFilters,
+  lockedBrand?: string,
+  lockedCategory?: string,
+  pageSize = PAGE_SIZE,
+): Promise<CatalogPageData> {
+  // Metadata and page rendering independently parse the same search params.
+  // A stable scalar key lets React memoize the shared filtering/option work
+  // within that render request without caching arbitrary user query variants.
+  return getCatalogPageDataForKey(JSON.stringify(filters), lockedBrand, lockedCategory, pageSize);
 }
 
-export const getHomepageBrands = cache(async (): Promise<readonly HomepageBrand[]> => {
+async function loadHomepageBrands(): Promise<readonly HomepageBrand[]> {
   const [brands, motorcycles, campaignImages] = await Promise.all([
     getPublicBrands(),
     getPublicCatalogMotorcycles(),
@@ -463,9 +496,15 @@ export const getHomepageBrands = cache(async (): Promise<readonly HomepageBrand[
       })),
     };
   });
-});
+}
 
-const getPublicHomepageBrandSections = cache(async (): Promise<readonly HomepageBrandSectionRow[]> => {
+export const getHomepageBrands = cache(unstable_cache(
+  loadHomepageBrands,
+  ["public-homepage-brands-v2"],
+  { tags: [PUBLIC_STOREFRONT_CACHE_TAG], revalidate: PUBLIC_CACHE_REVALIDATE_SECONDS },
+));
+
+async function loadPublicHomepageBrandSections(): Promise<readonly HomepageBrandSectionRow[]> {
   const supabase = createPublicServerSupabaseClient();
   const { data, error } = await supabase
     .from("homepage_brand_sections")
@@ -476,12 +515,18 @@ const getPublicHomepageBrandSections = cache(async (): Promise<readonly Homepage
 
   if (error) failQuery("getPublicHomepageBrandSections", error.code);
   return data ?? [];
-});
+}
 
-export const getHomepageDisplay = cache(async (): Promise<Readonly<{
+const getPublicHomepageBrandSections = cache(unstable_cache(
+  loadPublicHomepageBrandSections,
+  ["public-homepage-brand-sections-v1"],
+  { tags: [PUBLIC_STOREFRONT_CACHE_TAG], revalidate: PUBLIC_CACHE_REVALIDATE_SECONDS },
+));
+
+async function loadHomepageDisplay(): Promise<Readonly<{
   banners: readonly HomepageBrand[];
   motorcycleRows: readonly HomepageBrand[];
-}>> => {
+}>> {
   const [brands, sections] = await Promise.all([
     getHomepageBrands(),
     getPublicHomepageBrandSections(),
@@ -507,9 +552,15 @@ export const getHomepageDisplay = cache(async (): Promise<Readonly<{
     banners: select("brand_banner"),
     motorcycleRows: select("motorcycle_row"),
   };
-});
+}
 
-const getPublicBrandCampaignImages = cache(async (): Promise<readonly BrandCampaignImageRow[]> => {
+export const getHomepageDisplay = cache(unstable_cache(
+  loadHomepageDisplay,
+  ["public-homepage-display-v2"],
+  { tags: [PUBLIC_STOREFRONT_CACHE_TAG], revalidate: PUBLIC_CACHE_REVALIDATE_SECONDS },
+));
+
+async function loadPublicBrandCampaignImages(): Promise<readonly BrandCampaignImageRow[]> {
   const supabase = createPublicServerSupabaseClient();
   const { data, error } = await supabase
     .from("brand_campaign_images")
@@ -520,7 +571,13 @@ const getPublicBrandCampaignImages = cache(async (): Promise<readonly BrandCampa
 
   if (error) failQuery("getPublicBrandCampaignImages", error.code);
   return data ?? [];
-});
+}
+
+const getPublicBrandCampaignImages = cache(unstable_cache(
+  loadPublicBrandCampaignImages,
+  ["public-brand-campaign-images-v1"],
+  { tags: [PUBLIC_STOREFRONT_CACHE_TAG], revalidate: PUBLIC_CACHE_REVALIDATE_SECONDS },
+));
 
 function mapProductImage(image: ImageRow): ProductImage {
   return { src: resolveStorageImage(image.storage_path), alt: image.alt_text };

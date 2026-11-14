@@ -6,7 +6,8 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico)$).*)",
-  ],
+  // Authentication exists only in the admin application. Keeping anonymous
+  // storefront traffic outside Proxy avoids a Supabase JWT validation/refresh
+  // round trip for every public page and RSC request.
+  matcher: ["/admin/:path*"],
 };

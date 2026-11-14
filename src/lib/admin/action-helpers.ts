@@ -1,9 +1,10 @@
 import "server-only";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import type { PostgrestError } from "@supabase/supabase-js";
 import type { ZodError } from "zod";
 import type { AdminActionState } from "@/lib/admin/action-state";
+import { PUBLIC_STOREFRONT_CACHE_TAG } from "@/lib/cache/public-cache";
 
 export const unauthorizedAction: AdminActionState = { status: "error", message: "You are not authorized to perform this action." };
 
@@ -41,10 +42,10 @@ export function databaseAction(operation: string, error: PostgrestError | DbErro
 }
 
 export function revalidateAdminContent() {
+  revalidateTag(PUBLIC_STOREFRONT_CACHE_TAG, { expire: 0 });
   revalidatePath("/admin", "layout");
-  revalidatePath("/");
-  revalidatePath("/brands");
-  revalidatePath("/contact");
-  revalidatePath("/motorcycles", "layout");
+  // The storefront tag is consumed by homepage, navigation, brand/category
+  // listings, product pages, and related products. Invalidating it refreshes
+  // those dependencies without evicting every route under /motorcycles.
   revalidatePath("/sitemap.xml");
 }

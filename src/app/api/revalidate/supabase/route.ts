@@ -1,7 +1,8 @@
 import { timingSafeEqual } from "node:crypto";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { PUBLIC_STOREFRONT_CACHE_TAG } from "@/lib/cache/public-cache";
 
 const webhookSchema = z.object({
   table: z.enum([
@@ -42,8 +43,9 @@ export async function POST(request: Request) {
   if (!parsed.success) return NextResponse.json({ error: "Invalid webhook payload" }, { status: 400 });
 
   // Content records affect cross-linked homepage, brand, catalog, product, and
-  // sitemap output. Revalidating the public route group prevents stale links.
-  revalidatePath("/", "layout");
+  // sitemap output. The shared data tag refreshes those dependencies without
+  // evicting every public route from the Full Route Cache.
+  revalidateTag(PUBLIC_STOREFRONT_CACHE_TAG, { expire: 0 });
   revalidatePath("/sitemap.xml");
 
   return NextResponse.json({ revalidated: true, table: parsed.data.table });

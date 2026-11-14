@@ -1,12 +1,13 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { getAuthorizedAdminClient } from "@/lib/admin/auth";
 import { databaseAction, unauthorizedAction, validationAction } from "@/lib/admin/action-helpers";
 import type { AdminActionState } from "@/lib/admin/action-state";
 import { blogPostSchema, uuid } from "@/lib/admin/schemas";
 import { ADMIN_IMAGE_MAX_BYTES, ADMIN_IMAGE_MAX_LABEL } from "@/lib/admin/upload-limits";
 import type { Json } from "@/lib/supabase/database.types";
+import { PUBLIC_BLOG_CACHE_TAG } from "@/lib/cache/public-cache";
 
 const imageExtensions: Readonly<Record<string, string>> = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/avif": "avif" };
 
@@ -35,6 +36,7 @@ async function uploadHero(auth: NonNullable<Awaited<ReturnType<typeof getAuthori
 }
 
 function revalidateBlog(slug?: string) {
+  revalidateTag(PUBLIC_BLOG_CACHE_TAG, { expire: 0 });
   revalidatePath("/blog");
   if (slug) revalidatePath(`/blog/${slug}`);
   revalidatePath("/sitemap.xml");
