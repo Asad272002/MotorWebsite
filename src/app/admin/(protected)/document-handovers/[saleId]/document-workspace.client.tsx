@@ -28,7 +28,7 @@ function PictureCapture({ saleId, documentFileId }: Readonly<{ saleId: string; d
     });
   }
   return (
-    <AdminForm action={uploadDocumentPages} submitLabel={`Save ${pictures.length || ""} picture${pictures.length === 1 ? "" : "s"}`} pendingLabel="Uploading pictures..." className="space-y-3" formAttributes={{ encType: "multipart/form-data" }}>
+    <AdminForm action={uploadDocumentPages} submitLabel={`Save ${pictures.length || ""} picture${pictures.length === 1 ? "" : "s"}`} pendingLabel="Uploading pictures..." className="space-y-3">
       <input type="hidden" name="saleId" value={saleId} /><input type="hidden" name="documentFileId" value={documentFileId} />
       <input type="hidden" name="captureSource" value="camera" />
       {pictures.map((picture) => <input key={picture.id} type="file" name="pictures" className="hidden" ref={(input) => { if (input) { const transfer = new DataTransfer(); transfer.items.add(picture.file); input.files = transfer.files; } }} />)}
@@ -68,7 +68,7 @@ export function DocumentWorkspace({ sale, files, handovers, actorRole }: Readonl
     </AdminPanel>
 
     <AdminPanel title="Hand over documents" description="Choose one file, several files, or all remaining ready files. A recipient photograph is mandatory." actions={<UserRoundCheck className="h-5 w-5 text-[#C62828]" />}>
-      {readyFiles.length ? <AdminForm action={finalizeDocumentHandover} submitLabel="Complete handover" pendingLabel="Recording handover..." confirmMessage="Finalize this handover? Selected files will be locked and the recipient photograph will become part of the permanent record." formAttributes={{ encType: "multipart/form-data" }}>
+      {readyFiles.length ? <AdminForm action={finalizeDocumentHandover} submitLabel="Complete handover" pendingLabel="Recording handover..." confirmMessage="Finalize this handover? Selected files will be locked and the recipient photograph will become part of the permanent record.">
         <input type="hidden" name="saleId" value={sale.id} />
         <div className="flex flex-wrap items-center justify-between gap-3"><p className="text-sm font-semibold">Select ready files</p><button type="button" onClick={() => setSelected(readyFiles.map((file) => file.id))} className="inline-flex min-h-10 items-center gap-2 rounded-md border border-[#D1D5DB] px-3 text-xs font-bold hover:bg-[#F7F7F8]"><Check className="h-4 w-4" />Select all remaining</button></div>
         <div className="grid gap-2 sm:grid-cols-2">{readyFiles.map((file) => <label key={file.id} className={`flex min-h-14 cursor-pointer items-center gap-3 rounded-md border px-4 ${selected.includes(file.id) ? "border-[#C62828] bg-[#FEF2F2]" : "border-[#D1D5DB]"}`}><input type="checkbox" name="documentFileIds" value={file.id} checked={selected.includes(file.id)} onChange={() => toggle(file.id)} className="h-4 w-4 accent-[#C62828]" /><span><strong className="block text-sm">{file.name}</strong><span className="text-xs text-[#6B7280]">{file.pages.length} picture{file.pages.length === 1 ? "" : "s"}</span></span></label>)}</div>
