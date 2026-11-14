@@ -28,6 +28,7 @@ export function revalidateERP(): void {
   revalidatePath("/admin/stock/part-sales");
   revalidatePath("/admin/stock/movements");
   revalidatePath("/admin/receipts");
+  revalidatePath("/admin/document-handovers");
   revalidatePath("/admin/activity");
 }
 

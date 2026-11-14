@@ -6,6 +6,9 @@ const storagePattern = supabaseUrl ? new URL("/storage/v1/object/public/**", sup
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactCompiler: true,
+  experimental: {
+    serverActions: { bodySizeLimit: "50mb" },
+  },
   // Product metadata is database-backed and otherwise streams into <body> for
   // regular browser user agents. Keep it in the initial <head> so Lighthouse,
   // social preview tools, and HTML-only crawlers receive the same SEO markup.

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Bike, PackageOpen, Receipt, Search } from "lucide-react";
+import { Bike, FolderOpen, PackageOpen, Receipt, Search } from "lucide-react";
 import { AdminPanel, StatusBadge, adminInputClass } from "@/components/admin/admin-ui";
 
 type BikeSale = {
@@ -192,6 +192,7 @@ export function SalesRegisterClient({
               <div className="flex flex-wrap items-center gap-2 lg:justify-end">
                 <StatusBadge value={meta.badge} label={meta.label} />
                 {row.receiptHref ? <Link href={row.receiptHref} className="inline-flex min-h-9 items-center gap-1 rounded-md border border-[#D1D5DB] px-3 text-xs font-semibold text-[#374151] hover:bg-[#F7F7F8]"><Receipt aria-hidden="true" className="h-3.5 w-3.5" />Receipt</Link> : null}
+                {row.type === "bike" && ["approved", "completed"].includes(row.status) ? <Link href={`/admin/document-handovers/${row.id}`} className="inline-flex min-h-9 items-center gap-1 rounded-md border border-[#D1D5DB] px-3 text-xs font-semibold text-[#374151] hover:border-[#C62828] hover:bg-[#FEF2F2] hover:text-[#C62828]"><FolderOpen aria-hidden="true" className="h-3.5 w-3.5" />Documents</Link> : null}
               </div>
             </article>
           );
