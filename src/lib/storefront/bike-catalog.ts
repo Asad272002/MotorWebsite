@@ -1,11 +1,14 @@
 import "server-only";
 
+import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import bikesJson from "../../../docs/bikes.json";
 import type { CatalogMotorcycle, NavigationMotorcycle } from "@/data/catalog";
 import type { ProductDetail, ProductImage, ProductVariant, TechnicalGroup } from "@/data/products";
 import { getSupabaseConfig } from "@/lib/supabase/config";
 import { createPublicServerSupabaseClient } from "@/lib/supabase/server";
 import type { Json, Tables } from "@/lib/supabase/database.types";
+import { PUBLIC_CACHE_REVALIDATE_SECONDS, PUBLIC_STOREFRONT_CACHE_TAG } from "@/lib/cache/public-cache";
 
 const PLACEHOLDER_IMAGE = "/images/motorcycle-placeholder.svg";
 const FALLBACK_TIMESTAMP = "2026-09-25T00:00:00.000Z";
@@ -122,7 +125,17 @@ function withLegacyData(row: StorefrontBikeRow): StorefrontBike {
   return { ...row, normalizedVariants: legacyNormalizedVariants(row), normalizedImages: [], normalizedSpecifications: [] };
 }
 
-export async function getStorefrontBikeRows(): Promise<readonly StorefrontBike[]> {
+function groupByBikeId<T extends { storefront_bike_id: string }>(items: readonly T[]) {
+  const grouped = new Map<string, T[]>();
+  for (const item of items) {
+    const group = grouped.get(item.storefront_bike_id);
+    if (group) group.push(item);
+    else grouped.set(item.storefront_bike_id, [item]);
+  }
+  return grouped;
+}
+
+async function loadStorefrontBikeRows(): Promise<readonly StorefrontBike[]> {
   const supabase = createPublicServerSupabaseClient();
   const { data, error } = await supabase
     .from("storefront_bikes")
@@ -156,16 +169,25 @@ export async function getStorefrontBikeRows(): Promise<readonly StorefrontBike[]
     return rows.map(withLegacyData);
   }
 
+  const variantsByBike = groupByBikeId(variantsResult.data ?? []);
+  const imagesByBike = groupByBikeId(imagesResult.data ?? []);
+  const specificationsByBike = groupByBikeId(specificationsResult.data ?? []);
   return rows.map((row) => {
-    const normalizedVariants = (variantsResult.data ?? []).filter((variant) => variant.storefront_bike_id === row.id);
+    const normalizedVariants = variantsByBike.get(row.id) ?? [];
     return {
       ...row,
       normalizedVariants: normalizedVariants.length ? normalizedVariants : legacyNormalizedVariants(row),
-      normalizedImages: (imagesResult.data ?? []).filter((image) => image.storefront_bike_id === row.id),
-      normalizedSpecifications: (specificationsResult.data ?? []).filter((specification) => specification.storefront_bike_id === row.id),
+      normalizedImages: imagesByBike.get(row.id) ?? [],
+      normalizedSpecifications: specificationsByBike.get(row.id) ?? [],
     };
   });
 }
+
+export const getStorefrontBikeRows = cache(unstable_cache(
+  loadStorefrontBikeRows,
+  ["storefront-bike-rows-v2"],
+  { tags: [PUBLIC_STOREFRONT_CACHE_TAG], revalidate: PUBLIC_CACHE_REVALIDATE_SECONDS },
+));
 
 function resolveImage(path: string | null | undefined) {
   const value = path?.trim();
@@ -328,7 +350,7 @@ function productVariants(row: StorefrontBike): readonly ProductVariant[] {
   }).sort((a, b) => Number(b.isDefault) - Number(a.isDefault));
 }
 
-export async function getStorefrontCatalogMotorcycles(): Promise<readonly CatalogMotorcycle[]> {
+async function loadStorefrontCatalogMotorcycles(): Promise<readonly CatalogMotorcycle[]> {
   const rows = await getStorefrontBikeRows();
   return rows.flatMap((row) => {
     const variants = row.normalizedVariants;
@@ -381,14 +403,26 @@ export async function getStorefrontCatalogMotorcycles(): Promise<readonly Catalo
   });
 }
 
-export async function getStorefrontNavigationMotorcycles(): Promise<readonly NavigationMotorcycle[]> {
+export const getStorefrontCatalogMotorcycles = cache(unstable_cache(
+  loadStorefrontCatalogMotorcycles,
+  ["storefront-catalog-motorcycles-v2"],
+  { tags: [PUBLIC_STOREFRONT_CACHE_TAG], revalidate: PUBLIC_CACHE_REVALIDATE_SECONDS },
+));
+
+async function loadStorefrontNavigationMotorcycles(): Promise<readonly NavigationMotorcycle[]> {
   const motorcycles = await getStorefrontCatalogMotorcycles();
   return motorcycles.map(({ id, brand, brandName, name, slug, categories, categoryLabels, image, imageAlt, price, priceLabel }) => ({
     id, brand, brandName, name, slug, categories, categoryLabels, image, imageAlt, price, priceLabel,
   }));
 }
 
-export async function getStorefrontBrandSummaries(): Promise<readonly StorefrontBrandSummary[]> {
+export const getStorefrontNavigationMotorcycles = cache(unstable_cache(
+  loadStorefrontNavigationMotorcycles,
+  ["storefront-navigation-motorcycles-v2"],
+  { tags: [PUBLIC_STOREFRONT_CACHE_TAG], revalidate: PUBLIC_CACHE_REVALIDATE_SECONDS },
+));
+
+async function loadStorefrontBrandSummaries(): Promise<readonly StorefrontBrandSummary[]> {
   const rows = await getStorefrontBikeRows();
   return [...new Map(rows.filter((row) => row.section !== "replicas").map((row) => [row.brand_slug, {
     id: row.brand_id ?? `storefront-${row.brand_slug}`,
@@ -398,9 +432,53 @@ export async function getStorefrontBrandSummaries(): Promise<readonly Storefront
   }])).values()];
 }
 
-export async function getStorefrontProduct(brandSlug: string, productSlug: string): Promise<ProductDetail | null> {
-  const rows = await getStorefrontBikeRows();
-  const row = rows.find((bike) => bike.brand_slug === brandSlug && bike.slug === productSlug);
+export const getStorefrontBrandSummaries = cache(unstable_cache(
+  loadStorefrontBrandSummaries,
+  ["storefront-brand-summaries-v2"],
+  { tags: [PUBLIC_STOREFRONT_CACHE_TAG], revalidate: PUBLIC_CACHE_REVALIDATE_SECONDS },
+));
+
+async function loadStorefrontProduct(brandSlug: string, productSlug: string): Promise<ProductDetail | null> {
+  const supabase = createPublicServerSupabaseClient();
+  const { data, error } = await supabase
+    .from("storefront_bikes")
+    .select("*")
+    .eq("brand_slug", brandSlug)
+    .eq("slug", productSlug)
+    .eq("is_published", true)
+    .limit(1)
+    .maybeSingle();
+
+  let row: StorefrontBike | null = null;
+  if (error) {
+    if (error.code !== "PGRST205" && error.code !== "42P01") {
+      console.error("[OW Motors storefront product query failed]", { code: error.code });
+    }
+    const fallback = fallbackRows().find((bike) => bike.brand_slug === brandSlug && bike.slug === productSlug);
+    row = fallback ? withLegacyData(fallback) : null;
+  } else if (data) {
+    const [variantsResult, imagesResult, specificationsResult] = await Promise.all([
+      supabase.from("storefront_bike_variants").select("*").eq("storefront_bike_id", data.id).eq("is_active", true).order("display_order", { ascending: true }),
+      supabase.from("storefront_bike_images").select("*").eq("storefront_bike_id", data.id).order("sort_order", { ascending: true }),
+      supabase.from("storefront_bike_specifications").select("*").eq("storefront_bike_id", data.id).eq("is_active", true).order("group_order", { ascending: true }).order("sort_order", { ascending: true }),
+    ]);
+    if (variantsResult.error || imagesResult.error || specificationsResult.error) {
+      console.error("[OW Motors normalized storefront product media query failed]", {
+        variantsCode: variantsResult.error?.code,
+        imagesCode: imagesResult.error?.code,
+        specificationsCode: specificationsResult.error?.code,
+      });
+      row = withLegacyData(data);
+    } else {
+      const normalizedVariants = variantsResult.data ?? [];
+      row = {
+        ...data,
+        normalizedVariants: normalizedVariants.length ? normalizedVariants : legacyNormalizedVariants(data),
+        normalizedImages: imagesResult.data ?? [],
+        normalizedSpecifications: specificationsResult.data ?? [],
+      };
+    }
+  }
   if (!row) return null;
   const variants = productVariants(row);
   const defaultVariant = variants.find((variant) => variant.isDefault) ?? variants[0];
@@ -428,3 +506,9 @@ export async function getStorefrontProduct(brandSlug: string, productSlug: strin
     ] : [],
   };
 }
+
+export const getStorefrontProduct = cache(unstable_cache(
+  loadStorefrontProduct,
+  ["storefront-product-v2"],
+  { tags: [PUBLIC_STOREFRONT_CACHE_TAG], revalidate: PUBLIC_CACHE_REVALIDATE_SECONDS },
+));
