@@ -10,7 +10,7 @@ type LooseClient = any;
 
 export type DocumentPage = { id: string; storage_path: string; sequence_number: number; capture_source: string; mime_type: string; file_size: number; captured_at: string; signed_url?: string };
 export type DocumentFile = { id: string; sale_id: string; name: string; description: string | null; reference_number: string | null; notes: string | null; created_at: string; pages: DocumentPage[]; handed_over: boolean };
-export type DocumentHandover = { id: string; handover_number: string; recipient_type: string; recipient_name: string; recipient_cnic: string | null; recipient_phone: string | null; recipient_photo_storage_path: string; signature_storage_path: string | null; handed_over_at: string; status: string; notes: string | null; items: { document_file_id: string; file_name_snapshot: string }[]; staff?: { full_name?: string | null } | null; photo_url?: string };
+export type DocumentHandover = { id: string; handover_number: string; recipient_type: string; recipient_name: string; recipient_cnic: string | null; recipient_phone: string | null; recipient_photo_storage_path: string; handed_over_at: string; status: string; notes: string | null; items: { document_file_id: string; file_name_snapshot: string }[]; staff?: { full_name?: string | null } | null; photo_url?: string };
 export type HandoverSale = { id: string; receipt_number: string; sale_status: string; requested_by: string; requested_at: string; brand_name_snapshot: string; motorcycle_name_snapshot: string; color_name_snapshot: string | null; cc_snapshot: number; chasis_number: string; engine_number: string | null; customer: { id: string; full_name: string; cnic: string; phone_primary: string; phone_secondary?: string | null; address?: string | null } | null };
 
 function canSeeSale(role: string, actorId: string, sale: HandoverSale) {
@@ -56,14 +56,14 @@ export async function getDocumentHandoverSale(saleId: string) {
 
   const [filesResult, handoversResult] = await Promise.all([
     db.from("sale_document_files").select("id,sale_id,name,description,reference_number,notes,created_at,pages:sale_document_pages(id,storage_path,sequence_number,capture_source,mime_type,file_size,captured_at)").eq("sale_id", saleId).is("archived_at", null).order("created_at"),
-    db.from("document_handovers").select("id,handover_number,recipient_type,recipient_name,recipient_cnic,recipient_phone,recipient_photo_storage_path,signature_storage_path,handed_over_at,status,notes,items:document_handover_items(document_file_id,file_name_snapshot),staff:profiles!document_handovers_handed_over_by_fkey(full_name)").eq("sale_id", saleId).order("handed_over_at", { ascending: false }),
+    db.from("document_handovers").select("id,handover_number,recipient_type,recipient_name,recipient_cnic,recipient_phone,recipient_photo_storage_path,handed_over_at,status,notes,items:document_handover_items(document_file_id,file_name_snapshot),staff:profiles!document_handovers_handed_over_by_fkey(full_name)").eq("sale_id", saleId).order("handed_over_at", { ascending: false }),
   ]);
   const handovers = (handoversResult.data ?? []) as DocumentHandover[];
   const activeHandedIds = new Set(handovers.filter((handover) => handover.status === "completed").flatMap((handover) => handover.items.map((item) => item.document_file_id)));
   const files = ((filesResult.data ?? []) as Omit<DocumentFile, "handed_over">[]).map((file) => ({ ...file, pages: [...(file.pages ?? [])].sort((a, b) => a.sequence_number - b.sequence_number), handed_over: activeHandedIds.has(file.id) }));
   const storage = db.storage.from("sale-documents");
   const paths = [...files.flatMap((file) => file.pages.map((page) => page.storage_path)), ...handovers.map((handover) => handover.recipient_photo_storage_path)].filter(Boolean);
-  const signed = paths.length ? await storage.createSignedUrls(paths, 3600) : { data: [] };
+  const signed = paths.length ? await storage.createSignedUrls([...new Set(paths)], 3600) : { data: [] };
   const urlByPath = new Map<string, string>((signed.data ?? []).map((entry: { path: string; signedUrl: string }) => [entry.path, String(entry.signedUrl)]));
   return {
     sale,

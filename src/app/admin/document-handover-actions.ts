@@ -124,7 +124,6 @@ export async function finalizeDocumentHandover(_state: AdminActionState, formDat
   const recipientCnic = clean(formData.get("recipientCnic"), 30);
   const selectedIds = formData.getAll("documentFileIds").map((value) => clean(value)).filter((value) => uuid.safeParse(value).success);
   const photo = formData.get("recipientPhoto");
-  const signature = formData.get("signature");
   if (!uuid.safeParse(saleId).success || !(await getDocumentHandoverSale(saleId))) return { status: "error", message: "The sold-bike record is unavailable." };
   if (!selectedIds.length) return { status: "error", message: "Select at least one ready document file." };
   if (recipientName.length < 2) return { status: "error", message: "Enter the recipient’s name." };
@@ -134,20 +133,8 @@ export async function finalizeDocumentHandover(_state: AdminActionState, formDat
   const handoverId = crypto.randomUUID();
   const extension = photo.type === "image/png" ? "png" : photo.type === "image/webp" ? "webp" : "jpg";
   const photoPath = `sales/${saleId}/handovers/${handoverId}/recipient.${extension}`;
-  const uploadedPaths = [photoPath];
   const photoUpload = await db.storage.from("sale-documents").upload(photoPath, photo, { contentType: photo.type, upsert: false });
   if (photoUpload.error) return { status: "error", message: "The required recipient photograph could not be uploaded." };
-  let signaturePath = "";
-  if (validImage(signature)) {
-    const signatureExtension = signature.type === "image/png" ? "png" : signature.type === "image/webp" ? "webp" : "jpg";
-    signaturePath = `sales/${saleId}/handovers/${handoverId}/signature.${signatureExtension}`;
-    const signatureUpload = await db.storage.from("sale-documents").upload(signaturePath, signature, { contentType: signature.type, upsert: false });
-    if (signatureUpload.error) {
-      await db.storage.from("sale-documents").remove(uploadedPaths);
-      return { status: "error", message: "The optional signature image could not be uploaded." };
-    }
-    uploadedPaths.push(signaturePath);
-  }
   const rpc = await db.rpc("finalize_document_handover", {
     p_sale_id: saleId,
     p_document_file_ids: selectedIds,
@@ -158,11 +145,10 @@ export async function finalizeDocumentHandover(_state: AdminActionState, formDat
     p_notes: clean(formData.get("notes"), 1000) || null,
     p_acknowledgement_text: "The recipient confirms receipt of the listed original motorcycle documents.",
     p_recipient_photo_storage_path: photoPath,
-    p_signature_storage_path: signaturePath || null,
     p_actor_id: current.userId,
   });
   if (rpc.error) {
-    await db.storage.from("sale-documents").remove(uploadedPaths);
+    await db.storage.from("sale-documents").remove([photoPath]);
     return { status: "error", message: rpc.error.message || "The handover could not be completed." };
   }
   await writeActivity({ actorUserId: current.userId, actorRole: current.profile.role, action: "document_handover_completed", summary: `Completed a ${selectedIds.length}-file document handover`, targetTable: "document_handovers", targetId: rpc.data, metadata: { saleId, documentFileIds: selectedIds, recipientType } });
